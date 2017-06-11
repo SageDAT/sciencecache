@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Routes</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <h2 class="title">Saved Routes</h2>
+    <ion-content *ngIf="localRoutesList?.length < 1">
+      <em class="center">Retrieving Local Routes from Database...</em>
+      <ion-spinner></ion-spinner>
+    </ion-content>
+    <ion-list no-padding *ngIf="localRoutesList?.length > 0">
+    <ion-item-sliding #item *ngFor="let route of localRoutesList; let i = index;">
+        <ion-item tappable no-padding (tap)="loadRoute(route._id)">
+          <ion-thumbnail item-start no-padding>
+            <img src="{{ route.image }}" *ngIf="route.image">
+            <img src="assets/noImage.png" *ngIf="!route.image">
+          </ion-thumbnail>
+        <h2>{{ route.name }}</h2>
+        <p> {{ route.route_location.description }} </p>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button large color="primary" (click)="loadRoute(route._id)">
+          <ion-icon name="open"></ion-icon>
+        </button>    
+        <button ion-button large color="danger" (click)="removeRoute(i)">
+          <ion-icon name="trash"></ion-icon>
+        </button>    
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <h2 class="title">Online Routes</h2>
+  <ion-content *ngIf="routesList?.length < 1">
+    <em class="center">Retrieving Routes from ScienceCache Server...</em>
+    <ion-spinner></ion-spinner>
+  </ion-content>
+  <ion-list no-padding *ngIf="routesList?.length > 0">
+    <ion-item-sliding #item *ngFor="let route of routesList; let i = index;">
+        <ion-item no-padding>
+          <ion-thumbnail item-start no-padding>
+            <img src="{{ route.image }}" *ngIf="route.image">
+            <img src="assets/noImage.png" *ngIf="!route.image">
+          </ion-thumbnail>
+        <h2>{{ route.name }}</h2>
+        <p> {{ route.route_location.description }} </p>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button large color="primary" (click)="infoAlert(i)">
+          <ion-icon name="information-circle"></ion-icon>
+        </button>    
+        <button ion-button large color="secondary" (click)="downloadRoute(route.id)">
+          <ion-icon name="cloud-download"></ion-icon>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

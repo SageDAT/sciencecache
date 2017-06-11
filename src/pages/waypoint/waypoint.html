@@ -1,0 +1,149 @@
+<!--
+  Generated template for the WaypointPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title *ngIf="currentWaypoint != null">{{ currentWaypoint.name }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-12>
+        <ion-card *ngIf="currentWaypoint.description">
+          <ion-list class="description">
+            <ion-icon name="description" item-left></ion-icon>
+            <strong>Clue: </strong>{{ currentWaypoint.description }}
+          </ion-list>
+        </ion-card>
+        <ion-card *ngIf="currentWaypoint.warning">
+          <ion-list class="warning">
+            <ion-icon name="warning" item-left></ion-icon>
+            {{ currentWaypoint.warning }}
+          </ion-list>
+        </ion-card>
+        <ion-card *ngIf="currentWaypoint.image">
+          <img class="waypoint-image" src="{{ currentWaypoint.image }}" alt="{{ currentWaypoint.name }}" />
+        </ion-card>
+        <ion-card *ngIf="currentWaypoint.location_description">
+          <ion-list class="location_description" *ngIf="currentWaypoint.location_description  && showHint" padding>
+            <ion-icon name="location_description" item-left></ion-icon>
+            <strong>Hint: </strong>{{ currentWaypoint.location_description }}
+          </ion-list>
+        </ion-card>
+      </ion-col>
+      <ion-col col-12>
+        <ion-segment [ngModel]="mapLayer">
+          <ion-segment-button (click)="setWaypointFound(currentWaypoint.waypoint_id)" disabled="{{!onVisit}}">
+              <ion-icon name="ios-checkmark-circle"></ion-icon>
+              Found It
+          </ion-segment-button>
+          <ion-segment-button (click)="showHint = true" disabled="!currentWaypoint.location_description">
+              <ion-icon name="ios-help-circle"></ion-icon>
+              Hint
+          </ion-segment-button>
+        </ion-segment>  
+      </ion-col>      
+    </ion-row>
+    <ion-row *ngIf="waypointFound">
+        <ion-card ng-if="currentWaypoint.image_request" class="card question-box">
+          <div class="item item-divider">
+            Picture time
+          </div>
+          <p class="photo-instructions" ng-if="currentWaypoint.photo_instructions">
+            <b>Photo Instructions: </b>{{ currentWaypoint.photo_instructions }}
+          </p>
+          <div class="item item-text-wrap">
+            <button ion-button full class="button icon-left ion-camera" (click)="takePicture()">
+              Take a Picture
+            </button>
+          </div>
+          <div class="images_input" *ngIf="waypointPhotos.length > 0">
+            <p class="photos">Pictures taken ({{ waypointPhotos.length }})</p>
+            <img class="waypoint_photo" *ngFor="let photo of waypointPhotos" src="{{photo.data}}"/>
+          </div>
+        </ion-card>
+
+      <ion-col col-12 *ngFor="let dataRequest of currentWaypoint.data_requests">
+        <ion-card *ngIf="dataRequest.image">
+          <img class="waypoint-image" src="{{ dataRequest.image }}" alt="{{ dataRequest.name }}" />
+        </ion-card>
+        <ion-card *ngIf="dataRequest.question">
+<!--
+          <div class="item item-divider item-text-wrap question">
+            <b class="waypoint_question">{{ data_request.question}}</b> <button ng-if="data_request.image && data_request.help" class="button icon ion-ios-information-outline" ng-click="questionHelp($index)"></button>
+          </div>
+
+          <div class="item item-text-wrap">
+            <span class="question-desc">{{data_request.description}}</span>
+            <span class="question">
+              <textarea ng-if="data_request.type == 'textarea'"
+                ng-model="data_request.data"
+                placeholder="{{data_request.placeholder}}"
+                ng-blur="onVisitUpdate($index, q)">
+              </textarea>
+              <select ng-if="data_request.type == 'select'"
+                ng-model="data_request.data"
+                ng-options="o as o for o in data_request.sel_options"
+                ng-blur="onVisitUpdate($index, data_request)">
+              </select>
+              <input ng-if="data_request.type != 'textarea' && data_request.type != 'select'" type="{{data_request.type}}"
+                ng-model="data_request.data"
+                placeholder="{{data_request.placeholder}}"
+                ng-blur="onVisitUpdate($index, data_request)">
+              </input>
+            </span>
+-->
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+</ion-content>
+
+
+<!--
+      <div class="waypoint_found" ng-if="waypoint.found == true">
+
+          <div class="images_input" ng-if="visit.images.length > 0">
+            <p class="photos">Pictures taken ({{visit.images.length}})</p>
+            <img class="waypoint_photo" ng-repeat="pic in wp_pics = (visit.images | filter:{waypointId:waypointId})" src="{{pic.data}}"/>
+          </div>
+        </div>
+        <h4 class="waypoint_questions" ng-if="waypoint_count">{{ waypoint_count }}
+          Questions for this Waypoint</h4>
+        <div class="clear"></div>
+        <div class="card question-box" ng-repeat="q in waypoint.questions track by $index">
+          <div class="item item-divider item-text-wrap question">
+            <b class="waypoint_question">{{ q.question}}</b> <button ng-if="q.image && q.help" class="button icon ion-ios-information-outline" ng-click="questionHelp($index)"></button>
+          </div>
+          <div class="item item-text-wrap">
+            <span class="question-desc">{{q.description}}</span>
+            <span class="question">
+              <textarea ng-if="q.type.type == 'textarea'"
+                ng-model="q.data"
+                placeholder="{{q.placeholder}}"
+                ng-blur="onVisitUpdate($index, q)">
+              </textarea>
+              <select ng-if="q.type.type == 'select'"
+                ng-model="q.data"
+                ng-options="o as o for o in q.sel_options"
+                ng-blur="onVisitUpdate($index, q)">
+              </select>
+              <input ng-if="q.type.type != 'textarea' && q.type.type != 'select'" type="{{q.type.type}}"
+                ng-model="q.data"
+                placeholder="{{q.placeholder}}"
+                ng-blur="onVisitUpdate($index, q)">
+              </input>
+            </span>
+          </div>
+        </div>
+-->
+
+
