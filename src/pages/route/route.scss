@@ -2,5 +2,73 @@ page-route {
   #map {
     height: 300px;
   }
+  .custom-icon {
+    font-size: 1.1em !important;
+  }
+
+
+  ion-card-content.card-content {
+  	margin-top: 0 !important;
+  	padding-top: 0 !important;
+  }
+
+  ion-label.label {
+  	margin-bottom: 0 !important;
+  	padding-bottom: 0 !important;
+  }
+
+h3.df_distance {
+  font-size: 1.2em;
+  float: left;
+  width: 49%;
+  text-align: center;
+  display: block;
+  margin: 0;
+}
+
+h3.df_bearing {
+  font-size: 1.2em;
+  float: left;
+  width: 49%;
+  text-align: center;
+  display: block;
+  margin: 0;
+}
+
+h3.df_title {
+	font-size: 1.1em;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+h6.df_info {
+  padding-top: 1em;
+  padding-bottom: 1em;
+  display: block;
+}
+
+div.direction_finder .button {
+  border-top: 1px #CCC solid;
+  border-bottom: 1px #CCC solid;
+  border-right: 1px #CCC solid;
+}
+div.direction_finder .icon-left {
+  border-left: 1px #CCC solid;
+}
+img.direction_finder {
+  width: 80%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.waypoint_finder {
+  background-color: #0083B5;
+  padding: 1em 0 1em 0;
+  border-radius: 20px;
+  border: 2px solid #005395;
+  margin-top: 2em;
+}
 
 }

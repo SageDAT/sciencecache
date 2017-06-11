@@ -16,9 +16,11 @@ export class RoutesPage implements OnInit {
 
   newRoute: any
   localRoutesSubscription:Subscription
+  localRoutesLoadedSubscription:Subscription
   serviceRoutesSubscription:Subscription
   badLoadSubscription:Subscription
   localRoutes: any = []
+  localRoutesLoaded: boolean = false
   serviceRoutes: any = []
   routesList: any = []
   localRoutesList: any = []
@@ -86,6 +88,9 @@ export class RoutesPage implements OnInit {
     })
     this.localRoutesSubscription = this.lscService._localRoutesList.subscribe(localRoutesList=> {
       this.localRoutesList = localRoutesList
+    })
+    this.localRoutesLoadedSubscription = this.lscService._localRoutesLoaded.subscribe(localRoutesLoaded=> {
+      this.localRoutesLoaded = localRoutesLoaded
     })
     this.badLoadSubscription = this.rscService._badLoad.subscribe(badLoad=> {
       this.badLoad = badLoad

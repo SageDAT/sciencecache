@@ -24,6 +24,7 @@ import 'leaflet';
 export class RoutePage implements OnInit {
   id: any
   map: any
+  show
   waypointMarkers:any = []
   waypoints:any = []
   currentRoute: any = null
@@ -33,12 +34,13 @@ export class RoutePage implements OnInit {
   currentLocation:any = {}
   compass_waypoint = 0
   compass_waypoint_title = 'No Waypoint Loaded.'
-  compass_waypoint_number = 0
+  compass_waypoint_number = 1
   compass_waypoint_distance = -1 + ' meters.'
   compass_waypoint_bearing = -1 + '°'
   compass_current_heading:number = -1
   compass_current_accuracy = -1
   compass_current_speed:number = 0
+  showWaypointFinder: boolean = false
   deg = 0
   deg2 = 0
   onStreet:boolean = true
@@ -84,6 +86,18 @@ export class RoutePage implements OnInit {
     }, 1000);
   }
 
+  waypointFinderToggle() {
+    this.showWaypointFinder = !this.showWaypointFinder
+    if (this.showWaypointFinder) {
+      this.updateTimeSecs = 2
+    } else {
+      this.updateTimeSecs = 5
+    }
+  }
+
+  rotate(deg) {
+    return 'rotate(' + deg.toString() + 'deg)';
+  }
 
   ionViewDidEnter() {
     this.getWayPoints()    
@@ -108,6 +122,7 @@ export class RoutePage implements OnInit {
     this.currentLocationSubscription = this.locationTracker._currentLocation.subscribe(currentLocation=> {
       this.currentLocation = currentLocation
     })
+    this.updateWaypointFinder()
   }
 
   stopGPS() {
@@ -135,7 +150,9 @@ export class RoutePage implements OnInit {
     }
 
   updateWaypointFinder() {
-      this.compass_waypoint_distance = this.locationTracker.getDistanceFromLatLonInKm(this.currentLocation.coords.latitude,this.currentLocation.coords.longitude,this.waypoints[this.compass_waypoint].lat,this.waypoints[this.compass_waypoint].long).toString()
+      this.waypoints[this.compass_waypoint].distance = this.locationTracker.getDistanceFromLatLonInKm(this.currentLocation.coords.latitude,this.currentLocation.coords.longitude,this.waypoints[this.compass_waypoint].lat,this.waypoints[this.compass_waypoint].long) * 1000
+      this.waypoints[this.compass_waypoint].bearing = this.locationTracker.getBearingfromLatLong(this.currentLocation.coords.latitude,this.currentLocation.coords.longitude,this.waypoints[this.compass_waypoint].lat,this.waypoints[this.compass_waypoint].long)
+      console.log(this.compass_waypoint_distance)
       this.compass_waypoint_number = this.compass_waypoint + 1;
       this.compass_waypoint_title = this.waypoints[this.compass_waypoint].name;
       if (parseInt(this.waypoints[this.compass_waypoint].distance) > 1000) {
@@ -196,10 +213,12 @@ export class RoutePage implements OnInit {
         key = key + 1;
       }
     }
-    for (var marker of this.waypointMarkers) {
-      var thisMarker = L.marker([marker.lat, marker.lng], {icon: marker.icon}).addTo(this.map)
+    if (this.waypointMarkers[0]['lat'] && this.waypointMarkers[0]['long']) {
+      for (var marker of this.waypointMarkers) {
+        var thisMarker = L.marker([marker.lat, marker.lng], {icon: marker.icon}).addTo(this.map)
+      }
+      this.map.panTo(new L.LatLng(this.waypointMarkers[0]['lat'],this.waypointMarkers[0]['lng']))
     }
-    this.map.panTo(new L.LatLng(this.waypointMarkers[0]['lat'],this.waypointMarkers[0]['lng']))
   }
 
   addPoint(latitude, longitude, name, key, id) {

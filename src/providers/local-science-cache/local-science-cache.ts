@@ -16,33 +16,36 @@ export class LocalScienceCacheProvider {
   routesDb: any
   remote: any
   serviceData: any
+
+  localRoutesLoaded:boolean = false
+  _localRoutesLoaded = new BehaviorSubject <any> ([])
+  localRoutesLoaded$ = this._localRoutesLoaded.asObservable()
+
   localRoutesList:any = {}
-  _localRoutesList = new BehaviorSubject < any > ([])
+  _localRoutesList = new BehaviorSubject <any> ([])
   localRoutesList$ = this._localRoutesList.asObservable()
+
   currentRoute:any = {}
-  _currentRoute = new BehaviorSubject < any > ([]);
+  _currentRoute = new BehaviorSubject <any> ([]);
   currentRoute$ = this._currentRoute.asObservable();
 
   constructor() {
-    console.log('Hello ScienceCacheServiceProvider Provider')
     this.routesDb = new PouchDB('routes', {adapter : 'websql', size: 50})
   }
 
   wipeRoutesDB() {
     this.routesDb.destroy().then(function (response) {
-      console.log('Routes DB destroyed.')
     }).catch(function (err) {
       console.log(err);
     });
   }
 
   loadRoute(route_id) {
-    console.log('Loading Route: ' + route_id)
     this.currentRoute = this.routesDb.get(route_id).then((result) => {
       this.currentRoute = result
       this._currentRoute.next(this.currentRoute);
     }).catch((err) => {
-
+      console.log(err)
     })
   }
 
@@ -74,15 +77,15 @@ export class LocalScienceCacheProvider {
       this.routesDb.get(routeId).then((result) => {
         this.currentRoute = result
         resolve(this.currentRoute)
-      }).catch((err) => {
-
+        }).catch((err) => {
       })    
-    });
+    })
   }
 
   getRoutes() {
-    console.log('Getting local routes...')
     if (this.routesData) {
+      this.localRoutesLoaded = true
+      this._localRoutesLoaded.next(this.localRoutesLoaded)
       return Promise.resolve(this.routesData);
     }
     return new Promise(resolve => {
@@ -94,27 +97,15 @@ export class LocalScienceCacheProvider {
           this.localRoutesList.push(row.doc)
         })
         this._localRoutesList.next(this.localRoutesList)
+        this.localRoutesLoaded = true
+        this._localRoutesLoaded.next(this.localRoutesLoaded)
         resolve(this.localRoutesList)
       }).catch((error) => {
-        console.log(error);
-      }); 
-    });
+        console.log(error)
+        this.localRoutesLoaded = false
+        this._localRoutesLoaded.next(this.localRoutesLoaded)
+      });
+    })
   }
 
-  handleChange(change){ 
-    let changedDoc = null;
-    let changedIndex = null;
-    //A document was deleted
-    if(change.deleted){
-      this.routesData.splice(changedIndex, 1);
-    } else {
-      //A document was updated
-      if(changedDoc){
-        this.routesData[changedIndex] = change.doc;
-      } else {
-      //A document was added
-      this.routesData.push(change.doc); 
-      }
-    }
-  }
 }

@@ -27,6 +27,7 @@ export class WaypointPage  implements OnInit{
   waypointFound: boolean = false
   waypoinFoundSubscription: Subscription
   waypointPhotos = []
+  waypointPhotoRows = 1
   public base64Image: string
   options:any
   showHint: boolean = false
@@ -44,42 +45,34 @@ export class WaypointPage  implements OnInit{
     }
     this.camera.getPicture(this.options)
       .then((imageData)=>{
-        console.log('Saving Image.')
         var base64Image = "data:image/jpeg;base64," + imageData
         this.waypointPhotos.push({'data': base64Image})
+        this.waypointPhotoRows = Math.ceil(this.waypointPhotos.length / 3)
       })
   }
   
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad WaypointPage');
-  }
-
   setWaypointFound(id) {
-    console.log(id)
-    console.log(this.currentVisit)
     this.visitProvider.setWaypointFound(id)
   }
 
+  questionOptions(options) {
+    return JSON.parse(options)
+  }
+
   ngOnInit() {
-    console.log('Waypoint!')
     this.id = this.navParams.get('id')
-    console.log(this.id)
     if (this.id) {
       this.routeProvider.getWaypoint(this.id)
       this.currentWaypointSubscription = this.routeProvider._currentWaypoint.subscribe(currentWaypoint=> 
       {
         this.currentWaypoint = currentWaypoint;
       })
-    } else {
-      // Bad dates!
     }
     this.onVisitSubscription = this.visitProvider._onVisit.subscribe(onVisit=> {
       this.onVisit = onVisit
-      console.log(this.onVisit)
     })
     this.currentVisitSubscription = this.visitProvider._currentVisit.subscribe(currentVisit=> {
       this.currentVisit = currentVisit
-      console.log(this.currentVisit)
     })
     this.waypoinFoundSubscription = this.visitProvider._waypointFound.subscribe(waypointFound=> {
       this.waypointFound = waypointFound

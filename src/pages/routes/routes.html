@@ -7,12 +7,17 @@
 
 <ion-content padding>
   <h2 class="title">Saved Routes</h2>
-    <ion-content *ngIf="localRoutesList?.length < 1">
-      <em class="center">Retrieving Local Routes from Database...</em>
-      <ion-spinner></ion-spinner>
-    </ion-content>
+    <ion-card>
+      <ion-card-content *ngIf="!localRoutesLoaded">
+        <em class="center">Retrieving Local Routes from Database...</em>
+        <ion-spinner></ion-spinner>
+      </ion-card-content>
+      <ion-card-content *ngIf="localRoutesList?.length < 1 && localRoutesLoaded">
+        There don't seem to be any routes saved on this device.  To download one, slide one of the online listed below to the left and tap the buttons to view more information about them or download them.
+      </ion-card-content>
+    </ion-card>
     <ion-list no-padding *ngIf="localRoutesList?.length > 0">
-    <ion-item-sliding #item *ngFor="let route of localRoutesList; let i = index;">
+      <ion-item-sliding #item *ngFor="let route of localRoutesList; let i = index;">
         <ion-item tappable no-padding (tap)="loadRoute(route._id)">
           <ion-thumbnail item-start no-padding>
             <img src="{{ route.image }}" *ngIf="route.image">

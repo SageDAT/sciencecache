@@ -37,7 +37,10 @@ import { VisitProvider } from '../providers/visit/visit';
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp, { 
+      scrollAssist: false,
+      autoFocusAssist: false
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [

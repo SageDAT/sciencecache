@@ -31,7 +31,6 @@ export class VisitProvider {
 
 
   constructor(public http: Http, public routeProvider: RouteProvider) {
-    console.log('Visit provider.')
     this.currentWaypointSubscription = this.routeProvider._currentWaypoint.subscribe(currentWaypoint=> {
       this.currentWaypoint = currentWaypoint;
     })
@@ -40,7 +39,6 @@ export class VisitProvider {
   }
 
   createNewVisit() {
-    console.log('Adding a new visit.')
     var blankVisit = {
       current: null,
       images: [],
@@ -54,9 +52,11 @@ export class VisitProvider {
     }
     this.currentVisit = blankVisit
     this._currentVisit.next(this.currentVisit)
+    this._waypointFound.next(this.waypointFound)
   }
 
   setWaypointFound(id) {
+    console.log('Waypoint Found.')
     this.waypointFound = true
     this._waypointFound.next(this.waypointFound)
     for (var waypoint in this.currentVisit.waypoints) {
@@ -64,19 +64,15 @@ export class VisitProvider {
         this.currentVisit.waypoints[waypoint].waypoint_found = true
       }
     }
-    console.log(this.currentVisit)
   }
 
   updateCurrentVisit() {
-
   }
 
   saveCurrentVisit() {
-
   }
 
   addWaypoint() {
-
   }
       
   setOnVisit(onVisit) {

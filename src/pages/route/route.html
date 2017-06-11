@@ -30,80 +30,105 @@
           </ion-segment-button>
         </ion-segment>
       </ion-col>
-      <ion-col col-12 *ngIf="currentRoute.warning">
-        <ion-card>
-          <ion-list class="warning">
-            <div padding>
-              <ion-icon name="warning" item-left></ion-icon>
-            {{ currentRoute.warning }}
+
+      <ion-card>
+        <ion-card-header>
+          <ion-icon name="warning" item-start> </ion-icon>
+          Warning!
+        </ion-card-header>
+        <ion-card-content>
+          {{ currentRoute.warning }}
+        </ion-card-content>
+      </ion-card>
+
+      <ion-item>
+        <ion-label> Site Information</ion-label>
+        <ion-toggle checked="false" (click)="showInfo = !showInfo"></ion-toggle>
+      </ion-item>
+      <ion-card *ngIf="showInfo">
+        <img src="{{ currentRoute.image }}" />
+        <ion-item>
+          <h2>Site Information</h2>
+        </ion-item>
+        <ion-card-content>
+          <p>{{ currentRoute.description }}</p>
+        </ion-card-content>
+        <ion-row>
+          <ion-col>
+            <ion-card-content small>
+              <ion-label icon-left><ion-icon name="contacts"></ion-icon>Contact(s):</ion-label> {{ currentRoute.contact }}
+            </ion-card-content>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-card-content small>
+              <ion-label icon-left><ion-icon name="globe"></ion-icon>Location:</ion-label> {{ currentRoute.route_location.description }}
+            </ion-card-content>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+
+      <ion-item>
+        <ion-label>Waypoint Finder</ion-label>
+        <ion-toggle checked="false" (click)="waypointFinderToggle()"></ion-toggle>
+      </ion-item>        
+
+      <ion-card *ngIf="showWaypointFinder && !onVisit">
+        <ion-card-content>
+          Start a visit using the controls below to start using the waypoint finder to help you find Science Caches.
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card *ngIf="currentRoute.waypoints?.length > 0 && showWaypointFinder && onVisit">
+        <ion-card-content>
+          <h3 class="df_title">Waypoint {{ compass_waypoint_number }}: {{ compass_waypoint_title }}</h3>
+          <h3 class="df_distance">{{ compass_waypoint_distance }}</h3>
+          <h3 class="df_bearing">{{ compass_waypoint_bearing }}</h3>
+          <div class="waypoint_finder">
+            <div [ngStyle]="{ '-webkit-transform' : rotate(deg), '-moz-transform' : rotate(deg), '-o-transform' : rotate(deg), '-ms-transform' : rotate(deg), 'transform' : rotate(deg)}">
+              <img class="direction_finder" src="assets/images/waypoint_finder.png">
             </div>
-          </ion-list>
-        </ion-card>
-      </ion-col>
-      <ion-col col-12>
-        <ion-item>
-          <ion-label> Site Information</ion-label>
-          <ion-toggle checked="false" (click)="showInfo = !showInfo"></ion-toggle>
-        </ion-item>
-        <ion-card *ngIf="showInfo">
-          <ion-list>
-            <img src="{{ currentRoute.image }}" />
-            {{ currentRoute.description }}
-            <ion-label>Contact(s):</ion-label> {{ currentRoute.contact }}
-            <ion-label>Location:</ion-label> {{ currentRoute.route_location.description }}
-          </ion-list>
-        </ion-card>
-      </ion-col>
+          </div>
+          <h6 class="df_info">
+            Heading: {{ compass_current_heading }}°&nbsp;&nbsp;
+            Accuracy: +/- {{ compass_current_accuracy }} meters&nbsp;&nbsp;
+            Speed: {{ compass_current_speed }}
+          </h6>
+          <ion-segment>
+            <ion-segment-button value="sat" (click)="previousWaypoint()">
+              <ion-icon class="custom-icon" name="arrow-back"></ion-icon>
+              Prev. Waypoint
+            </ion-segment-button>
+            <ion-segment-button value="street" (click)="nextWaypoint()">
+              Next Waypoint 
+              <ion-icon class="custom-icon" name="arrow-forward"></ion-icon>
+            </ion-segment-button>
+          </ion-segment>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-item>
+        <ion-label>Waypoints ({{ currentRoute.waypoint_count }})</ion-label>
+        <ion-toggle checked="false" (click)="showWaypoints = !showWaypoints"></ion-toggle>
+      </ion-item>
+
       <ion-col col-12 *ngIf="currentRoute.waypoints?.length > 0">
-        <ion-item>
-          <ion-label>Waypoint Finder</ion-label>
-          <ion-toggle checked="false" (click)="showWaypointFinder = !showWaypointFinder"></ion-toggle>
-        </ion-item>        
-        <ion-item *ngIf="showWaypointFinder">
-            <h3 class="df_title">Waypoint {{ compass_waypoint_number }}: {{ compass_waypoint_title }}</h3>
-            <h3 class="df_distance">{{ compass_waypoint_distance }}</h3>
-            <h3 class="df_bearing">{{ compass_waypoint_bearing }}</h3>
-            <div class="waypoint_finder">
-              <div rotate degrees="deg">
-                <img class="direction_finder" src="assets/images/waypoint_finder.png">
-              </div>
-            </div>
-            <h6 class="df_info">Heading:
-              {{ compass_current_heading }}°&nbsp;&nbsp;Accuracy: +/-
-              {{ compass_current_accuracy }}
-              meters&nbsp;&nbsp;Speed:
-              {{ compass_current_speed }}</h6>
-              <ion-segment>
-                <ion-segment-button value="sat" (click)="previousWaypoint()">
-                  <ion-icon name="arrow-back"></ion-icon>
-                   Prev. Waypoint
-                </ion-segment-button>
-                <ion-segment-button value="street" (click)="nextWaypoint()">
-                  Next Waypoint 
-                  <ion-icon name="arrow-forward"></ion-icon>
-                </ion-segment-button>
-              </ion-segment>
-        </ion-item>
-      </ion-col>
-      <ion-col col-12 *ngIf="currentRoute.waypoints?.length > 0">
-        <ion-item>
-          <ion-label>Waypoints ({{ currentRoute.waypoint_count }})</ion-label>
-          <ion-toggle checked="false" (click)="showWaypoints = !showWaypoints"></ion-toggle>
-        </ion-item>
         <ion-list inset *ngIf="showWaypoints">
           <button ion-item *ngFor="let waypoint of currentRoute.waypoints" (click)="waypointSelected(waypoint.waypoint_id)">
-            {{ waypoint.name }} - {{ waypoint.waypoint_id }}
+            {{ waypoint.name }}
           </button> 
         </ion-list>
       </ion-col>
+
       <ion-col col-12>
-        <ion-segment>
-          <ion-segment-button value="startVisit" (click)="startVisit()" disabled="{{onVisit}}">
-            <ion-icon name="play"></ion-icon>
+        <ion-segment padding>
+          <ion-segment-button icon-start value="startVisit" (click)="startVisit()" disabled="{{onVisit}}">
+            <ion-icon class="custom-icon" name="play"></ion-icon>
             Start Visit
           </ion-segment-button>
-          <ion-segment-button value="stopVisit" (click)="stopVisit()" disabled="{{!onVisit}}">
-            <ion-icon name="square"></ion-icon>
+          <ion-segment-button icon-start value="stopVisit" (click)="stopVisit()" disabled="{{!onVisit}}">
+            <ion-icon class="custom-icon" name="square"></ion-icon>
             Stop Visit
           </ion-segment-button>
         </ion-segment>

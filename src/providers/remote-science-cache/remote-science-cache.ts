@@ -30,18 +30,19 @@ export class RemoteScienceCacheProvider {
 
 saveRoute(id) {
   console.log('Saving Route: ' + id)
+  for (var r in this.routesList) {
+    if (this.routesList[r].id == id) {
+      this.routesList.splice(r, 1)
+      this._routesList.next(this.routesList)
+      break
+    }
+  }
   return new Promise(resolve=>{
     this.http.get('https://beta.sciencebase.gov/sciencecache-service/routes/' + id)
     .map(response=>response.json())
     .subscribe(data => {
       console.log('Loaded: ' + data.id)
       this.currentRoute = data
-      for (var index in this.routesList) {
-        if (this.routesList[index].id == id) {
-          this.routesList.splice(index, 1)
-          this._routesList.next(this.routesList)
-        }
-      }
       this.lscService.saveRoute(this.currentRoute)
       resolve(this.currentRoute)
     })
