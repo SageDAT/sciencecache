@@ -25,6 +25,9 @@ export class LocationTrackerProvider {
   constructor(public zone: NgZone, public backgroundGeolocation: BackgroundGeolocation, public geolocation: Geolocation) {
   }
  
+  getCurrentLocation() {
+    return this.currentLocation
+  }
 
    // Credit: http://stackoverflow.com/a/27943/52160
    // ToDo: This should probably be replaced with the haversine formula.

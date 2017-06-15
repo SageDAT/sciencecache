@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { AlertController, LoadingController } from 'ionic-angular'
+import { AlertController } from 'ionic-angular'
 import { NavController } from 'ionic-angular'
 import { Http } from '@angular/http'
 import { Subscription } from 'rxjs/Subscription'
@@ -19,15 +19,17 @@ export class RoutesPage implements OnInit {
   localRoutesLoadedSubscription:Subscription
   serviceRoutesSubscription:Subscription
   badLoadSubscription:Subscription
+  savingRouteSubscription:Subscription
   localRoutes: any = []
   localRoutesLoaded: boolean = false
   serviceRoutes: any = []
   routesList: any = []
   localRoutesList: any = []
   badLoad:boolean = false
+  savingRoute: boolean = false
   displayCards: any = []
   
-  constructor(public http: Http, public alertController: AlertController, public navCtrl: NavController, public lscService: LocalScienceCacheProvider, public rscService: RemoteScienceCacheProvider, public loadingController: LoadingController) {
+  constructor(public http: Http, public alertController: AlertController, public navCtrl: NavController, public lscService: LocalScienceCacheProvider, public rscService: RemoteScienceCacheProvider) {
   }
 
   loadRoute(id) {
@@ -36,11 +38,49 @@ export class RoutesPage implements OnInit {
   
   removeRoute(index) {
     this.lscService.deleteRoute(this.localRoutesList[index])
-    this.lscService.getRoutes().then(data=>
+    this.lscService.loadRoutes().then(data=>
     { 
       this.rscService.loadRoutes(data)
     })    
   }
+
+  downloadRoute(id) {
+    this.rscService.saveRoute(id)
+  }
+
+  ionViewWillEnter() {
+    this.lscService.loadRoutes().then(localRoutes =>
+    { 
+      this.rscService.loadRoutes(localRoutes)
+    })    
+  }
+
+  ngOnInit() {
+    this.serviceRoutesSubscription = this.rscService._routesList.subscribe(routesList=> {
+      this.routesList = routesList
+    })
+    this.localRoutesSubscription = this.lscService._localRoutesList.subscribe(localRoutesList=> {
+      this.localRoutesList = localRoutesList
+    })
+    this.localRoutesLoadedSubscription = this.lscService._localRoutesLoaded.subscribe(localRoutesLoaded=> {
+      this.localRoutesLoaded = localRoutesLoaded
+    })
+    this.badLoadSubscription = this.rscService._badLoad.subscribe(badLoad=> {
+      this.badLoad = badLoad
+    })
+    this.savingRouteSubscription = this.rscService._savingRoute.subscribe(savingRoute=> {
+      this.savingRoute = savingRoute
+    })
+  }
+
+presentAlert() {
+  let alert = this.alertController.create({
+    title: 'Near a waypoint!',
+    subTitle: 'I think you are near a waypoint!',
+    buttons: ['Dismiss']
+  });
+  alert.present();
+}
 
   infoAlert(index) {
     let alert = this.alertController.create({
@@ -64,37 +104,6 @@ export class RoutesPage implements OnInit {
     ]
     });
     alert.present();
-  }
-
-  downloadRoute(id) {
-    this.rscService.saveRoute(id)
-  }
-
-  ionViewWillEnter() {
-    this.lscService.getRoutes().then(data=>
-    { 
-      console.log('loading service')
-      this.rscService.loadRoutes(data)
-    })    
-  }
-
-  ngOnInit() {
-    let loader = this.loadingController.create({
-      content: "Retrieving ScienceCache Routes."
-    })
-
-    this.serviceRoutesSubscription = this.rscService._routesList.subscribe(routesList=> {
-      this.routesList = routesList
-    })
-    this.localRoutesSubscription = this.lscService._localRoutesList.subscribe(localRoutesList=> {
-      this.localRoutesList = localRoutesList
-    })
-    this.localRoutesLoadedSubscription = this.lscService._localRoutesLoaded.subscribe(localRoutesLoaded=> {
-      this.localRoutesLoaded = localRoutesLoaded
-    })
-    this.badLoadSubscription = this.rscService._badLoad.subscribe(badLoad=> {
-      this.badLoad = badLoad
-    })
   }
 
 }

@@ -48,7 +48,7 @@
       
       <ion-col col-12>
         <ion-segment [ngModel]="settings" padding>
-          <ion-segment-button value='foundIt' (click)="setWaypointFound(currentWaypoint.waypoint_id)" disabled="{{!onVisit}}">
+          <ion-segment-button value='foundIt' (click)="setWaypointFound(currentWaypoint.waypoint_id)" disabled="{{!onVisit}} || {{ currentWaypoint.found }}">
               <ion-icon class="custom-icon" name="ios-checkmark-circle"></ion-icon>
               Found It
           </ion-segment-button>
@@ -84,32 +84,35 @@
           </ion-row>
         </ion-grid>
 
-        <ion-col col-12 *ngFor="let dataRequest of currentWaypoint.data_requests">
+        <ion-col col-12 *ngFor="let dataRequest of currentWaypoint.data_requests; let di = index">
           <ion-card>
             <ion-card-content *ngIf="dataRequest.image" no-padding>
               <img class="waypoint-image" src="{{ dataRequest.image }}" alt="{{ dataRequest.name }}" />
             </ion-card-content>
             <ion-card-header style="white-space: normal;" *ngIf="dataRequest.question">
               {{ dataRequest.question }} 
-              <button ion-button round><ion-icon name="help" item-end> </ion-icon></button>
             </ion-card-header>
-            <ion-card-content *ngIf="dataRequest.help && showHelp">
-              {{ dataRequest.help }}
-            </ion-card-content>
-            <!--<button ng-if="data_request.image && data_request.help" class="button icon ion-ios-information-outline" ng-click="questionHelp($index)"></button> -->
             <ion-card-content *ngIf="dataRequest.type == 'textarea'">
               <ion-textarea [(ngModel)]="dataRequest.data"></ion-textarea>
             </ion-card-content>
             <ion-card-content *ngIf="dataRequest.type == 'select'">
               <ion-label>Answer</ion-label>
-              <ion-select [(ngModel)]="gender">
-                <ion-option *ngFor="let option of questionOptions(dataRequest.options)" value="option">{{ option }}</ion-option>
+              <ion-select [(ngModel)]="dataRequest.data">
+                <ion-option *ngFor="let option of questionOptions(dataRequest.options)" value="{{ option }}">{{ option }}</ion-option>
               </ion-select>
             </ion-card-content>
             <ion-card-content *ngIf="dataRequest.type != 'textarea' && dataRequest.type != 'select'">
               <ion-input [(ngModel)]="dataRequest.data" placeholder="{{ dataRequest.placeholder }}" type="{{ dataRequest.type }}">
               </ion-input>
             </ion-card-content>
+            <ion-card-content *ngIf="dataRequest.help && showHelp">
+              {{ dataRequest.help }}
+            </ion-card-content>
+            <ion-card-content *ngIf="dataRequest.help">
+              <button ion-button outline round small padding class="data-request-help" (tap)="showHelp = true">
+                <ion-icon name="help-circle" item-end></ion-icon>&nbsp;&nbsp;Help With This Question
+              </button>
+            </ion-card-content>            
           </ion-card>
         </ion-col>
     </ion-row>

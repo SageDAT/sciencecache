@@ -12,7 +12,7 @@
         <em class="center">Retrieving Local Routes from Database...</em>
         <ion-spinner></ion-spinner>
       </ion-card-content>
-      <ion-card-content *ngIf="localRoutesList?.length < 1 && localRoutesLoaded">
+      <ion-card-content *ngIf="localRoutesList?.length < 1 && localRoutesLoaded  && !savingRoute">
         There don't seem to be any routes saved on this device.  To download one, slide one of the online listed below to the left and tap the buttons to view more information about them or download them.
       </ion-card-content>
     </ion-card>
@@ -36,6 +36,13 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
+  <ion-card-content *ngIf="savingRoute">   
+    <ion-thumbnail item-start no-padding>
+      <ion-spinner></ion-spinner>
+    </ion-thumbnail>
+    <em class="center">Retrieving Route from Remote Database...</em>
+  </ion-card-content>
+
 
   <h2 class="title">Online Routes</h2>
   <ion-content *ngIf="routesList?.length < 1">
@@ -56,7 +63,7 @@
         <button ion-button large color="primary" (click)="infoAlert(i)">
           <ion-icon name="information-circle"></ion-icon>
         </button>    
-        <button ion-button large color="secondary" (click)="downloadRoute(route.id)">
+        <button ion-button large color="secondary" (click)="downloadRoute(route.route_id)">
           <ion-icon name="cloud-download"></ion-icon>
         </button>
       </ion-item-options>

@@ -35,6 +35,10 @@ export class WaypointPage  implements OnInit{
   constructor(public navCtrl: NavController, public navParams: NavParams, public routeProvider: RouteProvider, public visitProvider: VisitProvider, private camera: Camera) {
   }
   
+  showDataRequest(dr) {
+    console.log(dr)
+  }
+
   takePicture(){
     this.options = {
       quality: 100,

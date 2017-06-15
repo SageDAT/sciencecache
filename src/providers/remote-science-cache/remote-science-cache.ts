@@ -23,6 +23,9 @@ export class RemoteScienceCacheProvider {
   _badLoad = new BehaviorSubject <any> ([])
   badLoad$ = this._badLoad.asObservable()
 
+  savingRoute:boolean = false
+  _savingRoute = new BehaviorSubject <any> ([])
+  savingRoute$ = this._savingRoute.asObservable()
 
   constructor(public http: Http, public lscService: LocalScienceCacheProvider) {
     console.log('Hello RemoteScienceCacheProvider Provider');
@@ -30,6 +33,8 @@ export class RemoteScienceCacheProvider {
 
 saveRoute(id) {
   console.log('Saving Route: ' + id)
+  this.savingRoute = true
+  this._savingRoute.next(this.savingRoute)
   for (var r in this.routesList) {
     if (this.routesList[r].id == id) {
       this.routesList.splice(r, 1)
@@ -42,19 +47,25 @@ saveRoute(id) {
     .map(response=>response.json())
     .subscribe(data => {
       console.log('Loaded: ' + data.id)
+      console.log(data)
       this.currentRoute = data
       this.lscService.saveRoute(this.currentRoute)
+      this.lscService.loadRoutes().then(localRoutes=>{
+        console.log('updating local routes...')
+        console.log(localRoutes)
+        this.lscService._localRoutesList.next(localRoutes)
+      })
+      this.savingRoute = false
+      this._savingRoute.next(this.savingRoute)
       resolve(this.currentRoute)
     })
   })
 }
 
   loadRoutes(localRoutes) {
-    console.log('loading routes and remove local')
-    console.log(localRoutes)
+    this.savingRoute = false
+    this._savingRoute.next(this.savingRoute)
     this.fetchRouteSummaries().then(data =>{
-      console.log('removing local routes from service routes')
-      console.log(this.fullRoutesList)
       for (var l in localRoutes) {
         for (var r in this.routesList) {
           if (this.routesList[r].id == localRoutes[l].id) {
@@ -62,8 +73,6 @@ saveRoute(id) {
           }
         }
       }
-      console.log(this.fullRoutesList)
-      console.log(this.routesList)
       this._routesList.next(this.routesList)
     })
   }

@@ -5,7 +5,7 @@
   Ionic pages and navigation.
 -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
-<ion-header>
+<ion-header *ngIf="currentRoute != null">
   <ion-navbar color="primary">
     <ion-title *ngIf="currentRoute != null">{{ currentRoute.name }}</ion-title>
     <ion-buttons end>
@@ -16,7 +16,16 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="currentRoute == null">
+    <ion-card>
+      <ion-card-content>
+        <em class="center">Loading Route ...</em>
+        <ion-spinner></ion-spinner>
+      </ion-card-content>
+    </ion-card>
+</ion-content>
+
+<ion-content *ngIf="currentRoute != null">
   <ion-grid no-padding>
     <ion-row>
       <ion-col col-12 no-padding>

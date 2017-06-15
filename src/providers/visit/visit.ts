@@ -1,11 +1,12 @@
-import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
+import { Injectable } from '@angular/core'
+import { Http } from '@angular/http'
+import 'rxjs/add/operator/map'
 //import {Observable} from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/map';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject'
+import 'rxjs/add/operator/map'
 import { Subscription } from 'rxjs/Subscription'
 import { RouteProvider } from '../route/route'
+import { LocationTrackerProvider } from '../location-tracker/location-tracker'
 //import { LocalScienceCacheProvider } from '../local-science-cache/local-science-cache'
 
 /*
@@ -23,6 +24,7 @@ export class VisitProvider {
   onVisit: boolean = false
   _onVisit = new BehaviorSubject <any> ([])
   onVisit$ = this._onVisit.asObservable()
+  currentLocation: any
   currentWaypoint: any
   currentWaypointSubscription: Subscription
   waypointFound: boolean = false
@@ -30,7 +32,7 @@ export class VisitProvider {
   waypointFound$ = this._waypointFound.asObservable()
 
 
-  constructor(public http: Http, public routeProvider: RouteProvider) {
+  constructor(public http: Http, public routeProvider: RouteProvider, public locationTracker: LocationTrackerProvider) {
     this.currentWaypointSubscription = this.routeProvider._currentWaypoint.subscribe(currentWaypoint=> {
       this.currentWaypoint = currentWaypoint;
     })
@@ -51,6 +53,7 @@ export class VisitProvider {
       waypoints_visited: 0
     }
     this.currentVisit = blankVisit
+    console.log(this.currentVisit)
     this._currentVisit.next(this.currentVisit)
     this._waypointFound.next(this.waypointFound)
   }
@@ -61,9 +64,54 @@ export class VisitProvider {
     this._waypointFound.next(this.waypointFound)
     for (var waypoint in this.currentVisit.waypoints) {
       if (this.currentVisit.waypoints[waypoint].id == id) {
-        this.currentVisit.waypoints[waypoint].waypoint_found = true
+        if (this.currentVisit.waypoints[waypoint].waypoint_found != true) {
+          this.currentVisit.waypoints[waypoint].waypoint_found = true
+          this.currentVisit.waypoints_visited = this.currentVisit.waypoints_visited + 1
+          this._currentVisit.next(this.currentVisit)
+        }
       }
     }
+    this._currentVisit.next(this.currentVisit)
+  }
+
+  updateWaypoints() {
+    this.currentLocation = this.locationTracker.getCurrentLocation()
+    for (var waypoint in this.currentVisit.waypoints) {
+      this.currentVisit.waypoints[waypoint].distance = this.locationTracker.getDistanceFromLatLonInKm(this.currentLocation.coords.latitude,this.currentLocation.coords.longitude,this.currentVisit.waypoints[waypoint].latitude,this.currentVisit.waypoints[waypoint].longitude) * 1000
+      this.currentVisit.waypoints[waypoint].bearing = this.locationTracker.getBearingfromLatLong(this.currentLocation.coords.latitude,this.currentLocation.coords.longitude,this.currentVisit.waypoints[waypoint].latitude,this.currentVisit.waypoints[waypoint].longitude)
+      this.currentVisit.waypoints[waypoint].distance
+      var waypointName = '<strong>' + this.currentVisit.waypoints[waypoint].name +'</strong><br />'
+      var waypointLat = 'Latitude: ' + this.currentVisit.waypoints[waypoint].latitude + '<br />'
+      var waypointLong = 'Longitude: ' + this.currentVisit.waypoints[waypoint].latitude + '<br />'
+      
+      var waypointBearing = '???'
+      if (isNaN(this.currentVisit.waypoints[waypoint].bearing) && waypointBearing != '???') {
+        waypointBearing =  'Last Bearing: ' + this.currentVisit.waypoints[waypoint].bearing + '<br />'
+      } else {
+          waypointBearing =  'Bearing: ' + this.currentVisit.waypoints[waypoint].bearing + '<br />'
+      }
+      
+      var waypointDistance = '???'
+      if (isNaN(this.currentVisit.waypoints[waypoint].distance) && waypointDistance != '???') {
+        waypointDistance = 'Last Distance: ' + this.currentVisit.waypoints[waypoint].distance + '<br />'
+      } else {
+          waypointDistance = 'Distance: ' + this.currentVisit.waypoints[waypoint].distance + '<br />'
+      }
+      this.currentVisit.waypoints[waypoint].message = waypointName + waypointLat + waypointLong + waypointBearing + waypointDistance
+    }
+  }
+
+  getWaypointFound(id) {
+   for (var waypoint in this.currentVisit.waypoints) {
+      if (this.currentVisit.waypoints[waypoint].id == id) {
+        if (this.currentVisit.waypoints[waypoint].waypoint_found != true) {
+          this.waypointFound = false
+        } else {
+          this.waypointFound = true
+        }
+        this._waypointFound.next(this.waypointFound)
+      }
+    } 
   }
 
   updateCurrentVisit() {
