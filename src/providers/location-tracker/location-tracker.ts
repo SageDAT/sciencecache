@@ -80,7 +80,6 @@ export class LocationTrackerProvider {
 
 
   startTracking() {
-
     let config = {
       desiredAccuracy: 0,
       stationaryRadius: 20,
@@ -118,7 +117,11 @@ export class LocationTrackerProvider {
   
   stopTracking() {
     console.log('stopTracking');
-    this.backgroundGeolocation.finish();
+    console.log('stopTracking');
+    console.log('stopTracking');
+    console.log('stopTracking');
+    this.backgroundGeolocation.finish()
+    this.backgroundGeolocation.stop()
     this.watch.unsubscribe();
   } 
 

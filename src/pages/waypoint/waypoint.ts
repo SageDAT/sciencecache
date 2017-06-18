@@ -26,8 +26,6 @@ export class WaypointPage  implements OnInit{
   onVisitSubscription: Subscription
   waypointFound: boolean = false
   waypoinFoundSubscription: Subscription
-  waypointPhotos = []
-  waypointPhotoRows = 1
   public base64Image: string
   options:any
   showHint: boolean = false
@@ -39,7 +37,8 @@ export class WaypointPage  implements OnInit{
     console.log(dr)
   }
 
-  takePicture(){
+  takePicture(index){
+    console.log(index)
     this.options = {
       quality: 100,
       sourceType: this.camera.PictureSourceType.CAMERA,
@@ -50,8 +49,7 @@ export class WaypointPage  implements OnInit{
     this.camera.getPicture(this.options)
       .then((imageData)=>{
         var base64Image = "data:image/jpeg;base64," + imageData
-        this.waypointPhotos.push({'data': base64Image})
-        this.waypointPhotoRows = Math.ceil(this.waypointPhotos.length / 3)
+        this.currentVisit.waypoints[index].photos.push({'data': base64Image})
       })
   }
   
@@ -61,6 +59,10 @@ export class WaypointPage  implements OnInit{
 
   questionOptions(options) {
     return JSON.parse(options)
+  }
+
+  ionViewDidEnter() {
+    this.visitProvider.getWaypointFound(this.id)
   }
 
   ngOnInit() {

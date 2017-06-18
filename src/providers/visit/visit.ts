@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core'
 import { Http } from '@angular/http'
 import 'rxjs/add/operator/map'
-//import {Observable} from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
-import 'rxjs/add/operator/map'
 import { Subscription } from 'rxjs/Subscription'
 import { RouteProvider } from '../route/route'
 import { LocationTrackerProvider } from '../location-tracker/location-tracker'
-//import { LocalScienceCacheProvider } from '../local-science-cache/local-science-cache'
+import { LocalScienceCacheProvider } from '../local-science-cache/local-science-cache'
 
 /*
   Generated class for the VisitProvider provider.
@@ -32,7 +30,7 @@ export class VisitProvider {
   waypointFound$ = this._waypointFound.asObservable()
 
 
-  constructor(public http: Http, public routeProvider: RouteProvider, public locationTracker: LocationTrackerProvider) {
+  constructor(public http: Http, public routeProvider: RouteProvider, public locationTracker: LocationTrackerProvider, public lscService: LocalScienceCacheProvider) {
     this.currentWaypointSubscription = this.routeProvider._currentWaypoint.subscribe(currentWaypoint=> {
       this.currentWaypoint = currentWaypoint;
     })
@@ -42,16 +40,17 @@ export class VisitProvider {
 
   createNewVisit() {
     var blankVisit = {
-      current: null,
-      images: [],
-      created_date: null,
-      questions: [],
+      created_date: new Date(),
+      uploaded_date: null,
       questions_answered: 0,
-      route_id: 0,
-      user: null,
+      total_questions: 0,
+      route_name: this.routeProvider.currentRoute.name,
+      route_id: this.routeProvider.currentRoute.route_id,
       waypoints: this.routeProvider.getWaypoints(),
-      waypoints_visited: 0
-    }
+      waypoints_visited: 0,
+      photos_taken: 0,
+      submitted: false
+    }  
     this.currentVisit = blankVisit
     console.log(this.currentVisit)
     this._currentVisit.next(this.currentVisit)
@@ -83,7 +82,6 @@ export class VisitProvider {
       var waypointName = '<strong>' + this.currentVisit.waypoints[waypoint].name +'</strong><br />'
       var waypointLat = 'Latitude: ' + this.currentVisit.waypoints[waypoint].latitude + '<br />'
       var waypointLong = 'Longitude: ' + this.currentVisit.waypoints[waypoint].latitude + '<br />'
-      
       var waypointBearing = '???'
       if (isNaN(this.currentVisit.waypoints[waypoint].bearing) && waypointBearing != '???') {
         waypointBearing =  'Last Bearing: ' + this.currentVisit.waypoints[waypoint].bearing + '<br />'
@@ -118,6 +116,13 @@ export class VisitProvider {
   }
 
   saveCurrentVisit() {
+    for (var waypoint of this.currentVisit.waypoints) {
+      this.currentVisit.total_questions = this.currentVisit.total_questions + waypoint.data_requests.length
+      this.currentVisit.questions_answered = this.currentVisit.questions_answered + waypoint.data.length
+      this.currentVisit.photos_taken = this.currentVisit.photos_taken + waypoint.photos.length
+    }
+    console.log(this.currentVisit)
+    this.lscService.saveVisit(this.currentVisit)
   }
 
   addWaypoint() {
@@ -126,7 +131,9 @@ export class VisitProvider {
   setOnVisit(onVisit) {
     this.onVisit = onVisit
     this._onVisit.next(this.onVisit)
-    this.createNewVisit()
+    if (onVisit == true) {
+      this.createNewVisit()
+    }
   }
 
 }

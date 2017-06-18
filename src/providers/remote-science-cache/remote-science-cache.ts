@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
 import { LocalScienceCacheProvider } from '../local-science-cache/local-science-cache'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/Rx';
 /*
   Generated class for the RemoteScienceCacheProvider provider.
 
@@ -15,10 +14,11 @@ export class RemoteScienceCacheProvider {
   serviceData: any
   currentRoute: any
   fullRoutesList:any = []
+  serviceRoutes: any = []
   routesList:any = []
   _routesList = new BehaviorSubject < any > ([])
   routesList$ = this._routesList.asObservable()
-
+  
   badLoad:boolean = false
   _badLoad = new BehaviorSubject <any> ([])
   badLoad$ = this._badLoad.asObservable()
@@ -28,48 +28,46 @@ export class RemoteScienceCacheProvider {
   savingRoute$ = this._savingRoute.asObservable()
 
   constructor(public http: Http, public lscService: LocalScienceCacheProvider) {
-    console.log('Hello RemoteScienceCacheProvider Provider');
   }
 
-saveRoute(id) {
-  console.log('Saving Route: ' + id)
-  this.savingRoute = true
-  this._savingRoute.next(this.savingRoute)
-  for (var r in this.routesList) {
-    if (this.routesList[r].id == id) {
-      this.routesList.splice(r, 1)
-      this._routesList.next(this.routesList)
-      break
+  saveRoute(id) {
+    this.savingRoute = true
+    this._savingRoute.next(this.savingRoute)
+    for (var r in this.routesList) {
+      if (this.routesList[r].route_id == id) {
+        this.routesList.splice(r, 1)
+        this._routesList.next(this.routesList)
+        break
+      }
     }
-  }
-  return new Promise(resolve=>{
-    this.http.get('https://beta.sciencebase.gov/sciencecache-service/routes/' + id)
-    .map(response=>response.json())
-    .subscribe(data => {
-      console.log('Loaded: ' + data.id)
-      console.log(data)
-      this.currentRoute = data
-      this.lscService.saveRoute(this.currentRoute)
-      this.lscService.loadRoutes().then(localRoutes=>{
-        console.log('updating local routes...')
-        console.log(localRoutes)
-        this.lscService._localRoutesList.next(localRoutes)
+    return new Promise(resolve=>{
+      this.http.get('https://beta.sciencebase.gov/sciencecache-service/routes/' + id)
+      .map(response=>response.json())
+      .subscribe(data => {
+        this.currentRoute = data
+        this.lscService.saveRoute(this.currentRoute)
+        this.lscService.loadRoutes().then(localRoutes=>{
+          this.lscService._localRoutesList.next(localRoutes)
+        })
+        this.savingRoute = false
+        this._savingRoute.next(this.savingRoute)
+        resolve(this.currentRoute)
       })
-      this.savingRoute = false
-      this._savingRoute.next(this.savingRoute)
-      resolve(this.currentRoute)
     })
-  })
-}
+  }
 
   loadRoutes(localRoutes) {
     this.savingRoute = false
     this._savingRoute.next(this.savingRoute)
-    this.fetchRouteSummaries().then(data =>{
-      for (var l in localRoutes) {
-        for (var r in this.routesList) {
-          if (this.routesList[r].id == localRoutes[l].id) {
-            this.routesList.splice(r, 1);
+    this.getRoutes().subscribe(
+      data => {
+        this.routesList = data;
+      if (localRoutes) {
+        for (var l in localRoutes) {
+          for (var r in this.routesList) {
+            if (this.routesList[r].route_id == localRoutes[l].route_id) {
+              this.routesList.splice(r, 1);
+            }
           }
         }
       }
@@ -77,12 +75,24 @@ saveRoute(id) {
     })
   }
 
+  getRoutes(all_fields=false) {
+    var time = new Date();
+    console.log(time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
+    var routesUrl = 'https://beta.sciencebase.gov/sciencecache-service/routes/'
+    return this.http.get(routesUrl)
+      .map(response => {
+        time = new Date();
+        console.log(time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
+        return response.json()
+      })
+      .catch(this.handleError)
+  }
+
   fetchRouteSummaries(reloadRoutes = false) {
-    console.log('fetching routes from service')
     var routesUrl = 'https://beta.sciencebase.gov/sciencecache-service/routes/';
-    if (this.fullRoutesList.length > 0 && reloadRoutes == false) {
-      console.log('Returning full routes list...')
-      return Promise.resolve(this.fullRoutesList);
+    //  This is BROKEN and should be fixed.
+    if ((this.fullRoutesList.length > 0) && (reloadRoutes == false)) {
+      return Promise.resolve(resolve=> { return this.fullRoutesList}) 
     }
     return new Promise(resolve => {
       this.http.get(routesUrl)
@@ -94,7 +104,11 @@ saveRoute(id) {
         })
     })  
   }
-
-
+  
+  private handleError(error: any): Promise < any > {
+    console.log('ERROR!')
+    console.error('An error occurred', error);
+    return Promise.reject(error.message || error);
+  }
 
 }

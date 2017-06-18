@@ -5,6 +5,7 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera'
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation'
 import { Geolocation } from '@ionic-native/geolocation';
+import { Network } from '@ionic-native/network';
 import { MyApp } from './app.component';
 
 import { HelpPage } from '../pages/help/help';
@@ -63,6 +64,7 @@ import { VisitProvider } from '../providers/visit/visit';
     BackgroundGeolocation,
     Geolocation,
     Camera,
+    Network,
     RouteProvider,
     VisitProvider
   ]

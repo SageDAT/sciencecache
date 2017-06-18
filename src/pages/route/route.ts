@@ -72,7 +72,7 @@ export class RoutePage implements OnInit {
       attribution: 'ArcGIS World Imagery'
     })
   }
-  updateTimeSecs = 5
+  updateTimeSecs = 3
 
   constructor(public navCtrl: NavController, public alertController: AlertController, public navParams: NavParams, public lscService: LocalScienceCacheProvider, public locationTracker: LocationTrackerProvider, public routeProvider: RouteProvider, public visitProvider: VisitProvider, private ref: ChangeDetectorRef) {
     var ticks = 1
@@ -90,12 +90,12 @@ export class RoutePage implements OnInit {
         this.ref.markForCheck();
         if (ticks == this.updateTimeSecs && this.mapLoaded == true) {
           if (this.onVisit) {
-            this.setCurrentLocation()
+            //this.setCurrentLocation()
             if (this.compass_waypoint_number != 0) {
-              this.updateWaypointFinder()
+              //this.updateWaypointFinder()
             }
-            this.visitProvider.updateWaypoints()
-            this.updateWaypoints()
+            //this.visitProvider.updateWaypoints()
+            //this.updateWaypoints()
           }
           ticks = 1
         }
@@ -107,11 +107,13 @@ export class RoutePage implements OnInit {
 
   waypointFinderToggle() {
     this.showWaypointFinder = !this.showWaypointFinder
+/*
     if (this.showWaypointFinder) {
       this.updateTimeSecs = 2
     } else {
       this.updateTimeSecs = 5
     }
+*/
   }
 
   rotate(deg) {
@@ -129,11 +131,15 @@ export class RoutePage implements OnInit {
     this.currentVisitSubscription = this.visitProvider._currentVisit.subscribe(currentVisit=> {
       this.currentVisit = currentVisit
     })    
-    this.startGPS()
+    //this.startGPS()
   }
 
   stopVisit() {
-    this.stopGPS()
+    this.currentVisit.route_id == this.currentRoute.route_id
+    this.currentVisit.route_name == this.currentRoute.name
+    this.visitProvider.setOnVisit(false)
+    this.visitProvider.saveCurrentVisit()
+    //this.stopGPS()
   }
 
   startGPS() {
@@ -163,44 +169,44 @@ export class RoutePage implements OnInit {
 
   nextWaypoint() {
     this.compass_waypoint = this.compass_waypoint + 1;
-      if (this.compass_waypoint == (this.waypoints.length)) {
-        this.compass_waypoint = 0;
-      }
-      this.updateWaypointFinder();
+    if (this.compass_waypoint == (this.waypoints.length)) {
+      this.compass_waypoint = 0;
     }
+    this.updateWaypointFinder();
+  }
 
   updateWaypointFinder() {
-      this.visitProvider.updateWaypoints()
-      this.compass_waypoint_number = this.compass_waypoint + 1;
-      this.compass_waypoint_title = this.waypoints[this.compass_waypoint].name;
-      var compass_distance_meters = Math.round(parseFloat(this.waypoints[this.compass_waypoint].distance))
-      if (compass_distance_meters > 1000) {
-        this.compass_waypoint_distance = (compass_distance_meters * 1000).toString() + ' kilometers'
-      } else {
-        this.compass_waypoint_distance = compass_distance_meters.toString() + ' meters'
-      }
-      var compass_bearing = Math.round(parseFloat(this.waypoints[this.compass_waypoint].bearing))
-      if (this.compass_current_speed <= 0) {
-        this.compass_waypoint_bearing = compass_bearing.toString() + ' (lkr)'
-      } else {
-        this.compass_waypoint_bearing = compass_bearing.toString()
-      }
-      var true_bearing = Math.round(parseInt(this.waypoints[this.compass_waypoint].bearing) - this.compass_current_heading);
+    this.visitProvider.updateWaypoints()
+    this.compass_waypoint_number = this.compass_waypoint + 1;
+    this.compass_waypoint_title = this.currentVisit.waypoints[this.compass_waypoint].name;
+    var compass_distance_meters = Math.round(parseFloat(this.currentVisit.waypoints[this.compass_waypoint].distance))
+    if (compass_distance_meters > 1000) {
+      this.compass_waypoint_distance = (compass_distance_meters / 1000).toString() + ' kilometers'
+    } else {
+      this.compass_waypoint_distance = compass_distance_meters.toString() + ' meters'
+    }
+    var compass_bearing = Math.round(parseFloat(this.currentVisit.waypoints[this.compass_waypoint].bearing))
+    if (this.compass_current_speed <= 0) {
+      this.compass_waypoint_bearing = compass_bearing.toString() + '°'
+    } else {
+      this.compass_waypoint_bearing = compass_bearing.toString() + '°'
+    }
+    if (this.compass_current_heading) {
+      var true_bearing = Math.round(parseInt(this.currentVisit.waypoints[this.compass_waypoint].bearing) - this.compass_current_heading);
       if (true_bearing < 0) {
         true_bearing = true_bearing + 360;
       }
-      console.log('COMPASS INFO:')
-      console.log(this.compass_waypoint_bearing)
-      console.log(this.compass_waypoint_distance)
-       if (this.compass_current_speed <= 0) {
-        this.compass_waypoint_bearing = "???";
-      } else {
-        this.compass_waypoint_bearing = true_bearing + "°";
-      }
-
-      this.deg = true_bearing;
-      this.deg2 = Math.round(this.compass_current_heading);
+    } else {
+      true_bearing = parseInt(this.compass_waypoint_bearing)
     }
+    this.deg = true_bearing;
+    if (this.compass_current_heading) { 
+      this.deg2 = Math.round(this.compass_current_heading);
+    } else {
+      this.deg2 = 0
+      this.compass_current_heading = 0
+    }
+  }
 
   setCurrentLocation() {
     var currentIcon = L.icon({
@@ -226,8 +232,7 @@ export class RoutePage implements OnInit {
 
   updateWaypoints() {
     for (var waypoint of this.currentVisit.waypoints) {
-      console.log(waypoint)
-      if ((Math.round(parseFloat(waypoint.distance)) < 20) && (!this.investigatingWaypoint)) {
+      if ((Math.round(parseFloat(waypoint.distance)) < 5) && (!this.investigatingWaypoint)) {
         if (waypoint.alert != true) {
           this.presentAlert(waypoint['id'], waypoint['name'], waypoint['distance'])
           waypoint.alert = true
@@ -260,13 +265,10 @@ export class RoutePage implements OnInit {
     }
     if (this.waypointMarkers && this.waypointMarkers[0]['lat'] && this.waypointMarkers[0]['lng']) {
       for (var marker of this.waypointMarkers) {
-        console.log(marker)
         this.leafletWaypointMarkers[marker['id']] = L.marker([marker.lat, marker.lng], {icon: marker.icon}).addTo(this.map)
         this.leafletWaypointMarkers[marker['id']].bindPopup(marker.message)
       }
       this.map.panTo(new L.LatLng(this.waypointMarkers[0]['lat'],this.waypointMarkers[0]['lng']))
-    } else {
-      console.log(this.waypointMarkers)
     }
   }
 
@@ -369,7 +371,6 @@ export class RoutePage implements OnInit {
       {
         text: 'Investigate',
         handler: () => {
-          console.log('Investigate')
           this.investigatingWaypoint = true
           this.navCtrl.push(WaypointPage, {'id': index})
         }

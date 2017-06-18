@@ -13,6 +13,7 @@ export class HelpPage {
 
   resetDB() {
     this.lscService.wipeRoutesDB()
+    this.lscService.wipeVisitsDB()
   }
 
 }

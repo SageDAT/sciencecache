@@ -7,10 +7,38 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-list-header>Visits</ion-list-header>
-    <ion-item>
-    Visits List Goes Here. :/
+    
+    <h2 class="title">Visits</h2>
+    
+    <ion-card  *ngIf="localVisitsList.length < 1">
+      <ion-card-content>
+        Visits are collections of data from routes you've explored.  Load a route, select start a visit, and use the GPS and clues to help you find waypoints where you can answer questions and take photos.  Once you're done, stop the visit and your data will be saved here, ready to be uploaded. 
+      </ion-card-content>
+    </ion-card>
+
+  <ion-list *ngIf="localVisitsList?.length > 0">
+    <ion-item *ngFor="let visit of localVisitsList">
+      <h2 class="title">{{ visit.route_name }}</h2>
+      <p>{{ formatDate(visit.created_date) }}</p>
+      <p>{{ visit.questions_answered }} questions answered out of {{ visit.total_questions }}</p>
+      <p>Number of Waypoints Found: {{ visit.waypoints_visited}}</p>
+      <p>Waypoint Uploaded:{{ visit.submitted }}</p>
+      <button ion-button full small (click)="uploadVisit" (disabled)="!allowUploads" *ngIf="!visit.submitted"><ion-icon start name="cloud-upload"></ion-icon>&nbsp;&nbsp;Upload this Visit</button>
     </ion-item>
   </ion-list>
 </ion-content>
+
+
+<!-- 
+     created_date: new Date(),
+      uploaded_date: null,
+      questions_answered: 0,
+      total_questions: 0,
+      route_name: this.routeProvider.currentRoute.name,
+      route_id: this.routeProvider.currentRoute.route_id,
+      waypoints: this.routeProvider.getWaypoints(),
+      waypoints_visited: 0,
+      photos_taken: 0,
+      submitted: false
+
+-->

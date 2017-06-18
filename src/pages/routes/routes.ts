@@ -38,8 +38,7 @@ export class RoutesPage implements OnInit {
   
   removeRoute(index) {
     this.lscService.deleteRoute(this.localRoutesList[index])
-    this.lscService.loadRoutes().then(data=>
-    { 
+    this.lscService.loadRoutes().then(data=> {
       this.rscService.loadRoutes(data)
     })    
   }
@@ -49,8 +48,8 @@ export class RoutesPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.lscService.loadRoutes().then(localRoutes =>
-    { 
+    this.lscService.loadRoutes().then(localRoutes => {
+      console.log(localRoutes)
       this.rscService.loadRoutes(localRoutes)
     })    
   }
@@ -72,15 +71,6 @@ export class RoutesPage implements OnInit {
       this.savingRoute = savingRoute
     })
   }
-
-presentAlert() {
-  let alert = this.alertController.create({
-    title: 'Near a waypoint!',
-    subTitle: 'I think you are near a waypoint!',
-    buttons: ['Dismiss']
-  });
-  alert.present();
-}
 
   infoAlert(index) {
     let alert = this.alertController.create({
