@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { LocalScienceCacheProvider } from '../local-science-cache/local-science-cache'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -56,6 +56,19 @@ export class RemoteScienceCacheProvider {
     })
   }
 
+  postVisit(visit, deviceInfo) {
+    var visitURL = 'http://localhost:8000/visits/'
+    var headers = new Headers()
+    headers.append('Content-Type', 'application/json')
+    visit.device_info = deviceInfo
+    return this.http.post(visitURL, visit, { headers: headers })
+      .map(response => { 
+        console.log(response.json())
+        return response.json() 
+
+      })
+  }
+
   loadRoutes(localRoutes) {
     this.savingRoute = false
     this._savingRoute.next(this.savingRoute)
@@ -66,7 +79,7 @@ export class RemoteScienceCacheProvider {
         for (var l in localRoutes) {
           for (var r in this.routesList) {
             if (this.routesList[r].route_id == localRoutes[l].route_id) {
-              this.routesList.splice(r, 1);
+              this.routesList.splice(r, 1)
             }
           }
         }
@@ -76,13 +89,13 @@ export class RemoteScienceCacheProvider {
   }
 
   getRoutes(all_fields=false) {
-    var time = new Date();
-    console.log(time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
+    var time = new Date()
+    console.log(time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds())
     var routesUrl = 'https://beta.sciencebase.gov/sciencecache-service/routes/'
     return this.http.get(routesUrl)
       .map(response => {
-        time = new Date();
-        console.log(time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
+        time = new Date()
+        console.log(time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds())
         return response.json()
       })
       .catch(this.handleError)

@@ -46,6 +46,7 @@ export class VisitProvider {
       total_questions: 0,
       route_name: this.routeProvider.currentRoute.name,
       route_id: this.routeProvider.currentRoute.route_id,
+      route_version: this.routeProvider.currentRoute.route_version,
       waypoints: this.routeProvider.getWaypoints(),
       waypoints_visited: 0,
       photos_taken: 0,
@@ -100,19 +101,21 @@ export class VisitProvider {
   }
 
   getWaypointFound(id) {
-   for (var waypoint in this.currentVisit.waypoints) {
-      if (this.currentVisit.waypoints[waypoint].id == id) {
-        if (this.currentVisit.waypoints[waypoint].waypoint_found != true) {
-          this.waypointFound = false
-        } else {
-          this.waypointFound = true
+   if (this.currentVisit) {
+     for (var waypoint in this.currentVisit.waypoints) {
+        if (this.currentVisit.waypoints[waypoint].id == id) {
+          if (this.currentVisit.waypoints[waypoint].waypoint_found != true) {
+            this.waypointFound = false
+          } else {
+            this.waypointFound = true
+          }
+          this._waypointFound.next(this.waypointFound)
         }
-        this._waypointFound.next(this.waypointFound)
-      }
-    } 
-  }
-
-  updateCurrentVisit() {
+      } 
+    } else {
+      this.waypointFound = false
+      this._waypointFound.next(this.waypointFound)
+    }
   }
 
   saveCurrentVisit() {
@@ -121,7 +124,6 @@ export class VisitProvider {
       this.currentVisit.questions_answered = this.currentVisit.questions_answered + waypoint.data.length
       this.currentVisit.photos_taken = this.currentVisit.photos_taken + waypoint.photos.length
     }
-    console.log(this.currentVisit)
     this.lscService.saveVisit(this.currentVisit)
   }
 

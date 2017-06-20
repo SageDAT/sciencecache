@@ -5,7 +5,9 @@ import { Subscription } from 'rxjs/Subscription';
 import { VisitProvider } from '../../providers/visit/visit'
 import { RouteProvider } from '../../providers/route/route'
 import { WaypointPage } from '../waypoint/waypoint'
+import { Device } from "@ionic-native/device"
 import { LocalScienceCacheProvider } from '../../providers/local-science-cache/local-science-cache'
+import { RemoteScienceCacheProvider } from '../../providers/remote-science-cache/remote-science-cache'
 import { LocationTrackerProvider } from '../../providers/location-tracker/location-tracker';
  
 import 'leaflet';
@@ -26,6 +28,11 @@ export class RoutePage implements OnInit {
   id: any
   map: any = null
   show
+  siteInformationToggle: boolean = false
+  waypointFinderToggle: boolean = false
+  waypointsToggle: boolean = false
+  visitToggle: boolean = false
+  warningShown: boolean = false
   waypointMarkers:any = []
   leafletWaypointMarkers:any = []
   waypoints:any = []
@@ -74,17 +81,21 @@ export class RoutePage implements OnInit {
   }
   updateTimeSecs = 3
 
-  constructor(public navCtrl: NavController, public alertController: AlertController, public navParams: NavParams, public lscService: LocalScienceCacheProvider, public locationTracker: LocationTrackerProvider, public routeProvider: RouteProvider, public visitProvider: VisitProvider, private ref: ChangeDetectorRef) {
+  constructor(public navCtrl: NavController, public alertController: AlertController, public navParams: NavParams, public lscService: LocalScienceCacheProvider, public rscService: RemoteScienceCacheProvider, public locationTracker: LocationTrackerProvider, public routeProvider: RouteProvider, public visitProvider: VisitProvider, private ref: ChangeDetectorRef, private device: Device) {
     var ticks = 1
     setInterval(() => {
       if (this.currentRoute !== null) {
+        if (!this.warningShown) {
+          this.startWarningAlert()
+          this.warningShown = true
+        }
         if (!this.map) {
           this.map = L.map('map', {
             center: [40, -105],
             zoom: 16,
             layers: [this.LAYER_OCM.layer, this.LAYER_OSM.layer]
           })
-          this.getWayPoints()
+          //this.getWayPoints()
           this.mapLoaded = true
         }
         this.ref.markForCheck();
@@ -105,21 +116,18 @@ export class RoutePage implements OnInit {
     }, 1000);
   }
 
-  waypointFinderToggle() {
-    this.showWaypointFinder = !this.showWaypointFinder
-/*
-    if (this.showWaypointFinder) {
-      this.updateTimeSecs = 2
+  visitStatusChanged() {
+    console.log(this.visitToggle)
+    if (this.visitToggle) {
+      this.startVisit()
     } else {
-      this.updateTimeSecs = 5
+      this.stopVisit()
     }
-*/
   }
 
   rotate(deg) {
     return 'rotate(' + deg.toString() + 'deg)';
   }
-
   
   removeRoute() {
     this.lscService.deleteRoute(this.currentRoute)
@@ -131,6 +139,7 @@ export class RoutePage implements OnInit {
     this.currentVisitSubscription = this.visitProvider._currentVisit.subscribe(currentVisit=> {
       this.currentVisit = currentVisit
     })    
+    this.startVisitAlert()
     //this.startGPS()
   }
 
@@ -138,8 +147,102 @@ export class RoutePage implements OnInit {
     this.currentVisit.route_id == this.currentRoute.route_id
     this.currentVisit.route_name == this.currentRoute.name
     this.visitProvider.setOnVisit(false)
-    this.visitProvider.saveCurrentVisit()
+    for (var wi in this.currentVisit.waypoints) {
+      for (var dri in this.currentVisit.waypoints[wi].data_requests) {
+        delete this.currentVisit.waypoints[wi].data_requests[dri].request_help
+        delete this.currentVisit.waypoints[wi].data_requests[dri].description
+        delete this.currentVisit.waypoints[wi].data_requests[dri].image
+        delete this.currentVisit.waypoints[wi].data_requests[dri].question
+        delete this.currentVisit.waypoints[wi].data_requests[dri].request_type
+        delete this.currentVisit.waypoints[wi].data_requests[dri].placeholder
+        delete this.currentVisit.waypoints[wi].data_requests[dri].options
+      }
+      delete this.currentVisit.waypoints[wi].distance
+      delete this.currentVisit.waypoints[wi].bearing
+      delete this.currentVisit.waypoints[wi].name
+      delete this.currentVisit.waypoints[wi].longitude
+      delete this.currentVisit.waypoints[wi].latitude
+    }   
+    this.uploadAlert()
     //this.stopGPS()
+  }
+
+ionViewWillUnload() {
+  console.log('destroy?')
+  if (this.onVisit) {
+    this.stopVisit()
+  }
+}
+
+ionViewWillLeave() {
+  console.log('leaving')
+}
+
+startVisitAlert() {
+  let alert = this.alertController.create({
+    title: 'Starting Visit!',
+    subTitle: 'Find waypoints and collect data.  As you answer questions and take pictures, your data is saved to the phone. When you are finished, stop the visit and upload it to the remote server, or wait until you have an Internet connection and save it from the Visits page.',
+    buttons: ['OK']
+  });
+  alert.present();
+}
+
+startWarningAlert() {
+  let alert = this.alertController.create({
+    title: 'Warning!',
+    subTitle: this.currentRoute.warning,
+    buttons: ['OK']
+  });
+  alert.present();
+}
+
+uploadAlert() {
+  let alert = this.alertController.create({
+    title: 'Upload Data',
+    message: 'Do you want to upload this data to the remove service right now?',
+    buttons: [
+      {
+        text: 'Cancel',
+        role: 'cancel',
+        handler: data => {
+          console.log('Saving Visit');
+          this.visitProvider.saveCurrentVisit()
+        }
+      },
+      {
+        text: 'Upload Data',
+        handler: data => {
+          this.uploadVisit()
+        }
+      }
+    ]
+  });
+  alert.present();
+}
+
+  uploadVisit() {
+    console.log('Uploading Visit')
+    var device_info = {
+      'cordova': this.device.cordova,
+      'uuid': this.device.uuid,
+      'model': this.device.model,
+      'platform': this.device.platform,
+      'version': this.device.version,
+      'manufacturer': this.device.manufacturer,
+      'isVirtual': this.device.isVirtual,
+      'serial': this.device.serial
+    }  
+    this.rscService.postVisit(this.currentVisit, device_info).subscribe(
+      data => {
+        console.log(data)
+        if (data['visit_added']) {
+          this.currentVisit.submitted = data['visit_added']
+        } else {
+          this.currentVisit.submitted = false
+        }
+        this.visitProvider.saveCurrentVisit()
+      }
+    )
   }
 
   startGPS() {

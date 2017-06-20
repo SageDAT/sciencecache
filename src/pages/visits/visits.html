@@ -17,13 +17,13 @@
     </ion-card>
 
   <ion-list *ngIf="localVisitsList?.length > 0">
-    <ion-item *ngFor="let visit of localVisitsList">
+    <ion-item *ngFor="let visit of localVisitsList, let visit_index = index">
       <h2 class="title">{{ visit.route_name }}</h2>
       <p>{{ formatDate(visit.created_date) }}</p>
       <p>{{ visit.questions_answered }} questions answered out of {{ visit.total_questions }}</p>
       <p>Number of Waypoints Found: {{ visit.waypoints_visited}}</p>
       <p>Waypoint Uploaded:{{ visit.submitted }}</p>
-      <button ion-button full small (click)="uploadVisit" (disabled)="!allowUploads" *ngIf="!visit.submitted"><ion-icon start name="cloud-upload"></ion-icon>&nbsp;&nbsp;Upload this Visit</button>
+      <button ion-button full small (click)="uploadVisit(visit_index)" (disabled)="!allowUploads" *ngIf="!visit.submitted"><ion-icon start name="cloud-upload"></ion-icon>&nbsp;&nbsp;Upload this Visit</button>
     </ion-item>
   </ion-list>
 </ion-content>

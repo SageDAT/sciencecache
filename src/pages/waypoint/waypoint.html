@@ -45,10 +45,9 @@
           </ion-card-content>
         </ion-card>
       </ion-col>
-      
       <ion-col col-12>
         <ion-segment [ngModel]="settings" padding>
-          <ion-segment-button value='foundIt' (click)="setWaypointFound(currentWaypoint.waypoint_id)" disabled="{{!onVisit}} || {{ currentWaypoint.found }}">
+          <ion-segment-button value='foundIt' (click)="setWaypointFound(currentWaypoint.waypoint_id)" disabled="{{!onVisit && currentVisit?.waypoints[currentWaypoint.index].found }}">
               <ion-icon class="custom-icon" name="ios-checkmark-circle"></ion-icon>
               Found It
           </ion-segment-button>

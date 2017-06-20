@@ -58,7 +58,14 @@ export class LocalScienceCacheProvider {
   }
 
   saveVisit(visit) {
+    console.log(visit)
     this.visitsDb.post(visit)
+  }
+
+  updateVisit(visit) {
+    this.visitsDb.put(visit).catch((err) => {
+      console.log(err);
+    });
   }
 
   loadVisits() {
