@@ -3,8 +3,6 @@
     <ion-title>Routes</ion-title>
   </ion-navbar>
 </ion-header>
-
-
 <ion-content padding>
   <h2 class="title">Saved Routes</h2>
     <ion-card>
@@ -42,15 +40,13 @@
     </ion-thumbnail>
     <em class="center">Retrieving Route from Remote Database...</em>
   </ion-card-content>
-
-
   <h2 class="title">Online Routes</h2>
-  <ion-content *ngIf="routesList?.length < 1">
+  <ion-content *ngIf="remoteRoutes?.length < 1">
     <em class="center">Retrieving Routes from ScienceCache Server...</em>
     <ion-spinner></ion-spinner>
   </ion-content>
-  <ion-list no-padding *ngIf="routesList?.length > 0">
-    <ion-item-sliding #item *ngFor="let route of routesList; let i = index;">
+  <ion-list no-padding *ngIf="remoteRoutes?.length > 0">
+    <ion-item-sliding #item *ngFor="let route of remoteRoutes; let i = index;">
         <ion-item no-padding>
           <ion-thumbnail item-start no-padding>
             <img src="{{ route.image }}" *ngIf="route.image">

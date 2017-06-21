@@ -33,10 +33,6 @@ export class WaypointPage  implements OnInit{
   constructor(public navCtrl: NavController, public navParams: NavParams, public routeProvider: RouteProvider, public visitProvider: VisitProvider, private camera: Camera) {
   }
   
-  showDataRequest(dr) {
-    console.log(dr)
-  }
-
   takePicture(index){
     var base64Image = "data:image/jpeg;base64," + "asdfjkl;"
     this.currentVisit.waypoints[index].photos.push({'data': base64Image})

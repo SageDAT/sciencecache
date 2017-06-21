@@ -63,9 +63,7 @@ export class RemoteScienceCacheProvider {
     visit.device_info = deviceInfo
     return this.http.post(visitURL, visit, { headers: headers })
       .map(response => { 
-        console.log(response.json())
         return response.json() 
-
       })
   }
 
@@ -90,12 +88,10 @@ export class RemoteScienceCacheProvider {
 
   getRoutes(all_fields=false) {
     var time = new Date()
-    console.log(time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds())
     var routesUrl = 'https://beta.sciencebase.gov/sciencecache-service/routes/'
     return this.http.get(routesUrl)
       .map(response => {
         time = new Date()
-        console.log(time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds())
         return response.json()
       })
       .catch(this.handleError)
@@ -119,7 +115,6 @@ export class RemoteScienceCacheProvider {
   }
   
   private handleError(error: any): Promise < any > {
-    console.log('ERROR!')
     console.error('An error occurred', error);
     return Promise.reject(error.message || error);
   }

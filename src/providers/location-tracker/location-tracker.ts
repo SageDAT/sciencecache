@@ -32,10 +32,6 @@ export class LocationTrackerProvider {
    // Credit: http://stackoverflow.com/a/27943/52160
    // ToDo: This should probably be replaced with the haversine formula.
    getDistanceFromLatLonInKm(latitude1,longitude1,latitude2,longitude2) {
-    console.log(latitude1)
-    console.log(latitude2)
-    console.log(longitude1)
-    console.log(longitude2)
     var R = 6371; // Radius of the earth in km
     var dLat = this.degreeToRadian(latitude2-latitude1);
     var dLon = this.degreeToRadian(longitude2-longitude1);
@@ -88,7 +84,6 @@ export class LocationTrackerProvider {
       interval: 5000 
     }
     this.backgroundGeolocation.configure(config).subscribe((location) => {
-      //console.log('BackgroundGeolocation:  ' + location.latitude + ',' + location.longitude);
       this.zone.run(() => {
         this.lat = location.latitude;
         this.lng = location.longitude;
@@ -116,10 +111,6 @@ export class LocationTrackerProvider {
    }
   
   stopTracking() {
-    console.log('stopTracking');
-    console.log('stopTracking');
-    console.log('stopTracking');
-    console.log('stopTracking');
     this.backgroundGeolocation.finish()
     this.backgroundGeolocation.stop()
     this.watch.unsubscribe();

@@ -3,6 +3,11 @@
     <ion-title>
       ScienceCache Help
     </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentPopover($event)">
+        <ion-icon name="settings"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -17,6 +22,5 @@
     <li>6. Once you've found all of the waypoints for the route you're visiting, you can stop your visit from the route page.</li>
     <li>7. If your phone is on wifi when you've stopped the visit, you'll be prompted to upload the data (question answers, photos) you've collected to our servers. (You can also upload all of your visits data from the 'Visits' tab.)</li>
     </ul>
-    <button ion-button full (click)="resetDB()">Reset DB</button>
+    
 </ion-content>
-

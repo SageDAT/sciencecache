@@ -96,18 +96,18 @@
 
       <ion-card *ngIf="currentRoute.waypoints?.length > 0 && waypointFinderToggle && onVisit">
         <ion-card-content>
-          <h3 class="df_title">Waypoint {{ compass_waypoint_number }}: {{ compass_waypoint_title }}</h3>
-          <h3 class="df_distance">{{ compass_waypoint_distance }}</h3>
-          <h3 class="df_bearing">{{ compass_waypoint_bearing }}</h3>
+          <h3 class="df_title">Waypoint {{ compass.waypoint_number }}: {{ compass.waypoint_title }}</h3>
+          <h3 class="df_distance">{{ compass.waypoint_distance }}</h3>
+          <h3 class="df_bearing">{{ compass.waypoint_bearing }}</h3>
           <div class="waypoint_finder">
-            <div [ngStyle]="{ '-webkit-transform' : rotate(deg), '-moz-transform' : rotate(deg), '-o-transform' : rotate(deg), '-ms-transform' : rotate(deg), 'transform' : rotate(deg)}">
+            <div [ngStyle]="{ '-webkit-transform' : rotate(compass.true_bearing), '-moz-transform' : rotate(compass.true_bearing), '-o-transform' : rotate(compass.true_bearing), '-ms-transform' : rotate(compass.true_bearing), 'transform' : rotate(compass.true_bearing)}">
               <img class="direction_finder" src="assets/images/waypoint_finder.png">
             </div>
           </div>
           <h6 class="df_info">
-            Heading: {{ compass_current_heading }}°&nbsp;&nbsp;
-            Accuracy: +/- {{ compass_current_accuracy }} meters&nbsp;&nbsp;
-            Speed: {{ compass_current_speed }}
+            Heading: {{ compass.current_heading }}°&nbsp;&nbsp;
+            Accuracy: +/- {{ compass.current_accuracy }} meters&nbsp;&nbsp;
+            Speed: {{ compass.current_speed }}
           </h6>
           <ion-segment>
             <ion-segment-button value="sat" (click)="previousWaypoint()">

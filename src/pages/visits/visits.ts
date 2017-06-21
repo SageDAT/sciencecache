@@ -51,7 +51,6 @@ export class VisitsPage implements OnInit {
   }
 
   uploadVisit(visit_index) {
-    console.log(this.localVisitsList[visit_index])
     this.rscService.postVisit(this.localVisitsList[visit_index], this.device_info).subscribe(
       data => {
         if (data['visit_added']) {
@@ -62,7 +61,6 @@ export class VisitsPage implements OnInit {
         this.lscService.updateVisit(this.localVisitsList[visit_index])
       }
     )
-    console.log(this.localVisitsList[visit_index])
   }
 
   formatDate(timedate) {

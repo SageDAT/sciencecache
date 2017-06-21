@@ -15,6 +15,7 @@ import { RoutesPage } from '../pages/routes/routes';
 import { TabsPage } from '../pages/tabs/tabs';
 import { RoutePage } from '../pages/route/route';
 import { WaypointPage } from '../pages/waypoint/waypoint';
+import { SettingsPage } from '../pages/settings/settings';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -33,6 +34,7 @@ import { VisitProvider } from '../providers/visit/visit';
     RoutesPage,
     RoutePage,
     TabsPage,
+    SettingsPage,
     WaypointPage,
     RouteMapComponent
   ],
@@ -52,6 +54,7 @@ import { VisitProvider } from '../providers/visit/visit';
     RoutesPage,
     RoutePage,
     WaypointPage,
+    SettingsPage,
     TabsPage
   ],
   providers: [

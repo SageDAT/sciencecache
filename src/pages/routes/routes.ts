@@ -21,12 +21,11 @@ export class RoutesPage implements OnInit {
   badLoadSubscription:Subscription
   savingRouteSubscription:Subscription
   localRoutes: any = []
-  localRoutesLoaded: boolean = false
-  serviceRoutes: any = []
-  routesList: any = []
+  remoteRoutes: any = []
   localRoutesList: any = []
   badLoad:boolean = false
   savingRoute: boolean = false
+  localRoutesLoaded: boolean = false
   displayCards: any = []
   
   constructor(public http: Http, public alertController: AlertController, public navCtrl: NavController, public lscService: LocalScienceCacheProvider, public rscService: RemoteScienceCacheProvider) {
@@ -49,14 +48,13 @@ export class RoutesPage implements OnInit {
 
   ionViewWillEnter() {
     this.lscService.loadRoutes().then(localRoutes => {
-      console.log(localRoutes)
       this.rscService.loadRoutes(localRoutes)
     })    
   }
 
   ngOnInit() {
     this.serviceRoutesSubscription = this.rscService._routesList.subscribe(routesList=> {
-      this.routesList = routesList
+      this.remoteRoutes = routesList
     })
     this.localRoutesSubscription = this.lscService._localRoutesList.subscribe(localRoutesList=> {
       this.localRoutesList = localRoutesList
@@ -74,9 +72,9 @@ export class RoutesPage implements OnInit {
 
   infoAlert(index) {
     let alert = this.alertController.create({
-      title: this.routesList[index].name,
-      subTitle: this.routesList[index].description,
-      message: '<span>Difficulty: ' + this.routesList[index].route_difficulty.name + '</span><br /><span>Length: ' + this.routesList[index].route_length.length + '</span><br /><span>Waypoints: ' + this.routesList[index].waypoints_count + '</span>',
+      title: this.remoteRoutes[index].name,
+      subTitle: this.remoteRoutes[index].description,
+      message: '<span>Difficulty: ' + this.remoteRoutes[index].route_difficulty.name + '</span><br /><span>Length: ' + this.remoteRoutes[index].route_length.length + '</span><br /><span>Waypoints: ' + this.remoteRoutes[index].waypoints_count + '</span>',
       buttons: [
       {
         text: 'Dismiss',
@@ -88,7 +86,7 @@ export class RoutesPage implements OnInit {
       {
         text: 'Download',
         handler: () => {
-          this.downloadRoute(this.routesList[index].id)
+          this.downloadRoute(this.remoteRoutes[index].id)
         }
       }
     ]
