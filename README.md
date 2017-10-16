@@ -1,26 +1,30 @@
-This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
+ScienceCache Mobile App
 
-## How to use this template
+A geocaching, citizen science app using the Ionic 2 Framework.
 
-*This template does not work on its own*. The shared files for each starter are found in the [ionic2-app-base repo](https://github.com/driftyco/ionic2-app-base).
-
-To use this template, either create a new ionic project using the ionic node.js utility, or copy the files from this repository into the [Starter App Base](https://github.com/driftyco/ionic2-app-base).
-
-### With the Ionic CLI:
-
-Take the name after `ionic2-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
-
-```bash
-$ sudo npm install -g ionic cordova
-$ ionic start myTabs tabs
+Install Ionic https://ionicframework.com/docs/intro/installation/
+```
+npm install -g ionic cordova
 ```
 
-Then, to run it, cd into `myTabs` and run:
-
-```bash
-$ ionic cordova platform add ios
-$ ionic cordova run ios
+Download the repository and in the app directory build the app using:
+```
+ npm install
 ```
 
+To run the app in a browser. While running in a browser is useful, cordova.js will not be present and full device simulation will not occur:
+```
+ionic serve
+```
+
+Simulate iOS or Android look at feel with --lab (But still no full device simulation):
+```
+ionic serve --lab
+```
+
+This command should fully simulate the app if you are running on a Mac:
+```
+ionic cordova platform add ios
+ionic cordova run ios -lc
+```
 Substitute ios for android if not on a Mac.
-
