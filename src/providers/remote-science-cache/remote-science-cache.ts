@@ -57,7 +57,7 @@ export class RemoteScienceCacheProvider {
   }
 
   postVisit(visit, deviceInfo) {
-    var visitURL = 'http://localhost:8000/visits/'
+    var visitURL = 'https://beta.sciencebase.gov/sciencecache-service/visits/'
     var headers = new Headers()
     headers.append('Content-Type', 'application/json')
     visit.device_info = deviceInfo
