@@ -27,7 +27,6 @@ npm config set strict-ssl false
 npm install npm -g
 ```
 
-
 4. Install Ionic 
 
 https://ionicframework.com/docs/intro/installation/
@@ -36,6 +35,7 @@ npm install -g ionic cordova
 ```
 
 5. Install XCode (Mac)
+
 6. Install Android SDK https://developer.android.com/studio/install.html
 
 7. PIP Configuration
