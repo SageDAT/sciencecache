@@ -5,11 +5,11 @@ A geocaching, citizen science app using the Ionic 2 Framework.
 
 Development Environment Setup
 -----------------------------
-1. Install NVM
+###Install NVM
 ```
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.7/install.sh | bash
 ```
-2. Install Node.js 
+###Install Node.js 
 ```
 nvm install 6.12.2
 ```
@@ -20,25 +20,26 @@ nvm use 6.12.2
 ```
 Uninstall various old global node things that the previous command complained about
 
-3. Update NPM
+###Update NPM
 ```
 npm config set cafile /Users/jllong/certificates/DOIRootCA.pem (didn’t work, so)
 npm config set strict-ssl false
 npm install npm -g
 ```
 
-4. Install Ionic 
+###Install Ionic 
 
 https://ionicframework.com/docs/intro/installation/
 ```
 npm install -g ionic cordova
 ```
 
-5. Install XCode (Mac)
+###Install XCode (Mac)
 
-6. Install Android SDK https://developer.android.com/studio/install.html
+###Install Android SDK 
+https://developer.android.com/studio/install.html
 
-7. PIP Configuration
+###PIP Configuration
 
 For pip cert errors, download cert and create pem:
 ```
