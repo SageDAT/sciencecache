@@ -65,7 +65,7 @@
           <h2>Site Information</h2>
         </ion-item>
         <ion-card-content>
-          <p>{{ currentRoute.description }}</p>
+          <p>{{ currentRoute?.description }}</p>
         </ion-card-content>
         <ion-row>
           <ion-col>
@@ -77,7 +77,7 @@
         <ion-row>
           <ion-col>
             <ion-card-content small>
-              <ion-label icon-left><ion-icon name="globe"></ion-icon>Location:</ion-label> {{ currentRoute.route_location.description }}
+              <ion-label icon-left><ion-icon name="globe"></ion-icon>Location:</ion-label> {{ currentRoute.route_location?.description }}
             </ion-card-content>
           </ion-col>
         </ion-row>
@@ -86,7 +86,7 @@
       <ion-item>
         <ion-label>Waypoint Finder</ion-label>
         <ion-toggle [(ngModel)]="waypointFinderToggle" checked="false"></ion-toggle>
-      </ion-item>        
+      </ion-item>
 
       <ion-card *ngIf="waypointFinderToggle && !onVisit">
         <ion-card-content>
@@ -115,7 +115,7 @@
               Prev. Waypoint
             </ion-segment-button>
             <ion-segment-button value="street" (click)="nextWaypoint()">
-              Next Waypoint 
+              Next Waypoint
               <ion-icon class="custom-icon" name="arrow-forward"></ion-icon>
             </ion-segment-button>
           </ion-segment>
@@ -131,7 +131,7 @@
         <ion-list inset>
           <button ion-item *ngFor="let waypoint of currentRoute.waypoints" (click)="waypointSelected(waypoint.waypoint_id)">
             {{ waypoint.name }}
-          </button> 
+          </button>
         </ion-list>
       </ion-col>
 
