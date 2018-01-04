@@ -22,19 +22,19 @@
             <img src="assets/noImage.png" *ngIf="!route.image">
           </ion-thumbnail>
         <h2>{{ route.name }}</h2>
-        <p> {{ route.route_location.description }} </p>
+        <p> {{ route.route_location?.description }} </p>
       </ion-item>
       <ion-item-options side="right">
         <button ion-button large color="primary" (click)="loadRoute(route._id)">
           <ion-icon name="open"></ion-icon>
-        </button>    
+        </button>
         <button ion-button large color="danger" (click)="removeRoute(i)">
           <ion-icon name="trash"></ion-icon>
-        </button>    
+        </button>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-  <ion-card-content *ngIf="savingRoute">   
+  <ion-card-content *ngIf="savingRoute">
     <ion-thumbnail item-start no-padding>
       <ion-spinner></ion-spinner>
     </ion-thumbnail>
@@ -53,12 +53,12 @@
             <img src="assets/noImage.png" *ngIf="!route.image">
           </ion-thumbnail>
         <h2>{{ route.name }}</h2>
-        <p> {{ route.route_location.description }} </p>
+        <p> {{ route.route_location?.description }} </p>
       </ion-item>
       <ion-item-options side="right">
         <button ion-button large color="primary" (click)="infoAlert(i)">
           <ion-icon name="information-circle"></ion-icon>
-        </button>    
+        </button>
         <button ion-button large color="secondary" (click)="downloadRoute(route.route_id)">
           <ion-icon name="cloud-download"></ion-icon>
         </button>
