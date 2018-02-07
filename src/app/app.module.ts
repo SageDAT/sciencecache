@@ -35,8 +35,7 @@ import { VisitProvider } from '../providers/visit/visit';
     RoutePage,
     TabsPage,
     SettingsPage,
-    WaypointPage,
-    RouteMapComponent
+    WaypointPage
   ],
   imports: [
     BrowserModule,
@@ -44,7 +43,8 @@ import { VisitProvider } from '../providers/visit/visit';
     IonicModule.forRoot(MyApp, { 
       scrollAssist: false,
       autoFocusAssist: false
-    })
+    }),
+    RouteMapComponent
   ],
   bootstrap: [IonicApp],
   entryComponents: [
