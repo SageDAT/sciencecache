@@ -26,6 +26,7 @@ export class RemoteScienceCacheProvider {
   savingRoute:boolean = false
   _savingRoute = new BehaviorSubject <any> ([])
   savingRoute$ = this._savingRoute.asObservable()
+  base_sciencecache_service_url = "https://api.sciencebase.gov/sciencecache-service/"
 
   constructor(public http: Http, public lscService: LocalScienceCacheProvider) {
   }
@@ -41,7 +42,7 @@ export class RemoteScienceCacheProvider {
       }
     }
     return new Promise(resolve=>{
-      this.http.get('https://beta.sciencebase.gov/sciencecache-service/routes/' + id)
+      this.http.get(this.base_sciencecache_service_url + 'routes/' + id)
       .map(response=>response.json())
       .subscribe(data => {
         this.currentRoute = data
@@ -57,7 +58,7 @@ export class RemoteScienceCacheProvider {
   }
 
   postVisit(visit, deviceInfo) {
-    var visitURL = 'https://beta.sciencebase.gov/sciencecache-service/visits/'
+    var visitURL = this.base_sciencecache_service_url + 'visits/'
     var headers = new Headers()
     headers.append('Content-Type', 'application/json')
     visit.device_info = deviceInfo
@@ -88,7 +89,7 @@ export class RemoteScienceCacheProvider {
 
   getRoutes(all_fields=false) {
     var time = new Date()
-    var routesUrl = 'https://beta.sciencebase.gov/sciencecache-service/routes/'
+    var routesUrl = this.base_sciencecache_service_url + 'routes/'
     return this.http.get(routesUrl)
       .map(response => {
         time = new Date()
@@ -98,7 +99,7 @@ export class RemoteScienceCacheProvider {
   }
 
   fetchRouteSummaries(reloadRoutes = false) {
-    var routesUrl = 'https://beta.sciencebase.gov/sciencecache-service/routes/';
+    var routesUrl = this.base_sciencecache_service_url + 'routes/';
     //  This is BROKEN and should be fixed.
     if ((this.fullRoutesList.length > 0) && (reloadRoutes == false)) {
       return Promise.resolve(resolve=> { return this.fullRoutesList}) 
