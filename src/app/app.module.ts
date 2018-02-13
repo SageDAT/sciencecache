@@ -22,7 +22,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { LocalScienceCacheProvider } from '../providers/local-science-cache/local-science-cache';
 import { RemoteScienceCacheProvider } from '../providers/remote-science-cache/remote-science-cache';
 import { LocationTrackerProvider } from '../providers/location-tracker/location-tracker';
-import { RouteMapComponent } from '../components/route-map/route-map';
 import { RouteProvider } from '../providers/route/route';
 import { VisitProvider } from '../providers/visit/visit';
 
@@ -43,8 +42,7 @@ import { VisitProvider } from '../providers/visit/visit';
     IonicModule.forRoot(MyApp, { 
       scrollAssist: false,
       autoFocusAssist: false
-    }),
-    RouteMapComponent
+    })    
   ],
   bootstrap: [IonicApp],
   entryComponents: [
