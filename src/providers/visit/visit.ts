@@ -76,27 +76,29 @@ export class VisitProvider {
 
   updateWaypoints() {
     this.currentLocation = this.locationTracker.getCurrentLocation()
-    for (var waypoint in this.currentVisit.waypoints) {
-      this.currentVisit.waypoints[waypoint].distance = this.locationTracker.getDistanceFromLatLonInKm(this.currentLocation.coords.latitude,this.currentLocation.coords.longitude,this.currentVisit.waypoints[waypoint].latitude,this.currentVisit.waypoints[waypoint].longitude) * 1000
-      this.currentVisit.waypoints[waypoint].bearing = this.locationTracker.getBearingfromLatLong(this.currentLocation.coords.latitude,this.currentLocation.coords.longitude,this.currentVisit.waypoints[waypoint].latitude,this.currentVisit.waypoints[waypoint].longitude)
-      this.currentVisit.waypoints[waypoint].distance
-      var waypointName = '<strong>' + this.currentVisit.waypoints[waypoint].name +'</strong><br />'
-      var waypointLat = 'Latitude: ' + this.currentVisit.waypoints[waypoint].latitude + '<br />'
-      var waypointLong = 'Longitude: ' + this.currentVisit.waypoints[waypoint].latitude + '<br />'
-      var waypointBearing = '???'
-      if (isNaN(this.currentVisit.waypoints[waypoint].bearing) && waypointBearing != '???') {
-        waypointBearing =  'Last Bearing: ' + this.currentVisit.waypoints[waypoint].bearing + '<br />'
-      } else {
-          waypointBearing =  'Bearing: ' + this.currentVisit.waypoints[waypoint].bearing + '<br />'
+    if (this.currentLocation.coords) {
+      for (var waypoint in this.currentVisit.waypoints) {
+        this.currentVisit.waypoints[waypoint].distance = this.locationTracker.getDistanceFromLatLonInKm(this.currentLocation.coords.latitude,this.currentLocation.coords.longitude,this.currentVisit.waypoints[waypoint].latitude,this.currentVisit.waypoints[waypoint].longitude) * 1000
+        this.currentVisit.waypoints[waypoint].bearing = this.locationTracker.getBearingfromLatLong(this.currentLocation.coords.latitude,this.currentLocation.coords.longitude,this.currentVisit.waypoints[waypoint].latitude,this.currentVisit.waypoints[waypoint].longitude)
+        this.currentVisit.waypoints[waypoint].distance
+        var waypointName = '<strong>' + this.currentVisit.waypoints[waypoint].name +'</strong><br />'
+        var waypointLat = 'Latitude: ' + this.currentVisit.waypoints[waypoint].latitude + '<br />'
+        var waypointLong = 'Longitude: ' + this.currentVisit.waypoints[waypoint].latitude + '<br />'
+        var waypointBearing = '???'
+        if (isNaN(this.currentVisit.waypoints[waypoint].bearing) && waypointBearing != '???') {
+          waypointBearing =  'Last Bearing: ' + this.currentVisit.waypoints[waypoint].bearing + '<br />'
+        } else {
+            waypointBearing =  'Bearing: ' + this.currentVisit.waypoints[waypoint].bearing + '<br />'
+        }
+        
+        var waypointDistance = '???'
+        if (isNaN(this.currentVisit.waypoints[waypoint].distance) && waypointDistance != '???') {
+          waypointDistance = 'Last Distance: ' + this.currentVisit.waypoints[waypoint].distance + '<br />'
+        } else {
+            waypointDistance = 'Distance: ' + this.currentVisit.waypoints[waypoint].distance + '<br />'
+        }
+        this.currentVisit.waypoints[waypoint].message = waypointName + waypointLat + waypointLong + waypointBearing + waypointDistance
       }
-      
-      var waypointDistance = '???'
-      if (isNaN(this.currentVisit.waypoints[waypoint].distance) && waypointDistance != '???') {
-        waypointDistance = 'Last Distance: ' + this.currentVisit.waypoints[waypoint].distance + '<br />'
-      } else {
-          waypointDistance = 'Distance: ' + this.currentVisit.waypoints[waypoint].distance + '<br />'
-      }
-      this.currentVisit.waypoints[waypoint].message = waypointName + waypointLat + waypointLong + waypointBearing + waypointDistance
     }
   }
 

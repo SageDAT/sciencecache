@@ -52,7 +52,7 @@
 
       <ion-item>
         <ion-label>Start Visit</ion-label>
-        <ion-toggle [(ngModel)]="visitToggle" checked="false" (click)="visitStatusChanged()"></ion-toggle>
+        <ion-toggle [(ngModel)]="visitToggle" checked="false" (ngModelChange)="visitStatusChanged()"></ion-toggle>
       </ion-item>
 
       <ion-item>

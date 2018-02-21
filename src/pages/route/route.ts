@@ -8,8 +8,8 @@ import { WaypointPage } from '../waypoint/waypoint'
 import { Device } from "@ionic-native/device"
 import { LocalScienceCacheProvider } from '../../providers/local-science-cache/local-science-cache'
 import { RemoteScienceCacheProvider } from '../../providers/remote-science-cache/remote-science-cache'
-import { LocationTrackerProvider } from '../../providers/location-tracker/location-tracker';
-import 'leaflet';
+import { LocationTrackerProvider } from '../../providers/location-tracker/location-tracker'
+import * as L from 'leaflet'
 
 /**
  * Generated class for the RoutePage page.
@@ -321,16 +321,23 @@ export class RoutePage implements OnInit {
         iconAnchor: [15, 45],
         popupAnchor: [0, -46]
     })
-    if (this.currentLocationMarker) {
-      this.currentLocationMarker.setLatLng([this.currentLocation.coords.latitude, this.currentLocation.coords.longitude]);
-    } else {
-      this.currentLocationMarker = L.marker([this.currentLocation.coords.latitude, this.currentLocation.coords.longitude], {icon: currentIcon}).addTo(this.map)
+    if (this.currentLocation.coords) {
+      if (this.currentLocationMarker) {
+        this.currentLocationMarker.setLatLng([this.currentLocation.coords.latitude, this.currentLocation.coords.longitude]);
+      } else {
+        this.currentLocationMarker = L.marker([this.currentLocation.coords.latitude, this.currentLocation.coords.longitude], {icon: currentIcon}).addTo(this.map)
+      }
+      this.currentLocationMarker.bindPopup('<b>Current Location</b><br />Latitude: ' + this.currentLocation.coords.latitude +'<br />Longitude: ' + this.currentLocation.coords.longitude)
+      this.map.panTo(new L.LatLng(this.currentLocation.coords.latitude, this.currentLocation.coords.longitude))
+      this.compass.current_heading = Math.round(this.currentLocation.coords.heading);
+      this.compass.current_accuracy = this.currentLocation.coords.accuracy;
+      if (this.currentLocation.coords.speed) {
+        this.compass.current_speed = this.currentLocation.coords.speed.toFixed(2);
+      }
+      else {
+        this.compass.current_speed = 0;
+      }
     }
-    this.currentLocationMarker.bindPopup('<b>Current Location</b><br />Latitude: ' + this.currentLocation.coords.latitude +'<br />Longitude: ' + this.currentLocation.coords.longitude)
-    this.map.panTo(new L.LatLng(this.currentLocation.coords.latitude, this.currentLocation.coords.longitude))
-    this.compass.current_heading = Math.round(this.currentLocation.coords.heading);
-    this.compass.current_accuracy = this.currentLocation.coords.accuracy;
-    this.compass.current_speed = this.currentLocation.coords.speed.toFixed(2);
   }
 
   updateWaypoints() {
