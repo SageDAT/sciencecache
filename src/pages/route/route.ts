@@ -348,7 +348,9 @@ export class RoutePage implements OnInit {
           waypoint.alert = true
         }
       }
-      this.leafletWaypointMarkers[waypoint['id']].bindPopup(waypoint.message)      
+      if (this.leafletWaypointMarkers[waypoint['id']]) {
+        this.leafletWaypointMarkers[waypoint['id']].bindPopup(waypoint.message)      
+      }
     }    
   }
 
@@ -369,7 +371,7 @@ export class RoutePage implements OnInit {
         key = key + 1;
       }
     }
-    if (this.waypointMarkers && this.waypointMarkers[0]['lat'] && this.waypointMarkers[0]['lng']) {
+    if (this.waypointMarkers && this.waypointMarkers[0] && this.waypointMarkers[0]['lat'] && this.waypointMarkers[0]['lng']) {
       for (var marker of this.waypointMarkers) {
         this.leafletWaypointMarkers[marker['id']] = L.marker([marker.lat, marker.lng], {icon: marker.icon}).addTo(this.map)
         this.leafletWaypointMarkers[marker['id']].bindPopup(marker.message)

@@ -34,8 +34,6 @@ export class WaypointPage  implements OnInit{
   }
   
   takePicture(index){
-    var base64Image = "data:image/jpeg;base64," + "asdfjkl;"
-    this.currentVisit.waypoints[index].photos.push({'data': base64Image})
     this.options = {
       quality: 100,
       sourceType: this.camera.PictureSourceType.CAMERA,
@@ -48,6 +46,7 @@ export class WaypointPage  implements OnInit{
         var base64Image = "data:image/jpeg;base64," + imageData
         this.currentVisit.waypoints[index].photos.push({'data': base64Image})
       })
+      .catch(error => { alert(error) })
   }
   
   setWaypointFound(id) {
