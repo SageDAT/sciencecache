@@ -24,6 +24,8 @@ import { RemoteScienceCacheProvider } from '../providers/remote-science-cache/re
 import { LocationTrackerProvider } from '../providers/location-tracker/location-tracker';
 import { RouteProvider } from '../providers/route/route';
 import { VisitProvider } from '../providers/visit/visit';
+import {RegistrationPage} from "../pages/registration/registration";
+import {IonicStorageModule} from "@ionic/storage";
 
 @NgModule({
   declarations: [
@@ -34,15 +36,17 @@ import { VisitProvider } from '../providers/visit/visit';
     RoutePage,
     TabsPage,
     SettingsPage,
-    WaypointPage
+    WaypointPage,
+    RegistrationPage
   ],
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp, { 
+    IonicStorageModule.forRoot(),
+    IonicModule.forRoot(MyApp, {
       scrollAssist: false,
       autoFocusAssist: false
-    })    
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -53,7 +57,8 @@ import { VisitProvider } from '../providers/visit/visit';
     RoutePage,
     WaypointPage,
     SettingsPage,
-    TabsPage
+    TabsPage,
+    RegistrationPage
   ],
   providers: [
     HttpModule,

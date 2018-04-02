@@ -61,6 +61,11 @@ Clone the repository.  In the app directory build the app using:
  npm install
 ```
 
+Install cordova
+```
+sudo npm install -g ionic cordova
+```
+
 To run the app in a browser. While running in a browser is useful, cordova.js will not be present and full device simulation will not occur:
 ```
 ionic serve
@@ -76,7 +81,7 @@ This command should fully simulate the app if you are running on a Mac:
 ionic cordova platform add ios
 ionic cordova run ios -lc
 ```
-Substitute ios for android if not on a Mac.
+Substitute ios for android if not on a Mac. The -lc is livereload and console logging
 
 Build and Deploy Debug APK to Device
 ------------------------------------

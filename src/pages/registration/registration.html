@@ -1,0 +1,83 @@
+<!--
+  Generated template for the RegistrationPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-avatar>
+      <img src="assets/noImage.png" width="10%">
+    </ion-avatar>
+    <ion-title>Registration</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding *ngIf="!isRegistered">
+
+  <ion-card>
+
+    <ion-card-content>
+      <i>Optional:</i> Enter an email address to be able to view Private Routes
+    </ion-card-content>
+
+
+    <ion-label color="primary">Email:</ion-label>
+    <ion-input [(ngModel)]="email" type="email" placeholder="Email address"></ion-input>
+    <ion-card-content *ngIf="isValidEmail">Email is invalid.</ion-card-content>
+
+    <div text-center>
+      <button ion-button (click)="sendDeviceInfo()">Register</button>
+    </div>
+    <ion-card-content *ngIf="registrationFailed">Registration failed, please retry.</ion-card-content>
+
+  </ion-card>
+
+  <!--<ion-card>-->
+    <!--<ion-label color="secondary">Cordova:</ion-label>-->
+    <!--<ion-card-content>{{deviceinfo.cordova}}</ion-card-content>-->
+    <!--<ion-label color="secondary">UUID:</ion-label>-->
+    <!--<ion-card-content>{{deviceinfo.uuid}}</ion-card-content>-->
+    <!--<ion-label color="secondary">Model:</ion-label>-->
+    <!--<ion-card-content>{{deviceinfo.model}}</ion-card-content>-->
+    <!--<ion-label color="secondary">Platform:</ion-label>-->
+    <!--<ion-card-content>{{deviceinfo.platform}}</ion-card-content>-->
+    <!--<ion-label color="secondary">Version:</ion-label>-->
+    <!--<ion-card-content>{{deviceinfo.version}}</ion-card-content>-->
+    <!--<ion-label color="secondary">Manufacturer:</ion-label>-->
+    <!--<ion-card-content>{{deviceinfo.manufacturer}}</ion-card-content>-->
+    <!--<ion-label color="secondary">Virtual:</ion-label>-->
+    <!--<ion-card-content>{{deviceinfo.isVirtual}}</ion-card-content>-->
+    <!--<ion-label color="secondary">Serial:</ion-label>-->
+    <!--<ion-card-content>{{deviceinfo.serial}}</ion-card-content>-->
+  <!--</ion-card>-->
+
+</ion-content>
+
+<ion-content padding *ngIf="isRegistered">
+
+  <ion-card class="vertical" >
+    <ion-card-content *ngIf="!emailProvided">
+      Congratulations, your registration was successful.
+    </ion-card-content>
+
+    <ion-card-content *ngIf="emailProvided">
+      Congratulations, your registration was successful. Please check your email for a verification link.
+      <br>
+      <i>Your registration email may have been sent to your spam folder.</i>
+    </ion-card-content>
+
+      <div text-center>
+        <button ion-button (click)="gotoRoutes()">Continue</button>
+      </div>
+  </ion-card>
+
+
+</ion-content>
+
+
+
+

@@ -3,10 +3,11 @@ import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { LocalScienceCacheProvider } from '../local-science-cache/local-science-cache'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 /*
   Generated class for the RemoteScienceCacheProvider provider.
 
-  This service handles data into and out of the Remove ScienceCache (python) microservice, which 
+  This service handles data into and out of the Remove ScienceCache (python) microservice, which
   in turn handles data into and out of the postgres database.
 */
 @Injectable()
@@ -18,7 +19,7 @@ export class RemoteScienceCacheProvider {
   routesList:any = []
   _routesList = new BehaviorSubject < any > ([])
   routesList$ = this._routesList.asObservable()
-  
+
   badLoad:boolean = false
   _badLoad = new BehaviorSubject <any> ([])
   badLoad$ = this._badLoad.asObservable()
@@ -27,6 +28,9 @@ export class RemoteScienceCacheProvider {
   _savingRoute = new BehaviorSubject <any> ([])
   savingRoute$ = this._savingRoute.asObservable()
   base_sciencecache_service_url = "https://api.sciencebase.gov/sciencecache-service/"
+
+  serviceUrl = 'https://ede.cr.usgs.gov/sciencecache-service' //ionic doesn't support env variables natively
+  // serviceUrl = 'http://localhost:8000'
 
   constructor(public http: Http, public lscService: LocalScienceCacheProvider) {
   }
@@ -63,8 +67,8 @@ export class RemoteScienceCacheProvider {
     headers.append('Content-Type', 'application/json')
     visit.device_info = deviceInfo
     return this.http.post(visitURL, visit, { headers: headers })
-      .map(response => { 
-        return response.json() 
+      .map(response => {
+        return response.json()
       })
   }
 
@@ -102,7 +106,7 @@ export class RemoteScienceCacheProvider {
     var routesUrl = this.base_sciencecache_service_url + 'routes/';
     //  This is BROKEN and should be fixed.
     if ((this.fullRoutesList.length > 0) && (reloadRoutes == false)) {
-      return Promise.resolve(resolve=> { return this.fullRoutesList}) 
+      return Promise.resolve(resolve=> { return this.fullRoutesList})
     }
     return new Promise(resolve => {
       this.http.get(routesUrl)
@@ -112,9 +116,15 @@ export class RemoteScienceCacheProvider {
           this.fullRoutesList = Object.assign({}, this.routesList)
           resolve(this.routesList)
         })
-    })  
+    })
   }
-  
+
+  postDeviceData(data) {
+    const URL = `${this.serviceUrl}/deviceinfo`;
+    return this.http.post(URL, data)
+      .map(response => response.json()).catch(this.handleError)
+  }
+
   private handleError(error: any): Promise < any > {
     console.error('An error occurred', error);
     return Promise.reject(error.message || error);
