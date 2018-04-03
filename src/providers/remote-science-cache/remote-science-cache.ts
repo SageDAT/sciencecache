@@ -3,6 +3,8 @@ import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { LocalScienceCacheProvider } from '../local-science-cache/local-science-cache'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { environment } from '../../environments/environment';
+
 
 /*
   Generated class for the RemoteScienceCacheProvider provider.
@@ -12,6 +14,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 */
 @Injectable()
 export class RemoteScienceCacheProvider {
+  serviceUrl: string = environment.serviceUrl;
+
   serviceData: any
   currentRoute: any
   fullRoutesList:any = []
@@ -28,9 +32,6 @@ export class RemoteScienceCacheProvider {
   _savingRoute = new BehaviorSubject <any> ([])
   savingRoute$ = this._savingRoute.asObservable()
   base_sciencecache_service_url = "https://api.sciencebase.gov/sciencecache-service/"
-
-  serviceUrl = 'https://ede.cr.usgs.gov/sciencecache-service' //ionic doesn't support env variables natively
-  // serviceUrl = 'http://localhost:8000'
 
   constructor(public http: Http, public lscService: LocalScienceCacheProvider) {
   }
@@ -121,6 +122,7 @@ export class RemoteScienceCacheProvider {
 
   postDeviceData(data) {
     const URL = `${this.serviceUrl}/deviceinfo`;
+    console.log('Device post url:', URL)
     return this.http.post(URL, data)
       .map(response => response.json()).catch(this.handleError)
   }

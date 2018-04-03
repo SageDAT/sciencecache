@@ -4,13 +4,11 @@ import { WaypointPage } from './waypoint';
 
 @NgModule({
   declarations: [
-    WaypointPage,
   ],
   imports: [
     IonicPageModule.forChild(WaypointPage),
   ],
   exports: [
-    WaypointPage
   ]
 })
 export class WaypointPageModule {}

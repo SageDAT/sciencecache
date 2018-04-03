@@ -4,13 +4,11 @@ import { RoutePage } from './route';
 
 @NgModule({
   declarations: [
-    RoutePage,
   ],
   imports: [
     IonicPageModule.forChild(RoutePage),
   ],
   exports: [
-    RoutePage
   ]
 })
 export class RoutePageModule {}

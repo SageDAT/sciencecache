@@ -81,7 +81,13 @@ This command should fully simulate the app if you are running on a Mac:
 ionic cordova platform add ios
 ionic cordova run ios -lc
 ```
-Substitute ios for android if not on a Mac. The -lc is livereload and console logging
+Substitute ios for android if not on a Mac. The -lc is livereload and console logging.
+
+Deploying to a device
+```
+https://ionicframework.com/docs/intro/deploying/
+```
+
 
 Build and Deploy Debug APK to Device
 ------------------------------------

@@ -106,6 +106,7 @@ export class RegistrationPage {
   }
 
   ngOnInit() {
+    // this.storage.remove('deviceinfo')
     this.setup()
     this.deviceinfo = this.setDeviceInfo()
 

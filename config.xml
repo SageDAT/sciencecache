@@ -3,7 +3,7 @@
     <name>ScienceCache</name>
     <description>USGS Citizen Science Application.</description>
     <author email="jllong@usgs.gov" href="https://www.usgs.gov/">USGS ScienceCache Team</author>
-    <content original-src="index.html" src="http://159.189.163.93:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="http://*/*" />
     <allow-navigation href="https://*/*" />
