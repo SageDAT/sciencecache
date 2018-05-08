@@ -14,32 +14,32 @@ import { RemoteScienceCacheProvider } from '../../providers/remote-science-cache
 })
 export class RoutesPage implements OnInit {
 
-  newRoute: any
-  localRoutesSubscription:Subscription
-  localRoutesLoadedSubscription:Subscription
-  serviceRoutesSubscription:Subscription
-  badLoadSubscription:Subscription
-  savingRouteSubscription:Subscription
-  localRoutes: any = []
-  remoteRoutes: any = []
-  localRoutesList: any = []
-  badLoad:boolean = false
-  savingRoute: boolean = false
-  localRoutesLoaded: boolean = false
-  displayCards: any = []
-  
+  newRoute: any;
+  localRoutesSubscription:Subscription;
+  localRoutesLoadedSubscription:Subscription;
+  // serviceRoutesSubscription:Subscription
+  badLoadSubscription:Subscription;
+  savingRouteSubscription:Subscription;
+  localRoutes: any = [];
+  remoteRoutes: any = [];
+  localRoutesList: any = [];
+  badLoad:boolean = false;
+  savingRoute: boolean = false;
+  localRoutesLoaded: boolean = false;
+  displayCards: any = [];
+
   constructor(public http: Http, public alertController: AlertController, public navCtrl: NavController, public lscService: LocalScienceCacheProvider, public rscService: RemoteScienceCacheProvider) {
   }
 
   loadRoute(id) {
     this.navCtrl.push(RoutePage, {'id': id})
   }
-  
+
   removeRoute(index) {
-    this.lscService.deleteRoute(this.localRoutesList[index])
+    this.lscService.deleteRoute(this.localRoutesList[index]);
     this.lscService.loadRoutes().then(data=> {
       this.rscService.loadRoutes(data)
-    })    
+    })
   }
 
   downloadRoute(id) {
@@ -47,24 +47,38 @@ export class RoutesPage implements OnInit {
   }
 
   ionViewWillEnter() {
+    console.log('ionviewwillender....');
     this.lscService.loadRoutes().then(localRoutes => {
       this.rscService.loadRoutes(localRoutes)
-    })    
+    })
+  }
+
+  setup() {
+    // this.serviceRoutesSubscription = this.rscService._routesList.subscribe( routesList => {
+    //   this.remoteRoutes = routesList
+    // })
+    this.rscService._routesList.subscribe(routesList =>{
+      this.remoteRoutes = routesList;
+    })
   }
 
   ngOnInit() {
-    this.serviceRoutesSubscription = this.rscService._routesList.subscribe(routesList=> {
-      this.remoteRoutes = routesList
-    })
+    console.log('nginit...');
+
+    this.setup();
+
+    // this.serviceRoutesSubscription = this.rscService._routesList.subscribe(routesList=> {
+    //   this.remoteRoutes = routesList
+    // })
     this.localRoutesSubscription = this.lscService._localRoutesList.subscribe(localRoutesList=> {
       this.localRoutesList = localRoutesList
-    })
+    });
     this.localRoutesLoadedSubscription = this.lscService._localRoutesLoaded.subscribe(localRoutesLoaded=> {
       this.localRoutesLoaded = localRoutesLoaded
-    })
+    });
     this.badLoadSubscription = this.rscService._badLoad.subscribe(badLoad=> {
       this.badLoad = badLoad
-    })
+    });
     this.savingRouteSubscription = this.rscService._savingRoute.subscribe(savingRoute=> {
       this.savingRoute = savingRoute
     })

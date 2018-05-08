@@ -4,6 +4,8 @@ import PouchDB from 'pouchdb';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 
+import {Storage} from "@ionic/storage";
+
 /*
   Generated class for the LocalScienceCacheProvider provider.
 
@@ -42,13 +44,17 @@ export class LocalScienceCacheProvider {
   _currentRoute = new BehaviorSubject <any> ([]);
   currentRoute$ = this._currentRoute.asObservable();
 
-  constructor() {
+  /////
+
+  storedDeviceInfo: any = null
+
+  constructor(private storage: Storage) {
     this.routesDb = new PouchDB('routes')
     this.visitsDb = new PouchDB('visits')
     this.userConfigDb = new PouchDB('userConfig')
   }
 
-// Visits DB Stuff 
+// Visits DB Stuff
 
   wipeVisitsDB() {
     this.visitsDb.destroy().then(function (response) {
@@ -150,7 +156,7 @@ export class LocalScienceCacheProvider {
         this.currentRoute = result
         resolve(this.currentRoute)
         }).catch((err) => {
-      })    
+      })
     })
   }
 
@@ -180,5 +186,20 @@ export class LocalScienceCacheProvider {
       });
     })
   }
+
+  ngOnInit() {
+
+    console.log('ng init local-science-cache.ts')
+
+    this.storage.get('deviceinfo').then((val) => {
+      console.log('Loading device info ', val);
+      if(val) {
+        this.storedDeviceInfo.uuid = val.uuid
+        this.storedDeviceInfo.email = val.email
+      }
+    });
+
+  }
+
 
 }

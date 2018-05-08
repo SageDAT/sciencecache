@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import { LocalScienceCacheProvider } from '../local-science-cache/local-science-cache'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { environment } from '../../environments/environment';
+import {Storage} from "@ionic/storage";
 
 
 /*
@@ -15,6 +17,9 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class RemoteScienceCacheProvider {
   serviceUrl: string = environment.serviceUrl;
+  storedDeviceInfo: any = null
+
+  /////
 
   serviceData: any
   currentRoute: any
@@ -33,7 +38,8 @@ export class RemoteScienceCacheProvider {
   savingRoute$ = this._savingRoute.asObservable()
   base_sciencecache_service_url = "https://api.sciencebase.gov/sciencecache-service/"
 
-  constructor(public http: Http, public lscService: LocalScienceCacheProvider) {
+  constructor(public http: Http, public httpClient: HttpClient, public lscService: LocalScienceCacheProvider,
+              private storage: Storage) {
   }
 
   saveRoute(id) {
@@ -92,6 +98,11 @@ export class RemoteScienceCacheProvider {
     })
   }
 
+  loadRoutes2() {
+    var routesUrl = `${this.serviceUrl}/mobile-route`;
+    this.httpClient.get(routesUrl, { headers: this.storedDeviceInfo })
+  }
+
   getRoutes(all_fields=false) {
     var time = new Date()
     var routesUrl = this.base_sciencecache_service_url + 'routes/'
@@ -130,6 +141,20 @@ export class RemoteScienceCacheProvider {
   private handleError(error: any): Promise < any > {
     console.error('An error occurred', error);
     return Promise.reject(error.message || error);
+  }
+
+  ngOnInit() {
+
+    console.log('ng init remote-science-cache.ts')
+
+    this.storage.get('deviceinfo').then((val) => {
+      console.log('Loading device info ', val);
+      if(val) {
+        this.storedDeviceInfo.uuid = val.uuid
+        this.storedDeviceInfo.email = val.email
+      }
+    });
+
   }
 
 }

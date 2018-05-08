@@ -1,6 +1,7 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera'
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation'
@@ -42,6 +43,7 @@ import {IonicStorageModule} from "@ionic/storage";
   imports: [
     BrowserModule,
     HttpModule,
+    HttpClientModule,
     IonicStorageModule.forRoot(),
     IonicModule.forRoot(MyApp, {
       scrollAssist: false,
