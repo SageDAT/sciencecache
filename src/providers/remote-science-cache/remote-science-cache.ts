@@ -44,18 +44,18 @@ export class RemoteScienceCacheProvider {
       }
     }
     return new Promise(resolve=>{
-      this.http.get(this.base_sciencecache_service_url + 'routes/' + id)
-      .map(response=>response.json())
-      .subscribe(data => {
-        this.currentRoute = data
-        this.lscService.saveRoute(this.currentRoute)
-        this.lscService.loadRoutes().then(localRoutes=>{
-          this.lscService._localRoutesList.next(localRoutes)
+      this.http.get(`${this.serviceUrl}/mobile-routes/${id}`)
+        .map(response=>response.json())
+        .subscribe(data => {
+          this.currentRoute = data
+          this.lscService.saveRoute(this.currentRoute)
+          this.lscService.loadRoutes().then(localRoutes=>{
+            this.lscService._localRoutesList.next(localRoutes)
+          })
+          this.savingRoute = false
+          this.savingRouteSubject.next(this.savingRoute)
+          resolve(this.currentRoute)
         })
-        this.savingRoute = false
-        this.savingRouteSubject.next(this.savingRoute)
-        resolve(this.currentRoute)
-      })
     })
   }
 
@@ -70,7 +70,7 @@ export class RemoteScienceCacheProvider {
       })
   }
 
-  loadRoutes2(localRoutes) {
+  loadRoutes(localRoutes) {
     this.savingRoute = false
     this.savingRouteSubject.next(this.savingRoute)
     this.getRoutes2().subscribe(data => {

@@ -21,7 +21,6 @@ export class WaypointPage  implements OnInit{
   currentWaypoint: any = null
   currentWaypointSubscription: Subscription;
   currentVisit: any = null
-  currentVisitSubscription: Subscription;
   onVisit:boolean = false
   onVisitSubscription: Subscription
   waypointFound: boolean = false
@@ -32,7 +31,7 @@ export class WaypointPage  implements OnInit{
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public routeProvider: RouteProvider, public visitProvider: VisitProvider, private camera: Camera) {
   }
-  
+
   takePicture(index){
     this.options = {
       quality: 100,
@@ -48,7 +47,7 @@ export class WaypointPage  implements OnInit{
       })
       .catch(error => { alert(error) })
   }
-  
+
   setWaypointFound(id) {
     this.visitProvider.setWaypointFound(id)
   }
@@ -65,7 +64,7 @@ export class WaypointPage  implements OnInit{
     this.id = this.navParams.get('id')
     if (this.id) {
       this.routeProvider.getWaypoint(this.id)
-      this.currentWaypointSubscription = this.routeProvider._currentWaypoint.subscribe(currentWaypoint=> 
+      this.currentWaypointSubscription = this.routeProvider._currentWaypoint.subscribe(currentWaypoint=>
       {
         this.currentWaypoint = currentWaypoint;
       })
@@ -73,7 +72,7 @@ export class WaypointPage  implements OnInit{
     this.onVisitSubscription = this.visitProvider._onVisit.subscribe(onVisit=> {
       this.onVisit = onVisit
     })
-    this.currentVisitSubscription = this.visitProvider._currentVisit.subscribe(currentVisit=> {
+    this.visitProvider._currentVisit.subscribe(currentVisit=> {
       this.currentVisit = currentVisit
     })
     this.waypoinFoundSubscription = this.visitProvider._waypointFound.subscribe(waypointFound=> {

@@ -14,21 +14,17 @@ import { RemoteScienceCacheProvider } from '../../providers/remote-science-cache
 })
 export class RoutesPage implements OnInit {
 
-  newRoute: any;
   localRoutesSubscription:Subscription;
   localRoutesLoadedSubscription:Subscription;
-  // serviceRoutesSubscription:Subscription
-  // badLoadSubscription:Subscription;
-  // savingRouteSubscription:Subscription;
   localRoutes: any = [];
   remoteRoutes: any = [];
   localRoutesList: any = [];
   badLoad:boolean = false;
   savingRoute: boolean = false;
   localRoutesLoaded: boolean = false;
-  displayCards: any = [];
 
-  constructor(public http: Http, public alertController: AlertController, public navCtrl: NavController, public lscService: LocalScienceCacheProvider, public rscService: RemoteScienceCacheProvider) {
+  constructor(public http: Http, public alertController: AlertController, public navCtrl: NavController,
+              public lscService: LocalScienceCacheProvider, public rscService: RemoteScienceCacheProvider) {
   }
 
   loadRoute(id) {
@@ -49,27 +45,15 @@ export class RoutesPage implements OnInit {
   ionViewWillEnter() {
     console.log('ionviewwillender....');
     this.lscService.loadRoutes().then(localRoutes => {
-      this.rscService.loadRoutes2(localRoutes)
+      this.rscService.loadRoutes(localRoutes)
     })
   }
 
   setup() {
-    // this.serviceRoutesSubscription = this.rscService._routesList.subscribe( routesList => {
-    //   this.remoteRoutes = routesList
-    // })
+
     this.rscService.routesListSubject.subscribe(routesList =>{
       this.remoteRoutes = routesList;
     })
-  }
-
-  ngOnInit() {
-    console.log('nginit...');
-
-    this.setup();
-
-    // this.serviceRoutesSubscription = this.rscService._routesList.subscribe(routesList=> {
-    //   this.remoteRoutes = routesList
-    // })
     this.localRoutesSubscription = this.lscService._localRoutesList.subscribe(localRoutesList=> {
       this.localRoutesList = localRoutesList
     });
@@ -82,13 +66,20 @@ export class RoutesPage implements OnInit {
     this.rscService.savingRouteSubject.subscribe(savingRoute=> {
       this.savingRoute = savingRoute
     })
+
+  }
+
+  ngOnInit() {
+    console.log('nginit...');
+
+    this.setup();
   }
 
   infoAlert(index) {
     let alert = this.alertController.create({
       title: this.remoteRoutes[index].name,
       subTitle: this.remoteRoutes[index].description,
-      message: '<span>Difficulty: ' + this.remoteRoutes[index].route_difficulty.name + '</span><br /><span>Length: ' + this.remoteRoutes[index].route_length.length + '</span><br /><span>Waypoints: ' + this.remoteRoutes[index].waypoints_count + '</span>',
+      message: '<span>Difficulty: ' + this.remoteRoutes[index].route_difficulty.difficulty + '</span><br /><span>Length: ' + this.remoteRoutes[index].route_length.length + '</span><br /><span>Waypoints: ' + this.remoteRoutes[index].waypoint_count + '</span>',
       buttons: [
       {
         text: 'Dismiss',
@@ -100,7 +91,7 @@ export class RoutesPage implements OnInit {
       {
         text: 'Download',
         handler: () => {
-          this.downloadRoute(this.remoteRoutes[index].id)
+          this.downloadRoute(this.remoteRoutes[index].route)
         }
       }
     ]
