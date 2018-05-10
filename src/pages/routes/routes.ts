@@ -18,8 +18,8 @@ export class RoutesPage implements OnInit {
   localRoutesSubscription:Subscription;
   localRoutesLoadedSubscription:Subscription;
   // serviceRoutesSubscription:Subscription
-  badLoadSubscription:Subscription;
-  savingRouteSubscription:Subscription;
+  // badLoadSubscription:Subscription;
+  // savingRouteSubscription:Subscription;
   localRoutes: any = [];
   remoteRoutes: any = [];
   localRoutesList: any = [];
@@ -49,7 +49,7 @@ export class RoutesPage implements OnInit {
   ionViewWillEnter() {
     console.log('ionviewwillender....');
     this.lscService.loadRoutes().then(localRoutes => {
-      this.rscService.loadRoutes(localRoutes)
+      this.rscService.loadRoutes2(localRoutes)
     })
   }
 
@@ -57,7 +57,7 @@ export class RoutesPage implements OnInit {
     // this.serviceRoutesSubscription = this.rscService._routesList.subscribe( routesList => {
     //   this.remoteRoutes = routesList
     // })
-    this.rscService._routesList.subscribe(routesList =>{
+    this.rscService.routesListSubject.subscribe(routesList =>{
       this.remoteRoutes = routesList;
     })
   }
@@ -76,10 +76,10 @@ export class RoutesPage implements OnInit {
     this.localRoutesLoadedSubscription = this.lscService._localRoutesLoaded.subscribe(localRoutesLoaded=> {
       this.localRoutesLoaded = localRoutesLoaded
     });
-    this.badLoadSubscription = this.rscService._badLoad.subscribe(badLoad=> {
+    this.rscService.badLoadSubject.subscribe(badLoad=> {
       this.badLoad = badLoad
     });
-    this.savingRouteSubscription = this.rscService._savingRoute.subscribe(savingRoute=> {
+    this.rscService.savingRouteSubject.subscribe(savingRoute=> {
       this.savingRoute = savingRoute
     })
   }
