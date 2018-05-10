@@ -44,8 +44,7 @@ export class RemoteScienceCacheProvider {
       }
     }
     return new Promise(resolve=>{
-      this.http.get(`${this.serviceUrl}/mobile-routes/${id}`)
-        .map(response=>response.json())
+      this.httpClient.get(`${this.serviceUrl}/mobile-routes/${id}`)
         .subscribe(data => {
           this.currentRoute = data
           this.lscService.saveRoute(this.currentRoute)
@@ -73,7 +72,7 @@ export class RemoteScienceCacheProvider {
   loadRoutes(localRoutes) {
     this.savingRoute = false
     this.savingRouteSubject.next(this.savingRoute)
-    this.getRoutes2().subscribe(data => {
+    this.getRoutes().subscribe(data => {
         this.routesList = data;
         if (localRoutes) {
           for (var l in localRoutes) {
@@ -88,12 +87,9 @@ export class RemoteScienceCacheProvider {
       })
   }
 
-  getRoutes2() {
+  getRoutes() {
     let routesUrl = `${this.serviceUrl}/mobile-routes`;
     return this.httpClient.get(routesUrl, {headers: this.storedDeviceInfo})
-      .map(response => {
-        return response
-      })
       .catch(this.handleError)
   }
 
@@ -111,10 +107,7 @@ export class RemoteScienceCacheProvider {
 
   ngOnInit() {
 
-    console.log('ng init remote-science-cache.ts')
-
     this.storage.get('deviceinfo').then((val) => {
-      console.log('Loading device info ', val);
       if(val) {
         this.storedDeviceInfo.uuid = val.uuid
         this.storedDeviceInfo.email = val.email

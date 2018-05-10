@@ -189,10 +189,7 @@ export class LocalScienceCacheProvider {
 
   ngOnInit() {
 
-    console.log('ng init local-science-cache.ts')
-
     this.storage.get('deviceinfo').then((val) => {
-      console.log('Loading device info ', val);
       if(val) {
         this.storedDeviceInfo.uuid = val.uuid
         this.storedDeviceInfo.email = val.email

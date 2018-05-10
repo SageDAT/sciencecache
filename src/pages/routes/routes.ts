@@ -43,7 +43,6 @@ export class RoutesPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    console.log('ionviewwillender....');
     this.lscService.loadRoutes().then(localRoutes => {
       this.rscService.loadRoutes(localRoutes)
     })
@@ -70,8 +69,6 @@ export class RoutesPage implements OnInit {
   }
 
   ngOnInit() {
-    console.log('nginit...');
-
     this.setup();
   }
 
