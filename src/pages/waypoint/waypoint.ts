@@ -19,7 +19,6 @@ import { RouteProvider } from '../../providers/route/route'
 export class WaypointPage  implements OnInit{
   id: number
   currentWaypoint: any = null
-  currentWaypointSubscription: Subscription;
   currentVisit: any = null
   onVisit:boolean = false
   onVisitSubscription: Subscription
@@ -64,7 +63,7 @@ export class WaypointPage  implements OnInit{
     this.id = this.navParams.get('id')
     if (this.id) {
       this.routeProvider.getWaypoint(this.id)
-      this.currentWaypointSubscription = this.routeProvider._currentWaypoint.subscribe(currentWaypoint=>
+      this.routeProvider.currentWaypointSubject.subscribe(currentWaypoint=>
       {
         this.currentWaypoint = currentWaypoint;
       })

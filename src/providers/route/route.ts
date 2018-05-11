@@ -8,11 +8,9 @@ import { LocalScienceCacheProvider } from '../local-science-cache/local-science-
 export class RouteProvider {
 
   currentRoute:any = {}
-  _currentRoute = new BehaviorSubject <any> ([])
-  currentRoute$ = this._currentRoute.asObservable()
+  currentRouteSubject = new BehaviorSubject <any> ([])
   currentWaypoint: any
-  _currentWaypoint = new BehaviorSubject <any> ([])
-  currentWaypoint$ = this._currentWaypoint.asObservable()
+  currentWaypointSubject = new BehaviorSubject <any> ([])
 
   constructor(public http: Http, public lscService: LocalScienceCacheProvider) {
   }
@@ -30,7 +28,7 @@ export class RouteProvider {
       this.currentRoute = data;
       //TODO: commenting out mapping for now, start here to contiune mapping work
       // this.currentRoute.waypoints = this.sortWaypointsByID(this.currentRoute.waypoints, 'waypoint_id');
-      this._currentRoute.next(this.currentRoute)
+      this.currentRouteSubject.next(this.currentRoute)
     })
   }
 
@@ -57,6 +55,6 @@ export class RouteProvider {
         }
       }
     }
-    this._currentWaypoint.next(this.currentWaypoint)
+    this.currentWaypointSubject.next(this.currentWaypoint)
   }
 }
