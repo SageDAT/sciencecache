@@ -10,7 +10,7 @@ export class RouteProvider {
   currentRoute:any = {}
   _currentRoute = new BehaviorSubject <any> ([])
   currentRoute$ = this._currentRoute.asObservable()
-  currentWaypoint: any 
+  currentWaypoint: any
   _currentWaypoint = new BehaviorSubject <any> ([])
   currentWaypoint$ = this._currentWaypoint.asObservable()
 
@@ -28,7 +28,8 @@ export class RouteProvider {
   getLocalRoute(RouteId) {
      this.lscService.getRoute(RouteId).then(data=>{
       this.currentRoute = data;
-      this.currentRoute.waypoints = this.sortWaypointsByID(this.currentRoute.waypoints, 'waypoint_id');
+      //TODO: commenting out mapping for now, start here to contiune mapping work
+      // this.currentRoute.waypoints = this.sortWaypointsByID(this.currentRoute.waypoints, 'waypoint_id');
       this._currentRoute.next(this.currentRoute)
     })
   }

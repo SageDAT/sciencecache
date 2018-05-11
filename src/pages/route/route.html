@@ -1,9 +1,4 @@
-<!--
-  Generated template for the RoutePage page.
 
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
 <ion-header *ngIf="currentRoute != null">
   <ion-navbar color="primary">
@@ -39,16 +34,6 @@
           </ion-segment-button>
         </ion-segment>
       </ion-col>
-
-      <!-- <ion-card>
-        <ion-card-header>
-          <ion-icon name="warning" item-start> </ion-icon>
-          Warning!
-        </ion-card-header>
-        <ion-card-content>
-          {{ currentRoute.warning }}
-        </ion-card-content>
-      </ion-card> -->
 
       <ion-item>
         <ion-label>Start Visit</ion-label>
@@ -134,19 +119,6 @@
           </button>
         </ion-list>
       </ion-col>
-
-      <!-- <ion-col col-12>
-        <ion-segment padding>
-          <ion-segment-button icon-start value="startVisit" (click)="startVisit()" disabled="{{onVisit}}">
-            <ion-icon class="custom-icon" name="play"></ion-icon>
-            Start Visit
-          </ion-segment-button>
-          <ion-segment-button icon-start value="stopVisit" (click)="stopVisit()" disabled="{{!onVisit}}">
-            <ion-icon class="custom-icon" name="square"></ion-icon>
-            Stop Visit
-          </ion-segment-button>
-        </ion-segment>
-      </ion-col> -->
 
     </ion-row>
   </ion-grid>

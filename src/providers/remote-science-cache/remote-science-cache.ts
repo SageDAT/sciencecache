@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import { LocalScienceCacheProvider } from '../local-science-cache/local-science-cache'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { environment } from '../../environments/environment';
+import {Storage} from "@ionic/storage";
 
 
 /*
@@ -15,50 +17,44 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class RemoteScienceCacheProvider {
   serviceUrl: string = environment.serviceUrl;
+  storedDeviceInfo: any = null
 
-  serviceData: any
+  /////
+
   currentRoute: any
-  fullRoutesList:any = []
-  serviceRoutes: any = []
   routesList:any = []
-  _routesList = new BehaviorSubject < any > ([])
-  routesList$ = this._routesList.asObservable()
-
-  badLoad:boolean = false
-  _badLoad = new BehaviorSubject <any> ([])
-  badLoad$ = this._badLoad.asObservable()
-
+  routesListSubject = new BehaviorSubject < any > ([])
+  badLoadSubject = new BehaviorSubject <any> ([])
   savingRoute:boolean = false
-  _savingRoute = new BehaviorSubject <any> ([])
-  savingRoute$ = this._savingRoute.asObservable()
+  savingRouteSubject = new BehaviorSubject <any> ([])
   base_sciencecache_service_url = "https://api.sciencebase.gov/sciencecache-service/"
 
-  constructor(public http: Http, public lscService: LocalScienceCacheProvider) {
+  constructor(public http: Http, public httpClient: HttpClient, public lscService: LocalScienceCacheProvider,
+              private storage: Storage) {
   }
 
   saveRoute(id) {
     this.savingRoute = true
-    this._savingRoute.next(this.savingRoute)
+    this.savingRouteSubject.next(this.savingRoute)
     for (var r in this.routesList) {
       if (this.routesList[r].route_id == id) {
         this.routesList.splice(r, 1)
-        this._routesList.next(this.routesList)
+        this.routesListSubject.next(this.routesList)
         break
       }
     }
     return new Promise(resolve=>{
-      this.http.get(this.base_sciencecache_service_url + 'routes/' + id)
-      .map(response=>response.json())
-      .subscribe(data => {
-        this.currentRoute = data
-        this.lscService.saveRoute(this.currentRoute)
-        this.lscService.loadRoutes().then(localRoutes=>{
-          this.lscService._localRoutesList.next(localRoutes)
+      this.httpClient.get(`${this.serviceUrl}/mobile-routes/${id}`)
+        .subscribe(data => {
+          this.currentRoute = data
+          this.lscService.saveRoute(this.currentRoute)
+          this.lscService.loadRoutes().then(localRoutes=>{
+            this.lscService._localRoutesList.next(localRoutes)
+          })
+          this.savingRoute = false
+          this.savingRouteSubject.next(this.savingRoute)
+          resolve(this.currentRoute)
         })
-        this.savingRoute = false
-        this._savingRoute.next(this.savingRoute)
-        resolve(this.currentRoute)
-      })
     })
   }
 
@@ -75,49 +71,26 @@ export class RemoteScienceCacheProvider {
 
   loadRoutes(localRoutes) {
     this.savingRoute = false
-    this._savingRoute.next(this.savingRoute)
-    this.getRoutes().subscribe(
-      data => {
+    this.savingRouteSubject.next(this.savingRoute)
+    this.getRoutes().subscribe(data => {
         this.routesList = data;
-      if (localRoutes) {
-        for (var l in localRoutes) {
-          for (var r in this.routesList) {
-            if (this.routesList[r].route_id == localRoutes[l].route_id) {
-              this.routesList.splice(r, 1)
+        if (localRoutes) {
+          for (var l in localRoutes) {
+            for (var r in this.routesList) {
+              if (this.routesList[r].route_id == localRoutes[l].route_id) {
+                this.routesList.splice(r, 1)
+              }
             }
           }
         }
-      }
-      this._routesList.next(this.routesList)
-    })
-  }
-
-  getRoutes(all_fields=false) {
-    var time = new Date()
-    var routesUrl = this.base_sciencecache_service_url + 'routes/'
-    return this.http.get(routesUrl)
-      .map(response => {
-        time = new Date()
-        return response.json()
+        this.routesListSubject.next(this.routesList)
       })
-      .catch(this.handleError)
   }
 
-  fetchRouteSummaries(reloadRoutes = false) {
-    var routesUrl = this.base_sciencecache_service_url + 'routes/';
-    //  This is BROKEN and should be fixed.
-    if ((this.fullRoutesList.length > 0) && (reloadRoutes == false)) {
-      return Promise.resolve(resolve=> { return this.fullRoutesList})
-    }
-    return new Promise(resolve => {
-      this.http.get(routesUrl)
-        .map(res => res.json())
-        .subscribe(data => {
-          this.routesList = data
-          this.fullRoutesList = Object.assign({}, this.routesList)
-          resolve(this.routesList)
-        })
-    })
+  getRoutes() {
+    let routesUrl = `${this.serviceUrl}/mobile-routes`;
+    return this.httpClient.get(routesUrl, {headers: this.storedDeviceInfo})
+      .catch(this.handleError)
   }
 
   postDeviceData(data) {
@@ -130,6 +103,17 @@ export class RemoteScienceCacheProvider {
   private handleError(error: any): Promise < any > {
     console.error('An error occurred', error);
     return Promise.reject(error.message || error);
+  }
+
+  ngOnInit() {
+
+    this.storage.get('deviceinfo').then((val) => {
+      if(val) {
+        this.storedDeviceInfo.uuid = val.uuid
+        this.storedDeviceInfo.email = val.email
+      }
+    });
+
   }
 
 }

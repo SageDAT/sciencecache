@@ -28,14 +28,13 @@ import * as L from 'leaflet'
 export class RoutePage implements OnInit {
   currentRouteSubscription: Subscription
   currentLocationSubscription: Subscription
-  currentVisitSubscription: Subscription
   onVisitSubscription: Subscription
   id: any
   map: any = null
   waypointMarkers:any = []
   leafletWaypointMarkers:any = []
   waypoints:any = []
-  updateTimeSecs = 3  
+  updateTimeSecs = 3
   siteInformationToggle: boolean = false
   waypointFinderToggle: boolean = false
   waypointsToggle: boolean = false
@@ -126,7 +125,7 @@ export class RoutePage implements OnInit {
   rotate(deg) {
     return 'rotate(' + deg.toString() + 'deg)';
   }
-  
+
   removeRoute() {
     this.lscService.deleteRoute(this.currentRoute)
     this.navCtrl.pop()
@@ -134,9 +133,9 @@ export class RoutePage implements OnInit {
 
   startVisit() {
     this.visitProvider.setOnVisit(true)
-    this.currentVisitSubscription = this.visitProvider._currentVisit.subscribe(currentVisit=> {
+    this.visitProvider._currentVisit.subscribe(currentVisit=> {
       this.currentVisit = currentVisit
-    })    
+    })
     this.startVisitAlert()
     this.startGPS()
   }
@@ -166,7 +165,7 @@ export class RoutePage implements OnInit {
       delete this.currentVisit.waypoints[wi].name
       delete this.currentVisit.waypoints[wi].longitude
       delete this.currentVisit.waypoints[wi].latitude
-    }       
+    }
   }
 
   startVisitAlert() {
@@ -242,7 +241,7 @@ export class RoutePage implements OnInit {
       'manufacturer': this.device.manufacturer,
       'isVirtual': this.device.isVirtual,
       'serial': this.device.serial
-    }  
+    }
     this.rscService.postVisit(this.currentVisit, device_info).subscribe(
       data => {
         if (data['visit_added']) {
@@ -349,9 +348,9 @@ export class RoutePage implements OnInit {
         }
       }
       if (this.leafletWaypointMarkers[waypoint['id']]) {
-        this.leafletWaypointMarkers[waypoint['id']].bindPopup(waypoint.message)      
+        this.leafletWaypointMarkers[waypoint['id']].bindPopup(waypoint.message)
       }
-    }    
+    }
   }
 
   getWayPoints() {
@@ -466,7 +465,7 @@ export class RoutePage implements OnInit {
     // to be calculated from site bounding box
   }
 
- 
+
   mapShowSat() {
     this.map.removeLayer(this.LAYER_OSM.layer);
     this.map.addLayer(this.LAYER_OCM.layer);
