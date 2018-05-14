@@ -14,8 +14,6 @@ import { RemoteScienceCacheProvider } from '../../providers/remote-science-cache
 })
 export class RoutesPage implements OnInit {
 
-  localRoutesSubscription:Subscription;
-  localRoutesLoadedSubscription:Subscription;
   localRoutes: any = [];
   remoteRoutes: any = [];
   localRoutesList: any = [];
@@ -53,10 +51,10 @@ export class RoutesPage implements OnInit {
     this.rscService.routesListSubject.subscribe(routesList =>{
       this.remoteRoutes = routesList;
     })
-    this.localRoutesSubscription = this.lscService._localRoutesList.subscribe(localRoutesList=> {
+    this.lscService.localRoutesListSubject.subscribe(localRoutesList=> {
       this.localRoutesList = localRoutesList
     });
-    this.localRoutesLoadedSubscription = this.lscService._localRoutesLoaded.subscribe(localRoutesLoaded=> {
+    this.lscService.localRoutesLoadedSubject.subscribe(localRoutesLoaded=> {
       this.localRoutesLoaded = localRoutesLoaded
     });
     this.rscService.badLoadSubject.subscribe(badLoad=> {

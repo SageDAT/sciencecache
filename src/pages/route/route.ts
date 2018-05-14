@@ -26,7 +26,6 @@ import * as L from 'leaflet'
 })
 
 export class RoutePage implements OnInit {
-  currentRouteSubscription: Subscription
   currentLocationSubscription: Subscription
   onVisitSubscription: Subscription
   id: any
@@ -494,7 +493,7 @@ export class RoutePage implements OnInit {
     this.id = this.navParams.get('id')
     if (this.id) {
       this.routeProvider.getLocalRoute(this.id)
-      this.currentRouteSubscription = this.routeProvider._currentRoute.subscribe(currentRoute=> {
+      this.routeProvider.currentRouteSubject.subscribe(currentRoute=> {
         this.currentRoute = currentRoute;
       })
       this.onVisitSubscription = this.visitProvider._onVisit.subscribe(onVisit=> {

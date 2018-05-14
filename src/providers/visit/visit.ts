@@ -24,14 +24,13 @@ export class VisitProvider {
   onVisit$ = this._onVisit.asObservable()
   currentLocation: any
   currentWaypoint: any
-  currentWaypointSubscription: Subscription
   waypointFound: boolean = false
   _waypointFound = new BehaviorSubject<any> ([])
   waypointFound$ = this._waypointFound.asObservable()
 
 
   constructor(public http: Http, public routeProvider: RouteProvider, public locationTracker: LocationTrackerProvider, public lscService: LocalScienceCacheProvider) {
-    this.currentWaypointSubscription = this.routeProvider._currentWaypoint.subscribe(currentWaypoint=> {
+    this.routeProvider.currentWaypointSubject.subscribe(currentWaypoint=> {
       this.currentWaypoint = currentWaypoint;
     })
     this._onVisit.next(this.onVisit)
@@ -51,7 +50,7 @@ export class VisitProvider {
       waypoints_visited: 0,
       photos_taken: 0,
       submitted: false
-    }  
+    }
     this.currentVisit = blankVisit
     console.log(this.currentVisit)
     this._currentVisit.next(this.currentVisit)
@@ -83,7 +82,7 @@ export class VisitProvider {
       var waypointLong = 'Longitude: ' + this.currentVisit.waypoints[waypoint].latitude + '<br />'
       var waypointBearing = ''
       var waypointDistance = ''
-      
+
       if (this.currentLocation.coords) {
         this.currentVisit.waypoints[waypoint].distance = this.locationTracker.getDistanceFromLatLonInKm(this.currentLocation.coords.latitude,this.currentLocation.coords.longitude,this.currentVisit.waypoints[waypoint].latitude,this.currentVisit.waypoints[waypoint].longitude) * 1000
         this.currentVisit.waypoints[waypoint].bearing = this.locationTracker.getBearingfromLatLong(this.currentLocation.coords.latitude,this.currentLocation.coords.longitude,this.currentVisit.waypoints[waypoint].latitude,this.currentVisit.waypoints[waypoint].longitude)
@@ -94,7 +93,7 @@ export class VisitProvider {
         this.currentVisit.waypoints[waypoint].distance = NaN
         this.currentVisit.waypoints[waypoint].bearing = NaN
       }
-      
+
       this.currentVisit.waypoints[waypoint].message = waypointName + waypointLat + waypointLong + waypointBearing + waypointDistance
     }
   }
@@ -110,7 +109,7 @@ export class VisitProvider {
           }
           this._waypointFound.next(this.waypointFound)
         }
-      } 
+      }
     } else {
       this.waypointFound = false
       this._waypointFound.next(this.waypointFound)
@@ -128,7 +127,7 @@ export class VisitProvider {
 
   addWaypoint() {
   }
-      
+
   setOnVisit(onVisit) {
     this.onVisit = onVisit
     this._onVisit.next(this.onVisit)

@@ -49,7 +49,7 @@ export class RemoteScienceCacheProvider {
           this.currentRoute = data
           this.lscService.saveRoute(this.currentRoute)
           this.lscService.loadRoutes().then(localRoutes=>{
-            this.lscService._localRoutesList.next(localRoutes)
+            this.lscService.localRoutesListSubject.next(localRoutes)
           })
           this.savingRoute = false
           this.savingRouteSubject.next(this.savingRoute)
@@ -77,7 +77,7 @@ export class RemoteScienceCacheProvider {
         if (localRoutes) {
           for (var l in localRoutes) {
             for (var r in this.routesList) {
-              if (this.routesList[r].route_id == localRoutes[l].route_id) {
+              if (this.routesList[r].route == localRoutes[l].route) {
                 this.routesList.splice(r, 1)
               }
             }

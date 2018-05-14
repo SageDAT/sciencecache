@@ -17,8 +17,6 @@ declare var Connection: any;
 })
 export class VisitsPage implements OnInit {
 
-  localVisitsSubscription:Subscription
-  localVisitsLoadedSubscription:Subscription
   localVisitsList: any
   loadVisitsLoaded: boolean = false
   allowUploads: boolean = false
@@ -75,10 +73,10 @@ export class VisitsPage implements OnInit {
   }
 
   ngOnInit() {
-    this.localVisitsSubscription = this.lscService._localVisitsList.subscribe(localRoutesList=> {
+    this.lscService.localVisitsListSubject.subscribe(localRoutesList=> {
       this.localVisitsList = localRoutesList
     })
-    this.localVisitsLoadedSubscription = this.lscService._localVisitsLoaded.subscribe(localRoutesLoaded=> {
+    this.lscService.localVisitsLoadedSubject.subscribe(localRoutesLoaded=> {
       this.loadVisitsLoaded = localRoutesLoaded
     })
   }
