@@ -17,7 +17,10 @@ export class RoutesPage implements OnInit {
   localRoutes: any = [];
   remoteRoutes: any = [];
   localRoutesList: any = [];
-  badLoad:boolean = false;
+  badLoad: any = {};
+  badLoadBool: boolean = false;
+  routeBadLoad: any = {};
+  routeBadLoadBool: boolean = false;
   savingRoute: boolean = false;
   localRoutesLoaded: boolean = false;
 
@@ -57,8 +60,17 @@ export class RoutesPage implements OnInit {
     this.lscService.localRoutesLoadedSubject.subscribe(localRoutesLoaded=> {
       this.localRoutesLoaded = localRoutesLoaded
     });
-    this.rscService.badLoadSubject.subscribe(badLoad=> {
+    this.rscService.badLoadSubject.subscribe(badLoad => {
       this.badLoad = badLoad
+    });
+    this.rscService.badLoadBoolSubject.subscribe(badLoadBool => {
+      this.badLoadBool = badLoadBool
+    });
+    this.rscService.routeBadLoadSubject.subscribe( routeBad => {
+      this.routeBadLoad = routeBad
+    });
+    this.rscService.routeBadLoadBoolSubject.subscribe(badBadBool => {
+      this.routeBadLoadBool = badBadBool
     });
     this.rscService.savingRouteSubject.subscribe(savingRoute=> {
       this.savingRoute = savingRoute

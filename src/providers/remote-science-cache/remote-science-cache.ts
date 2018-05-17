@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {HttpClient, HttpClientModule, HttpErrorResponse} from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import { LocalScienceCacheProvider } from '../local-science-cache/local-science-cache'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { environment } from '../../environments/environment';
 import {Storage} from "@ionic/storage";
+import {ErrorObservable} from "rxjs/observable/ErrorObservable";
+
 
 
 /*
@@ -24,7 +26,10 @@ export class RemoteScienceCacheProvider {
   currentRoute: any
   routesList:any = []
   routesListSubject = new BehaviorSubject < any > ([])
-  badLoadSubject = new BehaviorSubject <any> ([])
+  badLoadSubject = new BehaviorSubject <any> ({})
+  badLoadBoolSubject = new BehaviorSubject <boolean> (false)
+  routeBadLoadSubject = new BehaviorSubject <any> ({})
+  routeBadLoadBoolSubject = new BehaviorSubject <boolean> (false)
   savingRoute:boolean = false
   savingRouteSubject = new BehaviorSubject <any> ([])
   base_sciencecache_service_url = "https://api.sciencebase.gov/sciencecache-service/"
@@ -37,7 +42,7 @@ export class RemoteScienceCacheProvider {
     this.savingRoute = true
     this.savingRouteSubject.next(this.savingRoute)
     for (var r in this.routesList) {
-      if (this.routesList[r].route_id == id) {
+      if (this.routesList[r].route == id) {
         this.routesList.splice(r, 1)
         this.routesListSubject.next(this.routesList)
         break
@@ -53,7 +58,13 @@ export class RemoteScienceCacheProvider {
           })
           this.savingRoute = false
           this.savingRouteSubject.next(this.savingRoute)
+          this.routeBadLoadBoolSubject.next(false)
+          this.routeBadLoadSubject.next({})
           resolve(this.currentRoute)
+        }, error => {
+          this.routeBadLoadBoolSubject.next(true)
+          this.routeBadLoadSubject.next(error)
+          this.handleHttpClientError(error)
         })
     })
   }
@@ -84,13 +95,18 @@ export class RemoteScienceCacheProvider {
           }
         }
         this.routesListSubject.next(this.routesList)
-      })
+        this.badLoadBoolSubject.next(false)
+        this.badLoadSubject.next({})
+    }, error => {
+      this.badLoadBoolSubject.next(true)
+      this.badLoadSubject.next(error)
+      this.handleHttpClientError(error)
+    })
   }
 
   getRoutes() {
     let routesUrl = `${this.serviceUrl}/mobile-routes`;
     return this.httpClient.get(routesUrl, {headers: this.storedDeviceInfo})
-      .catch(this.handleError)
   }
 
   postDeviceData(data) {
@@ -104,6 +120,22 @@ export class RemoteScienceCacheProvider {
     console.error('An error occurred', error);
     return Promise.reject(error.message || error);
   }
+
+  private handleHttpClientError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      let e = 'An error occurred: ' + error.error.message
+      this.badLoadSubject.next(e)
+      this.routeBadLoadSubject.next(e)
+    } else {
+      // The backend returned an unsuccessful response code, response body may contain info
+      let e = `Service returned code ${error.status}, `+`with: ${error.error}`
+      this.badLoadSubject.next(e)
+      this.routeBadLoadSubject.next(e)
+    }
+    // return an ErrorObservable with a user-facing error message
+    return new ErrorObservable(
+      'Something bad happened; please try again later.');
+  };
 
   ngOnInit() {
 

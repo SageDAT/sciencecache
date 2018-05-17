@@ -34,16 +34,24 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-  <ion-card-content *ngIf="savingRoute">
+  <ion-card-content *ngIf="savingRoute && !routeBadLoadBool">
     <ion-thumbnail item-start no-padding>
       <ion-spinner></ion-spinner>
     </ion-thumbnail>
     <em class="center">Retrieving Route from Remote Database...</em>
   </ion-card-content>
+  <ion-card-content *ngIf="savingRoute && routeBadLoadBool">
+    <em class="center">There was a problem retrieving the route.</em>
+    <em class="center">{{routeBadLoad}}</em>
+  </ion-card-content>
   <h2 class="title">Online Routes</h2>
-  <ion-content *ngIf="remoteRoutes?.length < 1">
-    <em class="center">Retrieving Routes from ScienceCache Server...</em>
-    <ion-spinner></ion-spinner>
+  <ion-content *ngIf="remoteRoutes?.length < 1 && !badLoadBool">
+      <em class="center">Retrieving Routes from ScienceCache Server...</em>
+      <ion-spinner></ion-spinner>
+  </ion-content>
+  <ion-content *ngIf="remoteRoutes?.length < 1 && badLoadBool">
+      <p>An error occurred getting the routes list.</p>
+      <p>{{badLoad}}</p>
   </ion-content>
   <ion-list no-padding *ngIf="remoteRoutes?.length > 0">
     <ion-item-sliding #item *ngFor="let route of remoteRoutes; let i = index;">
