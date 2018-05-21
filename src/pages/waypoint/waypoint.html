@@ -1,9 +1,4 @@
-<!--
-  Generated template for the WaypointPage page.
 
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
   <ion-navbar color="primary">
     <ion-title *ngIf="currentWaypoint != null">{{ currentWaypoint.name }}</ion-title>
@@ -15,7 +10,8 @@
     <ion-row >
       <ion-col col-12 no-padding>
         <ion-card *ngIf="currentWaypoint.image" no-padding>
-          <img class="waypoint-image" src="{{ currentWaypoint.image }}" alt="{{ currentWaypoint.name }}" />
+          <!--<img class="waypoint-image" src="{{ currentWaypoint.image }}" alt="{{ currentWaypoint.name }}" />-->
+          <img src="assets/noImage.png">
         </ion-card>
         <ion-card *ngIf="currentWaypoint.warning">
           <ion-card-header>
@@ -55,8 +51,8 @@
               <ion-icon class="custom-icon" name="ios-help-circle"></ion-icon>
               Hint
           </ion-segment-button>
-        </ion-segment>  
-      </ion-col>      
+        </ion-segment>
+      </ion-col>
     </ion-row>
     <ion-row *ngIf="waypointFound">
         <ion-card ng-if="currentWaypoint.image_request" class="card question-box">
@@ -73,7 +69,7 @@
             </button>
           </ion-card-content>
         </ion-card>
-  
+
         <ion-grid *ngIf="currentVisit?.waypoints[currentWaypoint.index].photos.length > 0">
           <ion-row>
             <ion-col col-4 *ngFor="let photo of currentVisit?.waypoints[currentWaypoint.index].photos">
@@ -85,10 +81,11 @@
         <ion-col col-12 *ngFor="let dataRequest of currentWaypoint.data_requests; let di = index">
           <ion-card *ngIf="currentVisit">
             <ion-card-content *ngIf="dataRequest.image" no-padding>
-              <img class="waypoint-image" src="{{ dataRequest.image }}" alt="{{ dataRequest.name }}" />
+              <!--<img class="waypoint-image" src="{{ dataRequest.image }}" alt="{{ dataRequest.name }}" />-->
+              <img src="assets/noImage.png">
             </ion-card-content>
             <ion-card-header style="white-space: normal;" *ngIf="dataRequest.question">
-              {{ dataRequest.question }} 
+              {{ dataRequest.question }}
             </ion-card-header>
             <ion-card-content *ngIf="dataRequest.request_type == 'textarea'">
               <ion-textarea [(ngModel)]="currentVisit.waypoints[currentWaypoint.index].data[di]"></ion-textarea>
@@ -107,7 +104,7 @@
               <button ion-button outline round small padding class="data-request-help" (tap)="showHelp = true">
                 <ion-icon name="help-circle" item-end></ion-icon>&nbsp;&nbsp;Help With This Question
               </button>
-            </ion-card-content>            
+            </ion-card-content>
           </ion-card>
         </ion-col>
     </ion-row>

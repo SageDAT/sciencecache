@@ -14,7 +14,6 @@ import { RemoteScienceCacheProvider } from '../../providers/remote-science-cache
 })
 export class RoutesPage implements OnInit {
 
-  localRoutes: any = [];
   remoteRoutes: any = [];
   localRoutesList: any = [];
   badLoad: any = {};
@@ -76,6 +75,11 @@ export class RoutesPage implements OnInit {
       this.savingRoute = savingRoute
     })
 
+  }
+
+  refreshList() {
+    this.remoteRoutes = null
+    this.ionViewWillEnter()
   }
 
   ngOnInit() {

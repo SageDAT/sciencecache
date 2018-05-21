@@ -115,7 +115,7 @@
 
       <ion-col col-12 *ngIf="waypointsToggle && currentRoute.waypoints?.length > 0">
         <ion-list inset>
-          <button ion-item *ngFor="let waypoint of currentRoute.waypoints" (click)="waypointSelected(waypoint.waypoint_id)">
+          <button ion-item *ngFor="let waypoint of currentRoute.waypoints" (click)="waypointSelected(waypoint.id)">
             {{ waypoint.name }}
           </button>
         </ion-list>

@@ -16,12 +16,11 @@ import { RouteProvider } from '../../providers/route/route'
   selector: 'page-waypoint',
   templateUrl: 'waypoint.html',
 })
-export class WaypointPage  implements OnInit{
+export class WaypointPage implements OnInit{
   id: number
   currentWaypoint: any = null
   currentVisit: any = null
   onVisit:boolean = false
-  onVisitSubscription: Subscription
   waypointFound: boolean = false
   waypoinFoundSubscription: Subscription
   public base64Image: string
@@ -63,18 +62,17 @@ export class WaypointPage  implements OnInit{
     this.id = this.navParams.get('id')
     if (this.id) {
       this.routeProvider.getWaypoint(this.id)
-      this.routeProvider.currentWaypointSubject.subscribe(currentWaypoint=>
-      {
+      this.routeProvider.currentWaypointSubject.subscribe(currentWaypoint=> {
         this.currentWaypoint = currentWaypoint;
       })
     }
-    this.onVisitSubscription = this.visitProvider._onVisit.subscribe(onVisit=> {
+    this.visitProvider.onVisitSubject.subscribe(onVisit=> {
       this.onVisit = onVisit
     })
-    this.visitProvider._currentVisit.subscribe(currentVisit=> {
+    this.visitProvider.currentVisitSubject.subscribe(currentVisit=> {
       this.currentVisit = currentVisit
     })
-    this.waypoinFoundSubscription = this.visitProvider._waypointFound.subscribe(waypointFound=> {
+    this.waypoinFoundSubscription = this.visitProvider.waypointFoundSubject.subscribe(waypointFound=> {
       this.waypointFound = waypointFound
     })
   }

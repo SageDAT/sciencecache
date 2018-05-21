@@ -45,7 +45,7 @@
     <em class="center">There was a problem retrieving the route.</em>
     <em class="center">{{routeBadLoad}}</em>
   </ion-card-content>
-  <h2 class="title">Online Routes</h2>
+  <h2 class="title">Online Routes <ion-icon (click)=refreshList() name="refresh"></ion-icon> </h2>
   <ion-content *ngIf="remoteRoutes?.length < 1 && !badLoadBool">
       <em class="center">Retrieving Routes from ScienceCache Server...</em>
       <ion-spinner></ion-spinner>

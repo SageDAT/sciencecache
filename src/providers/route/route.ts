@@ -26,7 +26,8 @@ export class RouteProvider {
   getLocalRoute(RouteId) {
      this.lscService.getRoute(RouteId).then(data=>{
       this.currentRoute = data;
-      this.currentRoute.waypoints = this.sortWaypointsByID(this.currentRoute.waypoints, 'waypoint_id');
+      // this.currentRoute.waypoints = this.sortWaypointsByID(this.currentRoute.waypoints, 'waypoint_id');
+       this.currentRoute.waypoints = this.currentRoute.observation_points
       this.currentRouteSubject.next(this.currentRoute)
     })
   }
@@ -46,7 +47,7 @@ export class RouteProvider {
       this.currentWaypoint = null
     } else {
       for (var waypoint in this.currentRoute.waypoints) {
-        if (this.currentRoute.waypoints[waypoint].waypoint_id == waypointId) {
+        if (this.currentRoute.waypoints[waypoint].id == waypointId) {
           this.currentWaypoint = this.currentRoute.waypoints[waypoint]
           this.currentWaypoint.index = parseInt(waypoint)
           console.log(this.currentWaypoint)
