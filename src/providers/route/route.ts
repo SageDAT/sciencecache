@@ -26,8 +26,7 @@ export class RouteProvider {
   getLocalRoute(RouteId) {
      this.lscService.getRoute(RouteId).then(data=>{
       this.currentRoute = data;
-      //TODO: commenting out mapping for now, start here to contiune mapping work
-      // this.currentRoute.waypoints = this.sortWaypointsByID(this.currentRoute.waypoints, 'waypoint_id');
+      this.currentRoute.waypoints = this.sortWaypointsByID(this.currentRoute.waypoints, 'waypoint_id');
       this.currentRouteSubject.next(this.currentRoute)
     })
   }

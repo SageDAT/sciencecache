@@ -140,7 +140,7 @@ export class RoutePage implements OnInit {
   }
 
   stopVisit() {
-    this.currentVisit.route_id == this.currentRoute.route_id
+    this.currentVisit.route == this.currentRoute.route
     this.currentVisit.route_name == this.currentRoute.name
     this.visitProvider.setOnVisit(false)
     this.cleanUpVisit()

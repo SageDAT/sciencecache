@@ -18,8 +18,9 @@
       <ion-item-sliding #item *ngFor="let route of localRoutesList; let i = index;">
         <ion-item tappable no-padding (tap)="loadRoute(route._id)">
           <ion-thumbnail item-start no-padding>
-            <img src="{{ route.image }}" *ngIf="route.image">
-            <img src="assets/noImage.png" *ngIf="!route.image">
+            <!--<img src="{{ route.image }}" *ngIf="route.image">-->
+            <!--<img src="assets/noImage.png" *ngIf="!route.image">-->
+            <img src="assets/noImage.png">
           </ion-thumbnail>
         <h2>{{ route.name }}</h2>
         <p> {{ route.route_location?.description }} </p>
@@ -57,8 +58,9 @@
     <ion-item-sliding #item *ngFor="let route of remoteRoutes; let i = index;">
         <ion-item no-padding>
           <ion-thumbnail item-start no-padding>
-            <img src="{{ route.image }}" *ngIf="route.image">
-            <img src="assets/noImage.png" *ngIf="!route.image">
+            <!--<img src="{{ route.image }}" *ngIf="route.image">-->
+            <!--<img src="assets/noImage.png" *ngIf="!route.image">-->
+            <img src="assets/noImage.png">
           </ion-thumbnail>
         <h2>{{ route.name }}</h2>
         <p> {{ route.route_location?.description }} </p>
