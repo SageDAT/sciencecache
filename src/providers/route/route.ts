@@ -26,8 +26,7 @@ export class RouteProvider {
   getLocalRoute(RouteId) {
      this.lscService.getRoute(RouteId).then(data=>{
       this.currentRoute = data;
-      // this.currentRoute.waypoints = this.sortWaypointsByID(this.currentRoute.waypoints, 'waypoint_id');
-       this.currentRoute.waypoints = this.currentRoute.observation_points
+      this.currentRoute.waypoints = this.sortWaypointsByID(this.currentRoute.observation_points, 'id');
       this.currentRouteSubject.next(this.currentRoute)
     })
   }
@@ -36,7 +35,7 @@ export class RouteProvider {
     var routeWaypoints = []
     if (this.currentRoute.waypoints.length > 0) {
       for (var waypoint of this.currentRoute.waypoints) {
-        routeWaypoints.push({'id': waypoint.waypoint_id, 'name' : waypoint.name, 'latitude': waypoint.latitude, 'longitude': waypoint.longitude, 'distance': 0, 'bearing': 0, 'photos': [], 'data_requests': waypoint.data_requests, 'data': [], waypoint_found: false})
+        routeWaypoints.push({'id': waypoint.id, 'name' : waypoint.name, 'latitude': waypoint.latitude, 'longitude': waypoint.longitude, 'distance': 0, 'bearing': 0, 'photos': [], 'data_requests': waypoint.data_requests, 'data': [], waypoint_found: false})
       }
     }
     return routeWaypoints

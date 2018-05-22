@@ -7,12 +7,7 @@ import { RouteProvider } from '../route/route'
 import { LocationTrackerProvider } from '../location-tracker/location-tracker'
 import { LocalScienceCacheProvider } from '../local-science-cache/local-science-cache'
 
-/*
-  Generated class for the VisitProvider provider.
 
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 @Injectable()
 export class VisitProvider {
 
@@ -115,7 +110,7 @@ export class VisitProvider {
 
   saveCurrentVisit() {
     for (var waypoint of this.currentVisit.waypoints) {
-      this.currentVisit.total_questions = this.currentVisit.total_questions + waypoint.data_requests.length
+      // this.currentVisit.total_questions = this.currentVisit.total_questions + waypoint.data_requests.length
       this.currentVisit.questions_answered = this.currentVisit.questions_answered + waypoint.data.length
       this.currentVisit.photos_taken = this.currentVisit.photos_taken + waypoint.photos.length
     }

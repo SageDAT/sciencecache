@@ -25,7 +25,7 @@
         <ion-card *ngIf="currentWaypoint.description">
           <ion-card-header>
             <ion-icon name="search" item-start> </ion-icon>
-            Clue
+            Description
           </ion-card-header>
           <ion-card-content>
             {{ currentWaypoint.description }}
@@ -43,14 +43,14 @@
       </ion-col>
       <ion-col col-12>
         <ion-segment [ngModel]="settings" padding>
-          <ion-segment-button value='foundIt' (click)="setWaypointFound(currentWaypoint.waypoint_id)" disabled="{{!onVisit && currentVisit?.waypoints[currentWaypoint.index].found }}">
+          <ion-segment-button value='foundIt' (click)="setWaypointFound(currentWaypoint.id)" disabled="{{!onVisit && currentVisit?.waypoints[currentWaypoint.index].found }}">
               <ion-icon class="custom-icon" name="ios-checkmark-circle"></ion-icon>
               Found It
           </ion-segment-button>
-          <ion-segment-button value='showHint' (click)="showHint = true" disabled="showHint">
-              <ion-icon class="custom-icon" name="ios-help-circle"></ion-icon>
-              Hint
-          </ion-segment-button>
+          <!--<ion-segment-button value='showHint' (click)="showHint = true" disabled="showHint">-->
+              <!--<ion-icon class="custom-icon" name="ios-help-circle"></ion-icon>-->
+              <!--Hint-->
+          <!--</ion-segment-button>-->
         </ion-segment>
       </ion-col>
     </ion-row>

@@ -70,7 +70,7 @@
       </ion-card>
 
       <ion-item>
-        <ion-label>Waypoint Finder</ion-label>
+        <ion-label>Observation Point Finder</ion-label>
         <ion-toggle [(ngModel)]="waypointFinderToggle" checked="false"></ion-toggle>
       </ion-item>
 
@@ -98,10 +98,10 @@
           <ion-segment>
             <ion-segment-button value="sat" (click)="previousWaypoint()">
               <ion-icon class="custom-icon" name="arrow-back"></ion-icon>
-              Prev. Waypoint
+              Prev. Observation
             </ion-segment-button>
             <ion-segment-button value="street" (click)="nextWaypoint()">
-              Next Waypoint
+              Next Observation
               <ion-icon class="custom-icon" name="arrow-forward"></ion-icon>
             </ion-segment-button>
           </ion-segment>
@@ -109,7 +109,7 @@
       </ion-card>
 
       <ion-item>
-        <ion-label>Waypoints ({{ currentRoute.waypoint_count }})</ion-label>
+        <ion-label>Observation Points ({{ currentRoute.waypoint_count }})</ion-label>
         <ion-toggle [(ngModel)]="waypointsToggle" checked="false"></ion-toggle>
       </ion-item>
 
