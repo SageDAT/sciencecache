@@ -26,8 +26,6 @@ import * as L from 'leaflet'
 })
 
 export class RoutePage implements OnInit {
-  currentLocationSubscription: Subscription
-  onVisitSubscription: Subscription
   id: any
   map: any = null
   waypointMarkers:any = []
@@ -132,7 +130,7 @@ export class RoutePage implements OnInit {
 
   startVisit() {
     this.visitProvider.setOnVisit(true)
-    this.visitProvider._currentVisit.subscribe(currentVisit=> {
+    this.visitProvider.currentVisitSubject.subscribe(currentVisit=> {
       this.currentVisit = currentVisit
     })
     this.startVisitAlert()
@@ -140,7 +138,7 @@ export class RoutePage implements OnInit {
   }
 
   stopVisit() {
-    this.currentVisit.route_id == this.currentRoute.route_id
+    this.currentVisit.route == this.currentRoute.route
     this.currentVisit.route_name == this.currentRoute.name
     this.visitProvider.setOnVisit(false)
     this.cleanUpVisit()
@@ -255,7 +253,7 @@ export class RoutePage implements OnInit {
 
   startGPS() {
     this.locationTracker.startTracking()
-    this.currentLocationSubscription = this.locationTracker._currentLocation.subscribe(currentLocation=> {
+    this.locationTracker.currentLocationSubject.subscribe(currentLocation=> {
       this.currentLocation = currentLocation
     })
     this.updateWaypointFinder()
@@ -356,13 +354,15 @@ export class RoutePage implements OnInit {
     if (this.currentRoute && this.currentRoute.waypoints) {
       var key = 0;
       for (var waypoint of this.currentRoute.waypoints) {
-        this.addPoint(waypoint.latitude, waypoint.longitude, waypoint.name, key, waypoint.waypoint_id);
+        waypoint.longitude = waypoint.obspoint_geom[0]
+        waypoint.latitude = waypoint.obspoint_geom[1]
+        this.addPoint(waypoint.latitude, waypoint.longitude, waypoint.name, key, waypoint.id);
         this.waypoints[key] = {
             index: waypoint.key,
             name: waypoint.name,
             lat: waypoint.latitude,
             long: waypoint.longitude,
-            id: waypoint.waypoint_id,
+            id: waypoint.id,
             distance: null,
             bearing: null
         };
@@ -496,7 +496,7 @@ export class RoutePage implements OnInit {
       this.routeProvider.currentRouteSubject.subscribe(currentRoute=> {
         this.currentRoute = currentRoute;
       })
-      this.onVisitSubscription = this.visitProvider._onVisit.subscribe(onVisit=> {
+      this.visitProvider.onVisitSubject.subscribe(onVisit=> {
       this.onVisit = onVisit
       })
     }

@@ -45,7 +45,8 @@
         <ion-toggle [(ngModel)]="siteInformationToggle" checked="false"></ion-toggle>
       </ion-item>
       <ion-card *ngIf="siteInformationToggle">
-        <img src="{{ currentRoute.image }}" />
+        <!--<img src="{{ currentRoute.image }}" />-->
+        <img src="assets/noImage.png">
         <ion-item>
           <h2>Site Information</h2>
         </ion-item>
@@ -69,7 +70,7 @@
       </ion-card>
 
       <ion-item>
-        <ion-label>Waypoint Finder</ion-label>
+        <ion-label>Observation Point Finder</ion-label>
         <ion-toggle [(ngModel)]="waypointFinderToggle" checked="false"></ion-toggle>
       </ion-item>
 
@@ -97,10 +98,10 @@
           <ion-segment>
             <ion-segment-button value="sat" (click)="previousWaypoint()">
               <ion-icon class="custom-icon" name="arrow-back"></ion-icon>
-              Prev. Waypoint
+              Prev. Observation
             </ion-segment-button>
             <ion-segment-button value="street" (click)="nextWaypoint()">
-              Next Waypoint
+              Next Observation
               <ion-icon class="custom-icon" name="arrow-forward"></ion-icon>
             </ion-segment-button>
           </ion-segment>
@@ -108,13 +109,13 @@
       </ion-card>
 
       <ion-item>
-        <ion-label>Waypoints ({{ currentRoute.waypoint_count }})</ion-label>
+        <ion-label>Observation Points ({{ currentRoute.waypoint_count }})</ion-label>
         <ion-toggle [(ngModel)]="waypointsToggle" checked="false"></ion-toggle>
       </ion-item>
 
       <ion-col col-12 *ngIf="waypointsToggle && currentRoute.waypoints?.length > 0">
         <ion-list inset>
-          <button ion-item *ngFor="let waypoint of currentRoute.waypoints" (click)="waypointSelected(waypoint.waypoint_id)">
+          <button ion-item *ngFor="let waypoint of currentRoute.waypoints" (click)="waypointSelected(waypoint.id)">
             {{ waypoint.name }}
           </button>
         </ion-list>

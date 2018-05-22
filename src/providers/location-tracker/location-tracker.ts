@@ -19,12 +19,11 @@ export class LocationTrackerProvider {
   public lat: number = 0
   public lng: number = 0
   currentLocation:any = {}
-  _currentLocation = new BehaviorSubject < any > ([])
-  currentLocation$ = this._currentLocation.asObservable()
+  currentLocationSubject = new BehaviorSubject < any > ([])
 
   constructor(public zone: NgZone, public backgroundGeolocation: BackgroundGeolocation, public geolocation: Geolocation) {
   }
- 
+
   getCurrentLocation() {
     return this.currentLocation
   }
@@ -51,7 +50,7 @@ export class LocationTrackerProvider {
              var brng = this._toDeg(Math.atan2(y, x));
              return 360 - ((brng + 360) % 360);  }
 */
-  
+
    degreeToRadian(deg) {
     return deg * (Math.PI/180)
    }
@@ -79,22 +78,22 @@ export class LocationTrackerProvider {
     let config = {
       desiredAccuracy: 0,
       stationaryRadius: 20,
-      distanceFilter: 10, 
+      distanceFilter: 10,
       debug: true,
-      interval: 5000 
+      interval: 5000
     }
     this.backgroundGeolocation.configure(config).subscribe((location) => {
       this.zone.run(() => {
         this.lat = location.latitude;
         this.lng = location.longitude;
-      }); 
-    }, 
+      });
+    },
     (err) => {
       console.log(err);
     });
     this.backgroundGeolocation.start();
     let options = {
-      frequency: 5000, 
+      frequency: 5000,
       enableHighAccuracy: true
     }
     this.watch = this.geolocation
@@ -102,18 +101,18 @@ export class LocationTrackerProvider {
       .filter((p: any) => p.code === undefined)
       .subscribe((position: Geoposition) => {
         this.currentLocation = position
-        this._currentLocation.next(this.currentLocation)
+        this.currentLocationSubject.next(this.currentLocation)
         this.zone.run(() => {
           this.lat = position.coords.latitude
           this.lng = position.coords.longitude
         })
       })
    }
-  
+
   stopTracking() {
     this.backgroundGeolocation.finish()
     this.backgroundGeolocation.stop()
     this.watch.unsubscribe();
-  } 
+  }
 
 }

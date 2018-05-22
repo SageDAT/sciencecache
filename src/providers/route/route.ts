@@ -26,8 +26,7 @@ export class RouteProvider {
   getLocalRoute(RouteId) {
      this.lscService.getRoute(RouteId).then(data=>{
       this.currentRoute = data;
-      //TODO: commenting out mapping for now, start here to contiune mapping work
-      // this.currentRoute.waypoints = this.sortWaypointsByID(this.currentRoute.waypoints, 'waypoint_id');
+      this.currentRoute.waypoints = this.sortWaypointsByID(this.currentRoute.observation_points, 'id');
       this.currentRouteSubject.next(this.currentRoute)
     })
   }
@@ -36,7 +35,7 @@ export class RouteProvider {
     var routeWaypoints = []
     if (this.currentRoute.waypoints.length > 0) {
       for (var waypoint of this.currentRoute.waypoints) {
-        routeWaypoints.push({'id': waypoint.waypoint_id, 'name' : waypoint.name, 'latitude': waypoint.latitude, 'longitude': waypoint.longitude, 'distance': 0, 'bearing': 0, 'photos': [], 'data_requests': waypoint.data_requests, 'data': [], waypoint_found: false})
+        routeWaypoints.push({'id': waypoint.id, 'name' : waypoint.name, 'latitude': waypoint.latitude, 'longitude': waypoint.longitude, 'distance': 0, 'bearing': 0, 'photos': [], 'data_requests': waypoint.data_requests, 'data': [], waypoint_found: false})
       }
     }
     return routeWaypoints
@@ -47,7 +46,7 @@ export class RouteProvider {
       this.currentWaypoint = null
     } else {
       for (var waypoint in this.currentRoute.waypoints) {
-        if (this.currentRoute.waypoints[waypoint].waypoint_id == waypointId) {
+        if (this.currentRoute.waypoints[waypoint].id == waypointId) {
           this.currentWaypoint = this.currentRoute.waypoints[waypoint]
           this.currentWaypoint.index = parseInt(waypoint)
           console.log(this.currentWaypoint)

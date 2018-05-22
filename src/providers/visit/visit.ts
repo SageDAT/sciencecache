@@ -7,34 +7,26 @@ import { RouteProvider } from '../route/route'
 import { LocationTrackerProvider } from '../location-tracker/location-tracker'
 import { LocalScienceCacheProvider } from '../local-science-cache/local-science-cache'
 
-/*
-  Generated class for the VisitProvider provider.
 
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 @Injectable()
 export class VisitProvider {
 
   currentVisit:any = null
-  _currentVisit = new BehaviorSubject <any> ([])
-  currentVisit$ = this._currentVisit.asObservable()
+  currentVisitSubject = new BehaviorSubject <any> ([])
   onVisit: boolean = false
-  _onVisit = new BehaviorSubject <any> ([])
-  onVisit$ = this._onVisit.asObservable()
+  onVisitSubject = new BehaviorSubject <any> ([])
   currentLocation: any
   currentWaypoint: any
   waypointFound: boolean = false
-  _waypointFound = new BehaviorSubject<any> ([])
-  waypointFound$ = this._waypointFound.asObservable()
+  waypointFoundSubject = new BehaviorSubject<any> ([])
 
 
   constructor(public http: Http, public routeProvider: RouteProvider, public locationTracker: LocationTrackerProvider, public lscService: LocalScienceCacheProvider) {
     this.routeProvider.currentWaypointSubject.subscribe(currentWaypoint=> {
       this.currentWaypoint = currentWaypoint;
     })
-    this._onVisit.next(this.onVisit)
-    this._currentVisit.next(this.currentVisit)
+    this.onVisitSubject.next(this.onVisit)
+    this.currentVisitSubject.next(this.currentVisit)
   }
 
   createNewVisit() {
@@ -53,24 +45,24 @@ export class VisitProvider {
     }
     this.currentVisit = blankVisit
     console.log(this.currentVisit)
-    this._currentVisit.next(this.currentVisit)
-    this._waypointFound.next(this.waypointFound)
+    this.currentVisitSubject.next(this.currentVisit)
+    this.waypointFoundSubject.next(this.waypointFound)
   }
 
   setWaypointFound(id) {
     console.log('Waypoint Found.')
     this.waypointFound = true
-    this._waypointFound.next(this.waypointFound)
+    this.waypointFoundSubject.next(this.waypointFound)
     for (var waypoint in this.currentVisit.waypoints) {
       if (this.currentVisit.waypoints[waypoint].id == id) {
         if (this.currentVisit.waypoints[waypoint].waypoint_found != true) {
           this.currentVisit.waypoints[waypoint].waypoint_found = true
           this.currentVisit.waypoints_visited = this.currentVisit.waypoints_visited + 1
-          this._currentVisit.next(this.currentVisit)
+          this.currentVisitSubject.next(this.currentVisit)
         }
       }
     }
-    this._currentVisit.next(this.currentVisit)
+    this.currentVisitSubject.next(this.currentVisit)
   }
 
   updateWaypoints() {
@@ -107,18 +99,18 @@ export class VisitProvider {
           } else {
             this.waypointFound = true
           }
-          this._waypointFound.next(this.waypointFound)
+          this.waypointFoundSubject.next(this.waypointFound)
         }
       }
     } else {
       this.waypointFound = false
-      this._waypointFound.next(this.waypointFound)
+      this.waypointFoundSubject.next(this.waypointFound)
     }
   }
 
   saveCurrentVisit() {
     for (var waypoint of this.currentVisit.waypoints) {
-      this.currentVisit.total_questions = this.currentVisit.total_questions + waypoint.data_requests.length
+      // this.currentVisit.total_questions = this.currentVisit.total_questions + waypoint.data_requests.length
       this.currentVisit.questions_answered = this.currentVisit.questions_answered + waypoint.data.length
       this.currentVisit.photos_taken = this.currentVisit.photos_taken + waypoint.photos.length
     }
@@ -130,7 +122,7 @@ export class VisitProvider {
 
   setOnVisit(onVisit) {
     this.onVisit = onVisit
-    this._onVisit.next(this.onVisit)
+    this.onVisitSubject.next(this.onVisit)
     if (onVisit == true) {
       this.createNewVisit()
     }

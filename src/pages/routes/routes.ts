@@ -14,7 +14,6 @@ import { RemoteScienceCacheProvider } from '../../providers/remote-science-cache
 })
 export class RoutesPage implements OnInit {
 
-  localRoutes: any = [];
   remoteRoutes: any = [];
   localRoutesList: any = [];
   badLoad: any = {};
@@ -78,6 +77,11 @@ export class RoutesPage implements OnInit {
 
   }
 
+  refreshList() {
+    this.remoteRoutes = null
+    this.ionViewWillEnter()
+  }
+
   ngOnInit() {
     this.setup();
   }
@@ -86,7 +90,7 @@ export class RoutesPage implements OnInit {
     let alert = this.alertController.create({
       title: this.remoteRoutes[index].name,
       subTitle: this.remoteRoutes[index].description,
-      message: '<span>Difficulty: ' + this.remoteRoutes[index].route_difficulty.difficulty + '</span><br /><span>Length: ' + this.remoteRoutes[index].route_length.length + '</span><br /><span>Waypoints: ' + this.remoteRoutes[index].waypoint_count + '</span>',
+      message: '<span>Difficulty: ' + this.remoteRoutes[index].route_difficulty.difficulty + '</span><br /><span>Length: ' + this.remoteRoutes[index].route_length.length + '</span><br /><span>Observation Points: ' + this.remoteRoutes[index].waypoint_count + '</span>',
       buttons: [
       {
         text: 'Dismiss',

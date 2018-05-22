@@ -8,14 +8,6 @@ import { environment } from '../../environments/environment';
 import {Storage} from "@ionic/storage";
 import {ErrorObservable} from "rxjs/observable/ErrorObservable";
 
-
-
-/*
-  Generated class for the RemoteScienceCacheProvider provider.
-
-  This service handles data into and out of the Remove ScienceCache (python) microservice, which
-  in turn handles data into and out of the postgres database.
-*/
 @Injectable()
 export class RemoteScienceCacheProvider {
   serviceUrl: string = environment.serviceUrl;
