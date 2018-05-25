@@ -83,10 +83,25 @@ ionic cordova run ios -lc
 ```
 Substitute ios for android if not on a Mac. The -lc is livereload and console logging.
 
-Deploying to a device
+Deploying to a device info:
 ```
 https://ionicframework.com/docs/intro/deploying/
 ```
+Can use this to build an IOS file
+```
+ionic cordova build ios --prod
+```
+And then open the .xcodeproj file in platforms/ios/ in Xcode
+
+Otherwise running this should copy it to the device automatically:
+```
+ionic cordova run ios --device
+```
+
+Some tips to running on IOS:
+* Trying to run it with just your apple id likely wont work. Setup XCODE 'Preferences'>'Accounts' and make sure you're a part of Team 'US Geological Survey'
+* To be a part of the team sign into https://developer.apple.com/account/ios/certificate/?teamId=XA97G7J7P2 and look for requesting access under the 'Certificates, Ids and Profiles'
+* In xcode, when looking at the left bar navigator, select 'ScienceCache'. Under the 'Signing' section and where it says 'Development Team' make sure to select 'US Geological Survey'
 
 
 Build and Deploy Debug APK to Device

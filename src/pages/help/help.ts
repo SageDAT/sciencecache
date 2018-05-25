@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import { SettingsPage } from '../settings/settings'
 import { PopoverController } from 'ionic-angular';
 import { LocalScienceCacheProvider } from '../../providers/local-science-cache/local-science-cache'
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'page-help',
@@ -10,6 +11,8 @@ import { LocalScienceCacheProvider } from '../../providers/local-science-cache/l
 })
 
 export class HelpPage {
+
+  version: string = environment.VERSION;
 
   constructor(public navCtrl: NavController, public lscService: LocalScienceCacheProvider, private popoverCtrl: PopoverController) {
   }
