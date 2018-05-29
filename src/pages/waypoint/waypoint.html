@@ -9,19 +9,12 @@
   <ion-grid no-padding>
     <ion-row >
       <ion-col col-12 no-padding>
+
         <ion-card *ngIf="currentWaypoint.image" no-padding>
           <!--<img class="waypoint-image" src="{{ currentWaypoint.image }}" alt="{{ currentWaypoint.name }}" />-->
           <img src="assets/noImage.png">
         </ion-card>
-        <ion-card *ngIf="currentWaypoint.warning">
-          <ion-card-header>
-            <ion-icon name="warning" item-start> </ion-icon>
-            Warning!
-          </ion-card-header>
-          <ion-card-content>
-            {{ currentWaypoint.warning }}
-          </ion-card-content>
-        </ion-card>
+
         <ion-card *ngIf="currentWaypoint.description">
           <ion-card-header>
             <ion-icon name="search" item-start> </ion-icon>
@@ -31,16 +24,58 @@
             {{ currentWaypoint.description }}
           </ion-card-content>
         </ion-card>
-        <ion-card *ngIf="currentWaypoint.location_description && showHint">
+
+        <ion-card *ngIf="currentWaypoint.warning">
           <ion-card-header>
-            <ion-icon name="eye" item-start> </ion-icon>
-            Hint
+            <ion-icon name="warning" item-start> </ion-icon>
+            Warning!
           </ion-card-header>
           <ion-card-content>
-            {{ currentWaypoint.location_description }}
+            {{ currentWaypoint.warning }}
           </ion-card-content>
         </ion-card>
+
+        <ion-card *ngIf="currentWaypoint.obspoint_geom.length > 0">
+          <ion-card-header>
+            <ion-icon name="locate" item-start> </ion-icon>
+            Latitude
+          </ion-card-header>
+          <ion-card-content>
+            {{ currentWaypoint.obspoint_geom[1] }}
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card *ngIf="currentWaypoint.obspoint_geom.length > 0">
+          <ion-card-header>
+            <ion-icon name="locate" item-start> </ion-icon>
+            Longitude
+          </ion-card-header>
+          <ion-card-content>
+            {{ currentWaypoint.obspoint_geom[0] }}
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card *ngIf="currentWaypoint.observation_point_type.description">
+          <ion-card-header>
+            Observation Point Type
+          </ion-card-header>
+          <ion-card-content>
+            {{ currentWaypoint.observation_point_type.description }}
+          </ion-card-content>
+        </ion-card>
+
       </ion-col>
+
+
+      
+
+
+
+
+
+
+
+
       <ion-col col-12>
         <ion-segment [ngModel]="settings" padding>
           <ion-segment-button value='foundIt' (click)="setWaypointFound(currentWaypoint.id)" disabled="{{!onVisit && currentVisit?.waypoints[currentWaypoint.index].found }}">
@@ -78,35 +113,37 @@
           </ion-row>
         </ion-grid>
 
-        <ion-col col-12 *ngFor="let dataRequest of currentWaypoint.data_requests; let di = index">
-          <ion-card *ngIf="currentVisit">
-            <ion-card-content *ngIf="dataRequest.image" no-padding>
-              <!--<img class="waypoint-image" src="{{ dataRequest.image }}" alt="{{ dataRequest.name }}" />-->
-              <img src="assets/noImage.png">
-            </ion-card-content>
-            <ion-card-header style="white-space: normal;" *ngIf="dataRequest.question">
-              {{ dataRequest.question }}
-            </ion-card-header>
-            <ion-card-content *ngIf="dataRequest.request_type == 'textarea'">
-              <ion-textarea [(ngModel)]="currentVisit.waypoints[currentWaypoint.index].data[di]"></ion-textarea>
-            </ion-card-content>
-            <ion-card-content *ngIf="dataRequest.request_type == 'select'">
-              <ion-label>Answer</ion-label>
-              <ion-select [(ngModel)]="currentVisit.waypoints[currentWaypoint.index].data[di]">
-                <ion-option *ngFor="let option of questionOptions(dataRequest.options)" value="{{ option }}">{{ option }}</ion-option>
-              </ion-select>
-            </ion-card-content>
-            <ion-card-content *ngIf="dataRequest.request_type != 'textarea' && dataRequest.type != 'select'">
-              <ion-input [(ngModel)]="currentVisit.waypoints[currentWaypoint.index].data[di]" placeholder="{{ dataRequest.placeholder }}" type="{{ dataRequest.request_type }}">
-              </ion-input>
-            </ion-card-content>
-            <ion-card-content *ngIf="dataRequest.help && showHelp">
-              <button ion-button outline round small padding class="data-request-help" (tap)="showHelp = true">
-                <ion-icon name="help-circle" item-end></ion-icon>&nbsp;&nbsp;Help With This Question
-              </button>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
+        <!--<ion-col col-12 *ngFor="let dataRequest of currentWaypoint.data_requests; let di = index">-->
+          <!--<ion-card *ngIf="currentVisit">-->
+            <!--<ion-card-content *ngIf="dataRequest.image" no-padding>-->
+              <!--&lt;!&ndash;<img class="waypoint-image" src="{{ dataRequest.image }}" alt="{{ dataRequest.name }}" />&ndash;&gt;-->
+              <!--<img src="assets/noImage.png">-->
+            <!--</ion-card-content>-->
+            <!--<ion-card-header style="white-space: normal;" *ngIf="dataRequest.question">-->
+              <!--{{ dataRequest.question }}-->
+            <!--</ion-card-header>-->
+            <!--<ion-card-content *ngIf="dataRequest.request_type == 'textarea'">-->
+              <!--<ion-textarea [(ngModel)]="currentVisit.waypoints[currentWaypoint.index].data[di]"></ion-textarea>-->
+            <!--</ion-card-content>-->
+            <!--<ion-card-content *ngIf="dataRequest.request_type == 'select'">-->
+              <!--<ion-label>Answer</ion-label>-->
+              <!--<ion-select [(ngModel)]="currentVisit.waypoints[currentWaypoint.index].data[di]">-->
+                <!--<ion-option *ngFor="let option of questionOptions(dataRequest.options)" value="{{ option }}">{{ option }}</ion-option>-->
+              <!--</ion-select>-->
+            <!--</ion-card-content>-->
+            <!--<ion-card-content *ngIf="dataRequest.request_type != 'textarea' && dataRequest.type != 'select'">-->
+              <!--<ion-input [(ngModel)]="currentVisit.waypoints[currentWaypoint.index].data[di]" placeholder="{{ dataRequest.placeholder }}" type="{{ dataRequest.request_type }}">-->
+              <!--</ion-input>-->
+            <!--</ion-card-content>-->
+            <!--<ion-card-content *ngIf="dataRequest.help && showHelp">-->
+              <!--<button ion-button outline round small padding class="data-request-help" (tap)="showHelp = true">-->
+                <!--<ion-icon name="help-circle" item-end></ion-icon>&nbsp;&nbsp;Help With This Question-->
+              <!--</button>-->
+            <!--</ion-card-content>-->
+          <!--</ion-card>-->
+        <!--</ion-col>-->
+
+
     </ion-row>
   </ion-grid>
 </ion-content>
