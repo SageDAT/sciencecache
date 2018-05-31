@@ -8,10 +8,12 @@ page-waypoint {
     font-size: 1.1em !important;
   }
 
-  .data-request-help {
-  	display: block;
-  	margin-left: auto;
-  	margin-right: auto;
-  	width: 100%;
+  .indent {
+    margin-left: 2em;
   }
+
+  .centerText {
+    text-align: center;
+  }
+
 }

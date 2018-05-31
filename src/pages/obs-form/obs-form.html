@@ -1,18 +1,67 @@
-<!--
-  Generated template for the ObsFormPage page.
 
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
-    <ion-title>obs-form</ion-title>
-  </ion-navbar>
+    <ion-title>Questions</ion-title>
 
+
+    <ion-buttons end>
+      <button class="headerButton" ion-button (click)="backToRoute()">
+        Back To Route
+      </button>
+    </ion-buttons>
+
+  </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
+
+<div *ngIf="currentObsPoint && currentRoute">
+
+  <h4 class="centerText">{{currentObsPoint.obspnt_form.name}}</h4>
+
+  <ion-col col-12 *ngFor="let obsFormDR of currentObsPoint.obs_form; let i = index">
+
+
+    <ion-card>
+      <!--<ion-card *ngIf="currentVisit">-->
+      <ion-card-content *ngIf="obsFormDR.datarequest.image" no-padding>
+        <!--<img class="waypoint-image" src="{{ obsFormDR.datarequest.image }}" alt="{{ obsFormDR.datarequest.name }}" />-->
+        <img src="assets/noImage.png">
+      </ion-card-content>
+
+      <ion-card-header style="white-space: normal;" *ngIf="obsFormDR.datarequest.question">
+        {{ obsFormDR.datarequest.question }}
+      </ion-card-header>
+
+      <ion-card-content *ngIf="obsFormDR.datarequest.request_type == 'text' ">
+        <ion-textarea [(ngModel)]="obsFormDR.datarequest.value" placeholder={{obsFormDR.datarequest.placeholder}}></ion-textarea>
+      </ion-card-content>
+
+      <ion-card-content *ngIf="obsFormDR.datarequest.request_type == 'select' && obsFormDR.datarequest.options.length > 0">
+        <ion-label>Answer</ion-label>
+        <ion-select [(ngModel)]="obsFormDR.datarequest.value" >
+          <ion-option *ngFor="let option of obsFormDR.datarequest.options" value="{{ option }}">{{ option }}</ion-option>
+        </ion-select>
+      </ion-card-content>
+      <ion-card-content *ngIf="obsFormDR.datarequest.request_type == 'select' && !(obsFormDR.datarequest.options.length > 0)">
+        Error: No options found
+      </ion-card-content>
+      <ion-card-content *ngIf="obsFormDR.datarequest.request_type != 'text' && obsFormDR.datarequest.type != 'select'">
+        <ion-input [(ngModel)]="obsFormDR.datarequest.value" placeholder="{{ obsFormDR.datarequest.placeholder }}" type="{{ obsFormDR.datarequest.request_type }}">
+        </ion-input>
+      </ion-card-content>
+      <ion-card-content *ngIf="obsFormDR.datarequest.request_help && showHelp">
+        <button ion-button outline round small padding class="data-request-help" (tap)="showHelp = true">
+          <ion-icon name="help-circle" item-end></ion-icon>&nbsp;&nbsp;Help With This Question
+        </button>
+      </ion-card-content>
+    </ion-card>
+
+
+  </ion-col>
+
+</div>
 
 </ion-content>

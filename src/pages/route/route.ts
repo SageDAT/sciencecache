@@ -77,7 +77,10 @@ export class RoutePage implements OnInit {
     })
   }
 
-  constructor(public navCtrl: NavController, public alertController: AlertController, public navParams: NavParams, public lscService: LocalScienceCacheProvider, public rscService: RemoteScienceCacheProvider, public locationTracker: LocationTrackerProvider, public routeProvider: RouteProvider, public visitProvider: VisitProvider, private ref: ChangeDetectorRef, private device: Device) {
+  constructor(public navCtrl: NavController, public alertController: AlertController, public navParams: NavParams,
+              public lscService: LocalScienceCacheProvider, public rscService: RemoteScienceCacheProvider,
+              public locationTracker: LocationTrackerProvider, public routeProvider: RouteProvider,
+              public visitProvider: VisitProvider, private ref: ChangeDetectorRef, private device: Device) {
     var ticks = 1
     setInterval(() => {
       if (this.currentRoute !== null) {

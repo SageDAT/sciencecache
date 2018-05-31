@@ -27,6 +27,7 @@ import { RouteProvider } from '../providers/route/route';
 import { VisitProvider } from '../providers/visit/visit';
 import {RegistrationPage} from "../pages/registration/registration";
 import {IonicStorageModule} from "@ionic/storage";
+import {ObsFormPage} from "../pages/obs-form/obs-form";
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {IonicStorageModule} from "@ionic/storage";
     TabsPage,
     SettingsPage,
     WaypointPage,
-    RegistrationPage
+    RegistrationPage,
+    ObsFormPage
   ],
   imports: [
     BrowserModule,
@@ -60,7 +62,8 @@ import {IonicStorageModule} from "@ionic/storage";
     WaypointPage,
     SettingsPage,
     TabsPage,
-    RegistrationPage
+    RegistrationPage,
+    ObsFormPage
   ],
   providers: [
     HttpModule,

@@ -48,6 +48,12 @@
         <!--<img src="{{ currentRoute.image }}" />-->
         <img src="assets/noImage.png">
         <ion-item>
+          <h2>Site Name</h2>
+        </ion-item>
+        <ion-card-content>
+          <p>{{ currentRoute?.name}}</p>
+        </ion-card-content>
+        <ion-item>
           <h2>Site Information</h2>
         </ion-item>
         <ion-card-content>
@@ -92,7 +98,7 @@
           </div>
           <h6 class="df_info">
             Heading: {{ compass.current_heading }}°&nbsp;&nbsp;
-            Accuracy: +/- {{ compass.current_accuracy }} meters&nbsp;&nbsp;
+            Accuracy: +/- {{ compass.current_accuracy }} m&nbsp;&nbsp;
             Speed: {{ compass.current_speed }}
           </h6>
           <ion-segment>

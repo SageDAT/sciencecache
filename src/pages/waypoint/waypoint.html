@@ -10,6 +10,18 @@
     <ion-row >
       <ion-col col-12 no-padding>
 
+        <h4 class="centerText">Observation Point</h4>
+
+        <ion-card *ngIf="currentWaypoint.name">
+          <ion-card-header>
+            <ion-icon item-start> </ion-icon>
+            Name
+          </ion-card-header>
+          <ion-card-content>
+            {{ currentWaypoint.name }}
+          </ion-card-content>
+        </ion-card>
+
         <ion-card *ngIf="currentWaypoint.image" no-padding>
           <!--<img class="waypoint-image" src="{{ currentWaypoint.image }}" alt="{{ currentWaypoint.name }}" />-->
           <img src="assets/noImage.png">
@@ -66,14 +78,29 @@
 
       </ion-col>
 
+      <!--Maybe do something like this for visit forms -->
+      <!--<ion-col col-12 no-padding >-->
+        <!--<ion-card *ngIf="currentWaypoint.obspnt_form">-->
+          <!--<ion-card-header>Observation Form Data Request</ion-card-header>-->
+          <!--<ion-list inset>-->
+            <!--<button ion-item (click)="obsSelected(currentWaypoint.id)">-->
+              <!--{{ currentWaypoint.obspnt_form.name }}-->
+            <!--</button>-->
+          <!--</ion-list>-->
+        <!--</ion-card>-->
+      <!--</ion-col>-->
 
-      
+      <ion-col col-12 no-padding *ngIf="currentWaypoint.obspnt_form">
+        <div text-center>
+          <button ion-button large (click)="obsSelected(currentWaypoint.id)">Collect Data</button>
+        </div>
+      </ion-col>
 
-
-
-
-
-
+      <ion-col col-12 no-padding *ngIf="!(currentWaypoint.obspnt_form)">
+        <ion-card>
+          <p class="centerText">No Observation Form exists to Collect Data</p>
+        </ion-card>
+      </ion-col>
 
 
       <ion-col col-12>
@@ -112,37 +139,6 @@
             </ion-col>
           </ion-row>
         </ion-grid>
-
-        <!--<ion-col col-12 *ngFor="let dataRequest of currentWaypoint.data_requests; let di = index">-->
-          <!--<ion-card *ngIf="currentVisit">-->
-            <!--<ion-card-content *ngIf="dataRequest.image" no-padding>-->
-              <!--&lt;!&ndash;<img class="waypoint-image" src="{{ dataRequest.image }}" alt="{{ dataRequest.name }}" />&ndash;&gt;-->
-              <!--<img src="assets/noImage.png">-->
-            <!--</ion-card-content>-->
-            <!--<ion-card-header style="white-space: normal;" *ngIf="dataRequest.question">-->
-              <!--{{ dataRequest.question }}-->
-            <!--</ion-card-header>-->
-            <!--<ion-card-content *ngIf="dataRequest.request_type == 'textarea'">-->
-              <!--<ion-textarea [(ngModel)]="currentVisit.waypoints[currentWaypoint.index].data[di]"></ion-textarea>-->
-            <!--</ion-card-content>-->
-            <!--<ion-card-content *ngIf="dataRequest.request_type == 'select'">-->
-              <!--<ion-label>Answer</ion-label>-->
-              <!--<ion-select [(ngModel)]="currentVisit.waypoints[currentWaypoint.index].data[di]">-->
-                <!--<ion-option *ngFor="let option of questionOptions(dataRequest.options)" value="{{ option }}">{{ option }}</ion-option>-->
-              <!--</ion-select>-->
-            <!--</ion-card-content>-->
-            <!--<ion-card-content *ngIf="dataRequest.request_type != 'textarea' && dataRequest.type != 'select'">-->
-              <!--<ion-input [(ngModel)]="currentVisit.waypoints[currentWaypoint.index].data[di]" placeholder="{{ dataRequest.placeholder }}" type="{{ dataRequest.request_type }}">-->
-              <!--</ion-input>-->
-            <!--</ion-card-content>-->
-            <!--<ion-card-content *ngIf="dataRequest.help && showHelp">-->
-              <!--<button ion-button outline round small padding class="data-request-help" (tap)="showHelp = true">-->
-                <!--<ion-icon name="help-circle" item-end></ion-icon>&nbsp;&nbsp;Help With This Question-->
-              <!--</button>-->
-            <!--</ion-card-content>-->
-          <!--</ion-card>-->
-        <!--</ion-col>-->
-
 
     </ion-row>
   </ion-grid>
