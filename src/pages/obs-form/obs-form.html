@@ -25,30 +25,25 @@
 
 
     <ion-card>
-      <!--<ion-card *ngIf="currentVisit">-->
-      <ion-card-content *ngIf="obsFormDR.datarequest.image" no-padding>
-        <!--<img class="waypoint-image" src="{{ obsFormDR.datarequest.image }}" alt="{{ obsFormDR.datarequest.name }}" />-->
-        <img src="assets/noImage.png">
-      </ion-card-content>
 
       <ion-card-header style="white-space: normal;" *ngIf="obsFormDR.datarequest.question">
         {{ obsFormDR.datarequest.question }}
       </ion-card-header>
 
-      <ion-card-content *ngIf="obsFormDR.datarequest.request_type == 'text' ">
+      <ion-card-content *ngIf="obsFormDR.datarequest.request_type === 'text' ">
         <ion-textarea [(ngModel)]="obsFormDR.datarequest.value" placeholder={{obsFormDR.datarequest.placeholder}}></ion-textarea>
       </ion-card-content>
 
-      <ion-card-content *ngIf="obsFormDR.datarequest.request_type == 'select' && obsFormDR.datarequest.options.length > 0">
+      <ion-card-content *ngIf="obsFormDR.datarequest.request_type === 'select' && obsFormDR.datarequest.options.length > 0">
         <ion-label>Answer</ion-label>
         <ion-select [(ngModel)]="obsFormDR.datarequest.value" >
           <ion-option *ngFor="let option of obsFormDR.datarequest.options" value="{{ option }}">{{ option }}</ion-option>
         </ion-select>
       </ion-card-content>
-      <ion-card-content *ngIf="obsFormDR.datarequest.request_type == 'select' && !(obsFormDR.datarequest.options.length > 0)">
-        Error: No options found
+      <ion-card-content *ngIf="obsFormDR.datarequest.request_type === 'select' && !(obsFormDR.datarequest.options.length > 0)">
+        <div class="red">Error: No options created to select from</div>
       </ion-card-content>
-      <ion-card-content *ngIf="obsFormDR.datarequest.request_type != 'text' && obsFormDR.datarequest.type != 'select'">
+      <ion-card-content *ngIf="obsFormDR.datarequest.request_type === 'number' ">
         <ion-input [(ngModel)]="obsFormDR.datarequest.value" placeholder="{{ obsFormDR.datarequest.placeholder }}" type="{{ obsFormDR.datarequest.request_type }}">
         </ion-input>
       </ion-card-content>
