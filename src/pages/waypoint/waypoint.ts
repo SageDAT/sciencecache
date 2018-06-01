@@ -4,6 +4,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular'
 import { Subscription } from 'rxjs/Subscription'
 import { VisitProvider } from '../../providers/visit/visit'
 import { RouteProvider } from '../../providers/route/route'
+import {RoutePage} from "../route/route";
+import {ObsFormPage} from "../obs-form/obs-form";
 
 /**
  * Generated class for the WaypointPage page.
@@ -27,7 +29,8 @@ export class WaypointPage implements OnInit{
   options:any
   showHint: boolean = false
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public routeProvider: RouteProvider, public visitProvider: VisitProvider, private camera: Camera) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public routeProvider: RouteProvider,
+              public visitProvider: VisitProvider, private camera: Camera) {
   }
 
   takePicture(index){
@@ -75,6 +78,10 @@ export class WaypointPage implements OnInit{
     this.waypoinFoundSubscription = this.visitProvider.waypointFoundSubject.subscribe(waypointFound=> {
       this.waypointFound = waypointFound
     })
+  }
+
+  obsSelected(obs_id) {
+    this.navCtrl.push(ObsFormPage, {'obs_id': obs_id})
   }
 
 

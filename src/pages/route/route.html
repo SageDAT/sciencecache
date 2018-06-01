@@ -48,6 +48,12 @@
         <!--<img src="{{ currentRoute.image }}" />-->
         <img src="assets/noImage.png">
         <ion-item>
+          <h2>Site Name</h2>
+        </ion-item>
+        <ion-card-content>
+          <p>{{ currentRoute?.name}}</p>
+        </ion-card-content>
+        <ion-item>
           <h2>Site Information</h2>
         </ion-item>
         <ion-card-content>
@@ -76,13 +82,13 @@
 
       <ion-card *ngIf="waypointFinderToggle && !onVisit">
         <ion-card-content>
-          Start a visit using the controls below to start using the waypoint finder to help you find Science Caches.
+          Start a visit using the controls below to start using the Observation Point finder to help you find Science Caches.
         </ion-card-content>
       </ion-card>
 
       <ion-card *ngIf="currentRoute.waypoints?.length > 0 && waypointFinderToggle && onVisit">
         <ion-card-content>
-          <h3 class="df_title">Waypoint {{ compass.waypoint_number }}: {{ compass.waypoint_title }}</h3>
+          <h3 class="df_title">Obs Point {{ compass.waypoint_number }}: {{ compass.waypoint_title }}</h3>
           <h3 class="df_distance">{{ compass.waypoint_distance }}</h3>
           <h3 class="df_bearing">{{ compass.waypoint_bearing }}</h3>
           <div class="waypoint_finder">
@@ -92,7 +98,7 @@
           </div>
           <h6 class="df_info">
             Heading: {{ compass.current_heading }}°&nbsp;&nbsp;
-            Accuracy: +/- {{ compass.current_accuracy }} meters&nbsp;&nbsp;
+            Accuracy: +/- {{ compass.current_accuracy }} m&nbsp;&nbsp;
             Speed: {{ compass.current_speed }}
           </h6>
           <ion-segment>

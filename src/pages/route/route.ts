@@ -77,7 +77,10 @@ export class RoutePage implements OnInit {
     })
   }
 
-  constructor(public navCtrl: NavController, public alertController: AlertController, public navParams: NavParams, public lscService: LocalScienceCacheProvider, public rscService: RemoteScienceCacheProvider, public locationTracker: LocationTrackerProvider, public routeProvider: RouteProvider, public visitProvider: VisitProvider, private ref: ChangeDetectorRef, private device: Device) {
+  constructor(public navCtrl: NavController, public alertController: AlertController, public navParams: NavParams,
+              public lscService: LocalScienceCacheProvider, public rscService: RemoteScienceCacheProvider,
+              public locationTracker: LocationTrackerProvider, public routeProvider: RouteProvider,
+              public visitProvider: VisitProvider, private ref: ChangeDetectorRef, private device: Device) {
     var ticks = 1
     setInterval(() => {
       if (this.currentRoute !== null) {
@@ -290,9 +293,9 @@ export class RoutePage implements OnInit {
     this.compass.waypoint_title = this.currentVisit.waypoints[this.compass.waypoint].name;
     var compass_distance_meters = Math.round(parseFloat(this.currentVisit.waypoints[this.compass.waypoint].distance))
     if (compass_distance_meters > 1000) {
-      this.compass.waypoint_distance = (compass_distance_meters / 1000).toString() + ' kilometers'
+      this.compass.waypoint_distance = (compass_distance_meters / 1000).toString() + ' km'
     } else {
-      this.compass.waypoint_distance = compass_distance_meters.toString() + ' meters'
+      this.compass.waypoint_distance = compass_distance_meters.toString() + ' m'
     }
     var compass_bearing = Math.round(parseFloat(this.currentVisit.waypoints[this.compass.waypoint].bearing))
     if (this.compass.current_speed <= 0) {

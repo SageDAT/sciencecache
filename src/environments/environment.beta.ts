@@ -1,3 +1,7 @@
+const env = {
+  currentEnv: 'beta'
+}
+
 export const environment = {
     title: 'ScienceCache App',
     logo_url: '',
@@ -15,7 +19,7 @@ export const environment = {
         }
     },
     owning_agency: '',
-    version: '2.0.0beta',
+    VERSION: require('../../package.json').version + env.currentEnv,
     backendURL: 'https://dev-api.sciencebase.gov/sciencecache-service',
     googleClientId: '106633728735-rg42fv648mjjp9pvpk93b9d6l9jkhnuv.apps.googleusercontent.com',
     production: false,
