@@ -4,7 +4,6 @@ import { ObsFormPage } from './obs-form';
 
 @NgModule({
   declarations: [
-    ObsFormPage,
   ],
   imports: [
     IonicPageModule.forChild(ObsFormPage),
