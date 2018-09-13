@@ -3,6 +3,7 @@
  
 Install Lubuntu 18.04 LTS
 &nbsp;
+&nbsp;
  
 Update the OS:
   ```
@@ -99,6 +100,7 @@ Run Android Studio: Install SDKs:
   * Apply
   * Ok
 &nbsp;
+&nbsp;
  
 Run Android Studio: Create Android Virtual Device (AVD):
   * Tools -> AVD
@@ -106,6 +108,7 @@ Run Android Studio: Create Android Virtual Device (AVD):
   * API:    26
   * Target: Android 8.0
   * CPU:    x86
+&nbsp;
 &nbsp;
  
 Run Android Studio: Prepare to run AVD (Android Virtual Device) Manager:
@@ -117,6 +120,7 @@ Run Android Studio: Prepare to run AVD (Android Virtual Device) Manager:
   * In new window, select Install Build Tools 27.0.3 and sync project
   * Accept license -> Next
   * Finish (downloads the build tools, compiles the "new project" app)
+&nbsp;
 &nbsp;
  
 Test the new AVD from the command line:
@@ -190,9 +194,9 @@ Fixup `~/sciencecache/node_modules/@ionic/app-scripts/dist/dev-server/serve-conf
  
 Run ionic cordova: add the android platform:
   ```
+  # Creates the emulator.js (below, to be fixedup)
   $ ionic cordova platform add android
   ```
-  * Creates the emulator.js (below)
 &nbsp;
  
 Fixup `~/sciencecache/platforms/android/cordova/lib/emulator.js`:
