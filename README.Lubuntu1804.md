@@ -124,7 +124,7 @@ Test the new AVD from the command line:
   ```
 
 
-Clone sciencecache, **Do temp fixups for Android-only Ubuntu dev-tooling testing**:
+Clone sciencecache, do temp fixups for Android-only Ubuntu dev-tooling testing:
   ```
   $ cd ~
   $ # Start with GitHub latest
@@ -141,7 +141,7 @@ Clone sciencecache, **Do temp fixups for Android-only Ubuntu dev-tooling testing
 Install sciencecache:
   ```
   $ cd ~/sciencecache
-  $ # This sequence results in a successful '$ ionic cordova platform add android'
+  $ # This sequence -- including fixups below -- results in a successful '$ ionic cordova platform add android'
   $ npm install                                --no-optional
   $ npm audit fix                              --no-optional
   $ npm install   pouchdb@7.0.0                --no-optional
@@ -214,7 +214,7 @@ Fixup ~/sciencecache/platforms/android/cordova/lib/emulator.js:
   ```
 
 
-Run ionic cordova to compile and load/start **sciencecache** in the Android emulator:
+Run ionic cordova to compile and load/start sciencecache in the Android emulator:
   ```
   $ ionic cordova run android -lc
   ```
