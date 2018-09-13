@@ -24,13 +24,15 @@ Add packages:
 Add your username to the kvm group (group permission is REQUIRED by the Android emulator):
   ```
   $ sudo adduser {your username} kvm
-  $ sudo reboot     # to effect the new kvm user permission updates
+  # To effect the new kvm group permission updates:
+  $ sudo reboot
   ```
 
 Install nvm, node, cordova, and ionic:
   ```
   $ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
   $ nvm install 6.12.2
+  # Creates ~/.npmrc:
   $ npm config set strict-ssl false
   $ npm install -g npm@6.4.1
   $ npm install -g cordova@8.0.0
@@ -45,6 +47,7 @@ Install Android Studio:
   $ sudo mv android-studio/ /usr/local/
   $ cd /usr/local
   $ sudo chown -R root:root android-studio/
+  # Set executable:
   $ sudo chmod 775 /usr/local/android-studio/gradle/gradle-4.4/bin/gradle
   ```
 
@@ -59,8 +62,9 @@ Install Java JDK 8:
   $ cd /usr/lib
   $ sudo chown -R root:root jvm/
   ```
-  Append to ~/.bashrc:
+  Run, append to ~/.bashrc:
   ```
+  # These fully enable the java/sdk cli:
   export JAVA_HOME=/usr/lib/jvm
   export PATH=$PATH:/$JAVA_HOME/bin
   ```
@@ -104,10 +108,11 @@ Run Android Studio: Prepare to run AVD (Android Virtual Device) Manager:
 
 Test the new AVD from the command line:
   ```
+  # Quick test, should start without error:
   $ emulator -wipe-data  @Nexus_5X_API_28 
   ```
 
-Clone sciencecache, **Do temp fixups for Android-only Ubuntu dev-tooling testing**
+Clone sciencecache, **Do temp fixups for Android-only Ubuntu dev-tooling testing**:
   ```
   $ cd ~
   $ # Start with GitHub latest
@@ -129,19 +134,21 @@ Install sciencecache:
   $ npm install   pouchdb@7.0.0                --no-optional
   $ npm install   cordova-android@7.1.1        --no-optional
   $ npm uninstall cordova-plugin-compat        --no-optional
+  # Required to suppress build errors:
   $ npm install   cordova-plugin-camera@3      --no-optional
   $ npm install   cordova-plugin-geolocation@3 --no-optional
   ```
 
-Fixup ~/sciencecache/config.xml
+Fixup ~/sciencecache/config.xml:
   * Change:
   ```
   <preference name="android-minSdkVersion" value="16" />
   ```
   * To:
-  ```<preference name="android-minSdkVersion" value="19" />
   ```
-  * Why? To suppress ionic run error:
+  <preference name="android-minSdkVersion" value="19" />
+  ```
+  * Why: To suppress ionic run error:
   ```
   Error:
   [cordova]  uses-sdk:minSdkVersion 16 cannot be smaller than version 19 declared in library [:CordovaLib] /home/nsimon/sciencecache/platforms/android/CordovaLib/build/intermediates/manifests/full/debug/AndroidManifest.xml as the library might be using APIs not available in 16
@@ -158,7 +165,7 @@ Fixup ~/sciencecache/node_modules/@ionic/app-scripts/dist/dev-server/serve-confi
   ```
   exports.ANDROID_PLATFORM_PATH = path.join('platforms', 'android', 'app', 'src', 'main', 'assets', 'www');
   ```
-  * Why? To suppress ionic run warnings, e.g.:
+  * Why: To suppress ionic run warnings, e.g.:
   ```
   Native: tried calling StatusBar.styleDefault, but Cordova is not available.
   ```
@@ -184,12 +191,12 @@ Fixup ~/sciencecache/platforms/android/cordova/lib/emulator.js:
       (error.message.indexOf('device still authorizing') > -1) ||
       (error.message.indexOf('device still connecting') > -1))
   ```
-  * Why? To suppress ionic run error:
+  * Why: To suppress ionic run error:
   ```
   UnhandledPromiseRejectionWarning: CordovaError: Failed to execute shell command "getprop,dev.bootcomplete" on device
   ```
 
-Run ionic cordova to compile and load/start the Android emulator:
+Run ionic cordova to compile and load/start **sciencecache** in the Android emulator:
   ```
   $ ionic cordova run android -lc
   ```
