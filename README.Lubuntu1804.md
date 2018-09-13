@@ -1,17 +1,16 @@
 # README for installing a Lubuntu 18.04 LTS Development Environment
-&nbsp;
- 
+<br />
+<br /> 
 Install Lubuntu 18.04 LTS
-&nbsp;
-&nbsp;
- 
+<br />
+<br />
 Update the OS:
   ```
   $ sudo apt-get update
   $ sudo apt-get upgrade
   ```
-&nbsp;
- 
+<br />
+<br />
 Add packages:
   ```
   $ sudo apt-get install net-tools
@@ -23,16 +22,16 @@ Add packages:
   $ sudo apt-get install qemu-kvm
   $ sudo apt-get install libvirt-bin
   ```
-&nbsp;
- 
+<br />
+<br />
 Add your username to the kvm group (group permission is REQUIRED by the Android emulator):
   ```
   $ sudo adduser {your username} kvm
   # To effect the new kvm group permission updates:
   $ sudo reboot
   ```
-&nbsp;
- 
+<br />
+<br />
 Install nvm, node, cordova, and ionic:
   ```
   $ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
@@ -43,8 +42,8 @@ Install nvm, node, cordova, and ionic:
   $ npm install -g cordova@8.0.0
   $ npm install -g ionic@4.1.2
   ```
-&nbsp;
- 
+<br />
+<br />
 Install Android Studio:
   ```
   $ cd ~/Downloads
