@@ -1,16 +1,13 @@
 # README for installing a Lubuntu 18.04 LTS Development Environment
-<br />
-<br /> 
+
 Install Lubuntu 18.04 LTS
-<br />
-<br />
+
 Update the OS:
   ```
   $ sudo apt-get update
   $ sudo apt-get upgrade
   ```
-<br />
-<br />
+
 Add packages:
   ```
   $ sudo apt-get install net-tools
@@ -22,16 +19,14 @@ Add packages:
   $ sudo apt-get install qemu-kvm
   $ sudo apt-get install libvirt-bin
   ```
-<br />
-<br />
+
 Add your username to the kvm group (group permission is REQUIRED by the Android emulator):
   ```
   $ sudo adduser {your username} kvm
   # To effect the new kvm group permission updates:
   $ sudo reboot
   ```
-<br />
-<br />
+
 Install nvm, node, cordova, and ionic:
   ```
   $ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
@@ -42,8 +37,7 @@ Install nvm, node, cordova, and ionic:
   $ npm install -g cordova@8.0.0
   $ npm install -g ionic@4.1.2
   ```
-<br />
-<br />
+
 Install Android Studio:
   ```
   $ cd ~/Downloads
@@ -55,7 +49,6 @@ Install Android Studio:
   # Set executable:
   $ sudo chmod 775 /usr/local/android-studio/gradle/gradle-4.4/bin/gradle
   ```
-&nbsp;
  
 Install Java JDK 8:
   * Browse to: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
@@ -74,7 +67,6 @@ Install Java JDK 8:
   export JAVA_HOME=/usr/lib/jvm
   export PATH=$PATH:/$JAVA_HOME/bin
   ```
-&nbsp;
  
 Run Android Studio: Download additional components:
   * Android Studio Setup Wizard - Welcome
@@ -90,7 +82,6 @@ Run Android Studio: Download additional components:
     export ANDROID_HOME=~/Android/Sdk
     export PATH=$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:/usr/local/android-studio/bin:/usr/local/android-studio/gradle/gradle-4.4/bin
     ```
-&nbsp;
  
 Run Android Studio: Install SDKs:
   * Tools -> SDK Manager -> SDK Platforms (tab)
@@ -98,8 +89,6 @@ Run Android Studio: Install SDKs:
   * Check: Android 8.0 (Oreo)
   * Apply
   * Ok
-&nbsp;
-&nbsp;
  
 Run Android Studio: Create Android Virtual Device (AVD):
   * Tools -> AVD
@@ -107,8 +96,6 @@ Run Android Studio: Create Android Virtual Device (AVD):
   * API:    26
   * Target: Android 8.0
   * CPU:    x86
-&nbsp;
-&nbsp;
  
 Run Android Studio: Prepare to run AVD (Android Virtual Device) Manager:
   * Start a new Android Studio Project
@@ -119,15 +106,12 @@ Run Android Studio: Prepare to run AVD (Android Virtual Device) Manager:
   * In new window, select Install Build Tools 27.0.3 and sync project
   * Accept license -> Next
   * Finish (downloads the build tools, compiles the "new project" app)
-&nbsp;
-&nbsp;
  
 Test the new AVD from the command line:
   ```
   # Quick test, should start without error:
   $ emulator -wipe-data  @Nexus_5X_API_28 
   ```
-&nbsp;
  
 Clone sciencecache, do temp fixups for Android-only Ubuntu dev-tooling testing:
   ```
@@ -141,7 +125,6 @@ Clone sciencecache, do temp fixups for Android-only Ubuntu dev-tooling testing:
   $ sed -i "/cordova-ios/d" package.json   # remove cordova-ios
   $ sed -i "/ios/d"         package.json   # remove ios
   ```
-&nbsp;
  
 Install sciencecache:
   ```
@@ -156,7 +139,6 @@ Install sciencecache:
   $ npm install   cordova-plugin-camera@3      --no-optional
   $ npm install   cordova-plugin-geolocation@3 --no-optional
   ```
-&nbsp;
  
 Fixup `~/sciencecache/config.xml`:
   * Change:
@@ -174,7 +156,6 @@ Fixup `~/sciencecache/config.xml`:
   [cordova]  Suggestion: use a compatible library with a minSdk of at most 16,
   [cordova]    or increase this project's minSdk version to at least 19
   ```
-&nbsp;
  
 Fixup `~/sciencecache/node_modules/@ionic/app-scripts/dist/dev-server/serve-config.js`:
   * Change:
@@ -189,14 +170,12 @@ Fixup `~/sciencecache/node_modules/@ionic/app-scripts/dist/dev-server/serve-conf
   ```
   Native: tried calling StatusBar.styleDefault, but Cordova is not available.
   ```
-&nbsp;
  
 Run ionic cordova: add the android platform:
   ```
   # Creates the emulator.js (below, to be fixedup)
   $ ionic cordova platform add android
   ```
-&nbsp;
  
 Fixup `~/sciencecache/platforms/android/cordova/lib/emulator.js`:
   * Change:
@@ -217,7 +196,6 @@ Fixup `~/sciencecache/platforms/android/cordova/lib/emulator.js`:
   ```
   UnhandledPromiseRejectionWarning: CordovaError: Failed to execute shell command "getprop,dev.bootcomplete" on device
   ```
-&nbsp;
  
 Run ionic cordova to compile and load/start sciencecache in the Android emulator:
   ```
