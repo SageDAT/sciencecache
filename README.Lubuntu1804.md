@@ -1,15 +1,15 @@
 # README for installing a Lubuntu 18.04 LTS Development Environment
- 
+&nbsp; 
  
 Install Lubuntu 18.04 LTS
- 
+&nbsp; 
  
 Update the OS:
   ```
   $ sudo apt-get update
   $ sudo apt-get upgrade
   ```
- 
+&nbsp; 
  
 Add packages:
   ```
@@ -36,7 +36,7 @@ Install nvm, node, cordova, and ionic:
   ```
   $ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
   $ nvm install 6.12.2
-  # Creates ~/.npmrc:
+  # Creates `~/.npmrc`:
   $ npm config set strict-ssl false
   $ npm install -g npm@6.4.1
   $ npm install -g cordova@8.0.0
@@ -60,7 +60,7 @@ Install Android Studio:
 Install Java JDK 8:
   * Browse to: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
     * Accept license
-    * Download appropriate version to ~/Downloads: jdk-8u181-linux-x64.tar.gz (for my environment)
+    * Download appropriate version to `~/Downloads`: jdk-8u181-linux-x64.tar.gz (for my environment)
   ```
   $ cd ~/Downloads
   $ tar -xzvf jdk-8u181-linux-x64.tar.gz
@@ -155,7 +155,7 @@ Install sciencecache:
   ```
  
  
-Fixup ~/sciencecache/config.xml:
+Fixup `~/sciencecache/config.xml`:
   * Change:
   ```
   <preference name="android-minSdkVersion" value="16" />
@@ -173,7 +173,7 @@ Fixup ~/sciencecache/config.xml:
   ```
  
  
-Fixup ~/sciencecache/node_modules/@ionic/app-scripts/dist/dev-server/serve-config.js:
+Fixup `~/sciencecache/node_modules/@ionic/app-scripts/dist/dev-server/serve-config.js`:
   * Change:
   ```
   exports.ANDROID_PLATFORM_PATH = path.join('platforms', 'android', 'assets', 'www');
@@ -195,7 +195,7 @@ Run ionic cordova: add the android platform:
   * Creates the emulator.js (below)
  
  
-Fixup ~/sciencecache/platforms/android/cordova/lib/emulator.js:
+Fixup `~/sciencecache/platforms/android/cordova/lib/emulator.js`:
   * Change:
   ```
   if ((error && error.message &&
